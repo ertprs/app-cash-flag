@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>SGC Consultores C.A.</title>
+		<link rel="stylesheet" href="index.css">
+		<script type="text/javascript" src="../js/funciones.js"></script>
+		<!-- <script type="text/javascript" src="index.js"></script> -->
+	</head>
+	<body onload='cargadatos()'>
+		<div id="container">
+			<h2>Cash-Flag</h2>
+			<h5>Modulo administrativo</h5>
+			<br/>
+			<div id="div1" align="center">
+				<!-- clave -->
+				<div class="cmps">
+					<span class="etiq">Clave</span>
+					<input id="clave" class="campo" type="password" size="50" maxlength="10" title="Introduzca la clave correcta" />
+				</div>
+				<!-- Linea de botones -->
+				<div class="btns">
+					<button id="enviar" style="width: 7em;" onclick="enviar()">Enviar</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			// Variables públicas, constantes y función de transformación de números.
+			var ruta = "../img/";
+
+			function cargadatos() {
+				// cargar parámetros de la tabla
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function () {
+					if (this.readyState == 4 && this.status == 200) {
+						respuesta = JSON.parse(this.responseText);
+						if (respuesta.exito == 'SI') {
+							document.title = respuesta.parametros.nombresistema;
+							sessionStorage.setItem("nombresistema", respuesta.parametros.nombresistema);
+						}
+					}
+				};
+				xmlhttp.open("GET", "../php/parametros.php", true);
+				xmlhttp.send();
+			}
+
+			function enviar() {
+				if (clave.value=="a1b2c3d4e5") {
+					window.location.replace("./seleccion.html");
+				} else {
+					alert("Clave incorrecta.");
+				}
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf_8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Cotizacion Petro y algunas criptomonedas</title>
+	<link rel="stylesheet" href="">
+	<script type="text/javascript" src="../../js/funciones.js"></script>
+</head>
+<body onload="inicio()">
+	<table border="1">
+		<caption id="titulo"></caption>
+		<thead>
+			<tr>
+				<th style="width: 7em;">CRIPTO/FIAT</th>
+				<th style="width: 7em;">US Dolares</th>
+				<th style="width: 7em;">Euros</th>
+				<th style="width: 7em;">Pesos<br/>colombianos</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><b>PTR</b></td>
+				<td id="usd_ptr" style="text-align: right;"></td>
+				<td id="eur_ptr" style="text-align: right;"></td>
+				<td id="cop_ptr" style="text-align: right;"></td>
+			</tr>
+			<tr>
+				<td><b>BTC</b></td>
+				<td id="usd_btc" style="text-align: right;"></td>
+				<td id="eur_btc" style="text-align: right;"></td>
+				<td id="cop_btc" style="text-align: right;"></td>
+			</tr>
+			<tr>
+				<td><b>ETH</b></td>
+				<td id="usd_eth" style="text-align: right;"></td>
+				<td id="eur_eth" style="text-align: right;"></td>
+				<td id="cop_eth" style="text-align: right;"></td>
+			</tr>
+			<tr>
+				<td><b>DASH</b></td>
+				<td id="usd_dash" style="text-align: right;"></td>
+				<td id="eur_dash" style="text-align: right;"></td>
+				<td id="cop_dash" style="text-align: right;"></td>
+			</tr>
+		</tbody>
+	</table>
+	<script type="text/javascript">
+		function inicio() {
+			let xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200) {
+					respuesta = JSON.parse(this.responseText.substr(0,this.responseText.length-1));
+
+					hoy = new Date();
+					mes = hoy.getMonth()+1;
+					titulo.innerHTML = "<b>COTIZACION AL "+hoy.getDate()+"/"+mes+"/"+hoy.getFullYear()+"</b>";
+
+					usd_ptr.innerHTML  = formatNumber.new(respuesta.data.PTR.USD);
+					usd_btc.innerHTML  = formatNumber.new(respuesta.data.BTC.USD);
+					usd_eth.innerHTML  = formatNumber.new(respuesta.data.ETH.USD);
+					usd_dash.innerHTML = formatNumber.new(respuesta.data.DASH.USD);
+
+					eur_ptr.innerHTML  = formatNumber.new(respuesta.data.PTR.EUR);
+					eur_btc.innerHTML  = formatNumber.new(respuesta.data.BTC.EUR);
+					eur_eth.innerHTML  = formatNumber.new(respuesta.data.ETH.EUR);
+					eur_dash.innerHTML = formatNumber.new(respuesta.data.DASH.EUR);
+
+					cop_ptr.innerHTML  = formatNumber.new(respuesta.data.PTR.COP);
+					cop_btc.innerHTML  = formatNumber.new(respuesta.data.BTC.COP);
+					cop_eth.innerHTML  = formatNumber.new(respuesta.data.ETH.COP);
+					cop_dash.innerHTML = formatNumber.new(respuesta.data.DASH.COP);
+				}
+			};
+			xmlhttp.open("GET", "./getpetro.php", true);
+			xmlhttp.send();
+		}
+	</script>
+</body>
+</html>
+<!-- 
+			<tr>
+				<th style="width: 8em;">FIAT/CRIPTO</th>
+				<th style="width: 8em;">PTR</th>
+				<th style="width: 8em;">BTC</th>
+				<th style="width: 8em;">ETH</th>
+				<th style="width: 8em;">DASH</th>
+			</tr>
+
+			<tr>
+				<td><b>US Dolares</b></td>
+				<td id="usd_ptr" style="text-align: right;"></td>
+				<td id="usd_btc" style="text-align: right;"></td>
+				<td id="usd_eth" style="text-align: right;"></td>
+				<td id="usd_dash" style="text-align: right;"></td>
+			</tr>
+			<tr>
+				<td><b>Euros</b></td>
+				<td id="eur_ptr" style="text-align: right;"></td>
+				<td id="eur_btc" style="text-align: right;"></td>
+				<td id="eur_eth" style="text-align: right;"></td>
+				<td id="eur_dash" style="text-align: right;"></td>
+			</tr>
+			<tr>
+				<td><b>Pesos colombianos</b></td>
+				<td id="cop_ptr" style="text-align: right;"></td>
+				<td id="cop_btc" style="text-align: right;"></td>
+				<td id="cop_eth" style="text-align: right;"></td>
+				<td id="cop_dash" style="text-align: right;"></td>
+			</tr>
+			<tr>
+				<td><b>Pesos chilenos</b></td>
+				<td id="clp_ptr" style="text-align: right;"></td>
+				<td id="clp_btc" style="text-align: right;"></td>
+				<td id="clp_eth" style="text-align: right;"></td>
+				<td id="clp_dash" style="text-align: right;"></td>
+			</tr>
+ -->
