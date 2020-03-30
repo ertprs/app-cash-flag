@@ -1,0 +1,33 @@
+contract Card =
+
+  record card = {
+     card   : string,
+     nombre : string,
+     saldo  : int }
+
+  record state = {
+    cards : map(string, card) }
+
+  entrypoint init() = { cards = {} }
+
+  stateful entrypoint recarga_inicial( card' : string, nombre' : string, monto : int ) =
+    let card = { card = card', nombre = nombre', saldo = monto }
+    put(state {cards[card'] = card})
+
+  entrypoint busca_tarjeta(card' : string) : card =
+    state.cards[card']
+
+  stateful entrypoint recarga( card' : string, monto : int ) =
+    let card = busca_tarjeta( card')
+    let nuevoSaldo = card.saldo + monto
+    let cardActualizada = state.cards{ [card'].saldo = nuevoSaldo }
+    put(state {cards = cardActualizada})
+
+  stateful entrypoint consumo( card' : string, monto : int ) =
+    let card = busca_tarjeta( card')
+    let nuevoSaldo = card.saldo - monto
+    if(nuevoSaldo < 0)
+      abort("Saldo insuficiente")
+    else
+      let cardActualizada = state.cards{ [card'].saldo = nuevoSaldo }
+      put(state {cards = cardActualizada})
