@@ -5,7 +5,6 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Card</title>
-	<link rel="stylesheet" href="./cardlector.css">
 	<style>
 		* {
 		  --ancho: 340px;
@@ -98,24 +97,12 @@
 	margin: auto; <script type="text/javascript" src="./html2canvas.js"></script> -->
 	<script type="text/javascript" src="../js/funciones.js"></script>
 	<script type="text/javascript" src="./classes.js"></script>
-	<!-- <script type="text/javascript" src="./cardlector.js"></script> -->
-	<script type="text/javascript" src="../lector/instascan.min.js"></script>
 	<script>
 		let tarjeta, params = fparamurl(window.location.search.substr(1));
 
 		tarjeta = (params==undefined) ? '1111222233334444' : params.card ;
 
 		let card1, saldo=0.00;
-
-		let idproveedor="";
-		// , ficha='';
-		let datos = new FormData();
-		let beep = '../lector/audio/beep.mp3';
-		let scanner = "";
-		// const mysocket = new WebSocket("ws://demos.kaazing.com/echo");
-
-		idproveedor = (idproveedor==undefined) ? 2 : idproveedor;
-
 
 		function generacard() {
 			var xmlhttp = new XMLHttpRequest();
@@ -194,8 +181,7 @@
 
 		function scanearQR(){
 			if (validaciones()) {
-				// window.location.replace('../lector/index.html?menu=socio');
-				modal_lector();
+				window.location.replace('../lector/index.html?menu=socio');
 			}
 		}
 
@@ -204,7 +190,6 @@
 		}
 
 		function validaciones() {
-			console.log(monto.value);
 			continuar = true;
 			if (monto.value=="" || monto.value==0.00 || monto.value==undefined) {
 				alert("Debe indicar un monto para la transacción.");
@@ -239,83 +224,9 @@
 			}
 			return continuar;
 		}
-
-		// Enviar la transacción para procesar
-		function enviar() {
-			console.log('enviar');
-			// mysocket.send(document.getElementById("tarjeta").value+' monto: '+document.getElementById("monto").value);
-			datos.append("idproveedor", idproveedor);
-			datos.append("monto", document.getElementById("monto").value);
-			datos.append("tarjeta", tarjeta);
-
-			console.log(idproveedor);
-			console.log(document.getElementById("monto").value);
-			console.log(tarjeta);
-
-			var xmlhttp = new XMLHttpRequest();
-			xmlhttp.onreadystatechange = function() {
-				if (this.readyState == 4 && this.status == 200) {
-					respuesta = JSON.parse(this.responseText);
-					if (respuesta.exito == 'SI') {
-						alert(fmensaje(respuesta.mensaje));
-						limpiar();
-					} else {
-						alert(respuesta.mensaje);
-					}
-				}
-			};
-			xmlhttp.open("POST", "../php/enviacobrocard.php", true);
-			xmlhttp.send(datos);
-		}
-
-		function modal_lector() {
-		    beep = '../lector/audio/beep.mp3';
-			scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
-
-			scanner.addListener('scan', function (content) {
-				respuesta = JSON.parse(content);
-				console.log(respuesta);
-				if (content) { 
-					PlaySound(beep);
-				}
-				idproveedor = respuesta.idp;
-				cerrar_lector();
-				enviar();
-			});
-
-			Instascan.Camera.getCameras().then(function (cameras) {
-				back = 0;
-				for (i=0; i< cameras.length; i++) {
-					if (cameras[i].name.indexOf('back') >= 0) { back = i }
-				}
-				if (cameras.length > 0) {
-					scanner.mirror = false;
-					scanner.start(cameras[back]);
-				} else {
-					console.error('No cameras found.');
-				}
-			}).catch(function (e) {
-				console.error(e);
-			});
-			cuerpo.style.overflow = "hidden";
-			modal_area2.style.display = 'block';
-		}
-
-		function PlaySound(sonido) {
-			document.getElementById('beep').src = sonido;
-			let sound = document.getElementById('beep');
-			if (sound) { sound.play(); }
-		}
-
-		function cerrar_lector() {
-			scanner.stop();
-			cuerpo.style.overflow = "auto";
-			modal_area2.style.display = 'none';
-			console.log('cerrarlector');
-		}
 	</script>
 </head>
-<body id="cuerpo" onload="generacard()">
+<body onload="generacard()">
 	<div class="container">
 		<div id="mensaje_inicial" style="text-align: center;">
 			<span style="margin-top: 15px; font-size: 120%;">Cargando tarjeta...</span>			
@@ -351,24 +262,6 @@
 		<div id="qrcode" class="modal">
 			<span id="mensaje_qr">Generando código de transacción, por favor espera...</span>
 			<img id="codigo_qr" class="qrtransaccion" src="" />
-		</div>
-	</div>
-	<div id="modal_area2" class="area_modal2" style="display: none;">
-		<p align="center" style="margin-top: 0.25em;">Coloque el código en el siguiente recuadro, al ser leído se redireccionará su navegador a la sección que corresponda.</p>
-		<div class="framevideo" >
-			<div class="frame2">
-				<video id="preview" class="vd"></video>
-				<div class="scanner-laser laser-rightBottom"></div>
-				<div class="scanner-laser laser-rightTop"></div>
-				<div class="scanner-laser laser-leftBottom"></div>
-				<div class="scanner-laser laser-leftTop"></div>
-			</div>
-		</div>
-		<div style="width: 100%; margin-top: 46%; text-align: center;">
-			<p id="mensaje" align="center"></p>
-			<br/>
-			<button id="volver_lector" style="width: 60px; height: 30px; margin: auto;" onclick="cerrar_lector()">Cerrar</button>
-			<audio id="beep" src="" />
 		</div>
 	</div>
 </body>

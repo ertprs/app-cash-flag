@@ -312,7 +312,11 @@ function modal_lector() {
 		// window.location.replace(content);
 		document.getElementById("tarjeta").value = respuesta.c;
 		cerrar_lector();
-		enviar();
+		if (respuesta.m==document.getElementById("monto").value) {
+			enviar();
+		} else {
+			alert("El monto del pago no coincide con el monto cobrado.");
+		}
 	});
 
 	Instascan.Camera.getCameras().then(function (cameras) {
