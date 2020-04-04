@@ -1,0 +1,35 @@
+contract Coupon =
+
+  record coupon = {
+     coupon : string,
+     status : int }
+
+  record state = {
+    coupons : map(string, coupon) }
+
+  entrypoint init() = { coupons = {} }
+
+  stateful entrypoint coupon_generate( coupon' : string ) =
+    let coupon = { coupon = coupon', status = 0 }
+    put(state {coupons[coupon'] = coupon})
+
+  entrypoint coupon_lookup(coupon' : string) : coupon =
+    state.coupons[coupon']
+
+  stateful entrypoint coupon_status_change( coupon' : string, status: int ) =
+    let couponUpdated = state.coupons{ [coupon'].status = status }
+    put(state {coupons = couponUpdated})
+
+  stateful entrypoint coupon_exchange( coupon' : string ) =
+    let cpn = coupon_lookup(coupon')
+    if(cpn.status == 0)
+      coupon_status_change( coupon', 1 )
+    else
+      abort("Cupón ya canjeado o anulado")
+
+  stateful entrypoint coupon_cancel( coupon' : string ) =
+    let cpn = coupon_lookup(coupon')
+    if(cpn.status == 0)
+      coupon_status_change( coupon', 2 )
+    else
+      abort("Cupón ya canjeado o anulado")
