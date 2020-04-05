@@ -13,7 +13,7 @@
 		<div id="container">
 			<div class="logo" align="center">
 				<!-- <img class="img-logo" id="logo" src="img/logoclub.png" alt=""> -->
-				<img class="img-logo" id="logo" src="" alt="">
+				<img class="img-logo" id="logo" src="../img/logoclub.png" alt="">
 			</div>
 			<h2 style="text-align: center; color: black;">Cash-Flag</h2>
 			<!-- <h5 style="text-align: center; color: black;">Servicios a los socios</h5> -->
@@ -21,6 +21,14 @@
 				<h3>Menú principal</h3>
 				<br/>
 				<div id="comercios" class="catalogo">
+					<a id="comercios" href="./comercio.html" onclick="">
+						<div class="item" align="center">
+							<div class="imagen" align="center">
+								<!-- <img class="img_opcion" src="" title="Lector" /> -->
+								Administrar comercios
+							</div>
+						</div>
+					</a>
 					<a id="premios" href="./premios.html" onclick="">
 						<div class="item" align="center">
 							<div class="imagen" align="center">
@@ -52,6 +60,7 @@
 			function generalink() {
 				idp = sessionStorage.getItem("id_proveedor");
 				sessionStorage.setItem("url_back",window.location);
+				sessionStorage.setItem("url_bck2",window.location);
 				// document.getElementById("cupon").href = "./cupones/cupon.html?id="+idp+"&btn=1";
 				// document.getElementById("prepago").href = "./prepago/compra.html?id="+idp;
 				// document.getElementById("giftcard").href = "./giftcards/compra.html?id="+idp;

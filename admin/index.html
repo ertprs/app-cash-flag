@@ -12,7 +12,10 @@
 	</head>
 	<body onload='cargadatos()'>
 		<div id="container">
-			<h2>Cash-Flag</h2>
+			<div class="logo" align="center">
+				<!-- <img class="img-logo" id="logo" src="img/logoclub.png" alt=""> -->
+				<img class="img-logo" id="logo" src="../img/logoclub.png" alt="">
+			</div>
 			<h5>Modulo administrativo</h5>
 			<br/>
 			<div id="div1" align="center">
@@ -48,8 +51,8 @@
 			}
 
 			function enviar() {
-				if (clave.value=="a1b2c3d4e5") {
-					window.location.replace("./seleccion.html");
+				if (clave.value=="123456") {
+					window.location.replace("./menu.html");
 				} else {
 					alert("Clave incorrecta.");
 				}

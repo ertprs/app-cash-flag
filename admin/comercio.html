@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>POP CLIK</title>
+		<link rel="stylesheet" href="./comercio.css">
+		<script type="text/javascript" src="../js/funciones.js"></script>
+	</head>
+	<body onload="inicio()">
+		<div id="container">
+			<div class="logo" align="center">
+				<img class="img-logo" id="logo" src="../img/logoclub.png" alt="">
+			</div>
+			<h2 style="text-align: center; color: black;">Comercios afiliados</h2>
+			<h3 id="menu" align="center"></h3>
+			<br/>
+			<div id="tabla" class="tabla">
+				<div id="f-t" class="fila titulo">
+					<div id="" class="columna1">
+						Comercio
+					</div>
+					<div id="" class="columna2">
+						Contacto
+					</div>
+					<div id="" class="columna3">
+						Teléfono
+					</div>
+					<div id="" class="columna4">
+						e-mail
+					</div>
+					<div id="" class="columna5">
+						Status
+					</div>
+				</div>
+			</div>
+			<!-- Linea de botones -->
+			<div class="btns">
+				<button id="btnvolver" style="width: 7em; margin: 0.5em 0 0 0;">Volver</button>
+			</div>
+		</div>
+		<div id="ventana_modal" class="area_modal">
+			<div id="formulario" class="modal">
+				<!-- Variable para controlar el registro -->
+				<input id="id" class="campo" type="hidden" />
+
+				<!-- nombre -->
+				<div class="cmps">
+					<span class="etiq">Nombre</span>
+					<input id="nombre" class="campo" type="text" size="50" maxlength="100" onchange="grabar()" />
+				</div>
+				<!-- email -->
+				<div class="cmps">
+					<span class="etiq">Correo electrónico</span>
+					<input id="email" class="campo" type="email" size="50" maxlength="100" title="Debe introducir un formato de email válido (incluir el @ y al menos un . )" onchange="grabar()" />
+				</div>
+				<!-- nombre -->
+				<div class="cmps">
+					<span class="etiq">Dirección</span>
+					<input id="direccion" class="campo" type="text" size="50" maxlength="100" onchange="grabar()" />
+				</div>
+				<!-- nombre -->
+				<div class="cmps">
+					<span class="etiq">RIF</span>
+					<input id="rif" class="campo" type="text" size="50" maxlength="10" onchange="grabar()" />
+				</div>
+				<!-- nombre -->
+				<div class="cmps">
+					<span class="etiq">Contacto</span>
+					<input id="contacto" class="campo" type="text" size="50" maxlength="100" onchange="grabar()" />
+				</div>
+				<!-- nombre -->
+				<div class="cmps">
+					<span class="etiq">Teléfono</span>
+					<input id="telefono" class="campo" type="text" size="50" maxlength="100" onchange="grabar()" />
+				</div>
+				<!-- Linea de botones -->
+				<div class="btns_centrado">
+					<button id="btnguardar" style="width: 7em; margin: 0.5em 0 0 0;" onclick="cierraFormulario()">Cerrar</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			var respuesta, tarjetas, comercios, paroimpar, idsocio = sessionStorage.getItem("idsocio");
+			var fx = sessionStorage.getItem("url_bck2")
+			document.getElementById("btnvolver").addEventListener('click', function(){
+				window.open(fx, "_self") });
+
+			// Inicializa la aplicación
+			function inicio() {
+				xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						respuesta = JSON.parse(this.responseText);
+						if (respuesta.exito=="SI") {
+							comercios = respuesta.comercios;
+							// Rellena la lista de tarjetas
+							pintarcomercios(comercios);
+						} else {
+							alert("No hay comercios registrados.");
+						}
+					}
+				};
+				xmlhttp.open("GET", "../php/buscacomercios2.php", true);
+				xmlhttp.send();
+			}
+
+			// Rellena la tabla
+			function pintarcomercios(comercios) {
+				// para agregar un nuevo comercio
+				txtNew = document.createTextNode("AGREGAR UN NUEVO COMERCIO");
+				clNew = document.createElement("div");
+				clNew.classList.add("columnaNew");
+				clNew.appendChild(txtNew);
+
+				// Crear fila para la transacción
+				fila = document.createElement("div");
+				fila.id = 'fila-New';
+				fila.classList.add("fila");
+				// Agregar la clase para definir el comportamiento del css
+				fila.classList.add("new");
+				fila.addEventListener('click', function(){
+					abreFormulario(this.id);
+				});
+				// Agregar las columnas a la fila
+				fila.appendChild(clNew);
+
+				// Agregar la fila a la tabla
+				document.getElementById("tabla").appendChild(fila);
+
+				par = true;
+				for (var i = 0; i < comercios.length; i++) {
+					// proveedor en la columna 1
+					txtNombre = document.createTextNode(comercios[i].nombre);
+					// txtTipo = document.createTextNode(tarjetas[i].tipo);
+					cl1 = document.createElement("div");
+					cl1.classList.add("columna1");
+					cl1.classList.add("detcolumna1");
+					cl1.appendChild(txtNombre);
+
+					// nombre en la columna 2
+					txtContacto = document.createTextNode(comercios[i].contacto);
+					// txtTipo = document.createTextNode(tarjetas[i].tipo);
+					cl2 = document.createElement("div");
+					cl2.classList.add("columna2");
+					cl2.appendChild(txtContacto);
+
+					// tarjeta en la columna 3
+					txtTelefono = document.createTextNode(comercios[i].telefono);
+					cl3 = document.createElement("div");
+					cl3.classList.add("columna3");
+					cl3.appendChild(txtTelefono);
+
+					// saldo en la columna 4
+					txtEmail = document.createTextNode(comercios[i].email);
+					cl4 = document.createElement("div");
+					cl4.classList.add("columna4");
+					cl4.appendChild(txtEmail);
+
+					// saldo en la columna 4
+					if (comercios[i].status) { stts = "Activo" } else { stts = "Inactivo" }
+					console.log(comercios[i].status);
+					txtStatus = document.createTextNode(stts);
+					cl5 = document.createElement("div");
+					cl5.classList.add("columna5");
+					if (comercios[i].status) { cl5.style.color = "green" } else { cl5.style.color = "red" }
+					cl5.style.fontWeight = 'bold';
+					cl5.appendChild(txtStatus);
+
+					// Crear fila para la transacción
+					fila = document.createElement("div");
+					fila.id = 'fila-'+comercios[i].id;
+					fila.classList.add("fila");
+					// Agregar la clase para definir el comportamiento del css
+					if (par) {
+						fila.classList.add("par");
+						paroimpar = "par";
+						par = false;
+					} else {
+						fila.classList.add("impar");
+						paroimpar = "impar";
+						par = true;
+					}
+					fila.addEventListener('click', function(){
+						abreFormulario(this.id);
+					});
+					// Agregar las columnas a la fila
+					fila.appendChild(cl1);
+					fila.appendChild(cl2);
+					fila.appendChild(cl3);
+					fila.appendChild(cl4);
+					fila.appendChild(cl5);
+
+					// Agregar la fila a la tabla
+					document.getElementById("tabla").appendChild(fila);
+				}
+			}
+
+			function abreFormulario(registro) {
+				aux = registro.split("-");
+				id = aux[1];
+				if (id!="New") {
+					let xmlhttp = new XMLHttpRequest();
+					xmlhttp.onreadystatechange = function() {
+						if (this.readyState == 4 && this.status == 200) {
+							respuesta = JSON.parse(this.responseText);
+							console.log(respuesta);
+							if (respuesta.exito=="SI") {
+								document.getElementById("id").value        = id;
+								document.getElementById("nombre").value    = respuesta.nombre;
+								document.getElementById("email").value     = respuesta.email;
+								document.getElementById("direccion").value = respuesta.direccion;
+								document.getElementById("rif").value       = respuesta.rif;
+								document.getElementById("contacto").value  = respuesta.contacto;
+								document.getElementById("telefono").value  = respuesta.telefono;
+							} else {
+								alert("No hay comercios registrados.");
+							}
+						}
+					};
+					xmlhttp.open("GET", "../php/comerciocompleto.php?id="+id, true);
+					xmlhttp.send();
+				} else {
+					document.getElementById("id").value        = id;
+					document.getElementById("nombre").value    = "";
+					document.getElementById("email").value     = "";
+					document.getElementById("direccion").value = "";
+					document.getElementById("rif").value       = "";
+					document.getElementById("contacto").value  = "";
+					document.getElementById("telefono").value  = "";
+				}
+				ventana_modal.style.display = 'block';
+			}
+
+			// valida la entrada en los campos
+			function validaciones() {
+				let continuar = true, nocontinuar = false, vacios = 0, campo = "";
+				if (document.getElementById("nombre").value=="" || document.getElementById("nombre").value==undefined) {
+					alert("El campo nombre no puede quedar en blanco");
+					vacios++;
+					campo = "nombre";
+					continuar = false;
+					nocontinuar = true;
+				}
+				if ((document.getElementById("email").value=="" || document.getElementById("email").value==undefined) && vacios == 0) {
+					alert("El campo email no puede quedar en blanco");
+					vacios++;
+					campo = "email";
+				}
+				if (vacios>0) {
+					continuar = false;
+					nocontinuar = true;
+				}
+				if (nocontinuar) {
+					document.getElementById(campo).focus();
+				}
+				return continuar;
+			}
+
+			function cierraFormulario() {
+				if (btnguardar.innerHTML=="Guardar") {
+					if (validaciones()) {
+						datos = new FormData();
+						datos.append("id",        document.getElementById("id").value);
+						datos.append("nombre",    document.getElementById("nombre").value);
+						datos.append("email",     document.getElementById("email").value);
+						datos.append("direccion", document.getElementById("direccion").value);
+						datos.append("rif",       document.getElementById("rif").value);
+						datos.append("contacto",  document.getElementById("contacto").value);
+						datos.append("telefono",  document.getElementById("telefono").value);
+
+						xmlhttp = new XMLHttpRequest();
+						xmlhttp.onreadystatechange = function() {
+							if (this.readyState == 4 && this.status == 200) {
+								respuesta = JSON.parse(this.responseText);
+								if (respuesta.exito == 'SI') {
+									alert("Registro exitoso");
+									for (var i = comercios.length-1; i >= 0; i--) {
+										document.getElementById("tabla").removeChild(document.getElementById('fila-'+comercios[i].id));
+									}
+									document.getElementById("tabla").removeChild(document.getElementById('fila-New'));
+
+									xmlhttp = new XMLHttpRequest();
+									xmlhttp.onreadystatechange = function() {
+										if (this.readyState == 4 && this.status == 200) {
+											respuesta = JSON.parse(this.responseText);
+											if (respuesta.exito=="SI") {
+												comercios = respuesta.comercios;
+												pintarcomercios(comercios);
+											}
+										}
+									};
+									xmlhttp.open("GET", "../php/buscacomercios2.php", true);
+									xmlhttp.send();
+
+									btnguardar.innerHTML = "Cerrar";
+								} else {
+									alert("Falló el registro");
+								}
+							}
+						};
+						xmlhttp.open("POST", "../php/registracomercio.php", true);
+						xmlhttp.send(datos);
+					}
+				}
+				ventana_modal.style.display = 'none';
+			}
+
+			function grabar() {
+				btnguardar.innerHTML = "Guardar";
+			}
+
+
+		</script>
+	</body>
+</html>

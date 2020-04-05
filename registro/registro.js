@@ -109,3 +109,19 @@ function buscatitulo() {
 	xmlhttp.open("GET", "../php/parametros.php", false);
 	xmlhttp.send();
 }
+
+function atras(tab1,tab2) {
+	document.getElementById("tab"+tab1).style.display = 'block';
+	document.getElementById("tab"+tab2).style.display = 'none';
+	if (tab2==4) {
+		document.getElementById("enviar").style.display = 'none';
+	}
+}
+
+function adelante(tab1,tab2) {
+	document.getElementById("tab"+tab1).style.display = 'none';
+	document.getElementById("tab"+tab2).style.display = 'block';
+	if (tab2==4) {
+		document.getElementById("enviar").style.display = 'inline-block';
+	}
+}

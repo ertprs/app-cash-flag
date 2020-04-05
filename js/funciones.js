@@ -35,7 +35,7 @@ function fparametros() {
 			}
 		}
 	};
-	xmlhttp.open("GET", "php/parametros.php", true);
+	xmlhttp.open("GET", "../php/parametros.php", true);
 	xmlhttp.send();
 }
 

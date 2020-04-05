@@ -67,6 +67,11 @@ img {
     text-align: right;
 }
 
+.btns2 {
+    padding-top: 0.5em;
+    text-align: center;
+}
+
 @media only screen and (max-width: 960px) {
     * {
         width: 100%;

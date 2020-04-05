@@ -1,0 +1,202 @@
+* {
+    padding: 0;
+    margin: 0;
+    --columnas: 1;
+    --filas: 1;
+    --ancho: 180px;
+    --alto: 100px;
+    --linea: 10px;
+    /* font-size: 10px; */
+}
+
+#container {
+    padding: 1em;
+    margin: auto;
+    width: 80%;
+    /* min-width: 400px; */
+    /* background: lightgray; */
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.logo {
+    margin: 10px auto;
+    height: auto;
+    width: 8em;
+    text-align: center;
+}
+
+.img-logo {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.tabla {
+    margin-top: 0.5em;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    border: solid 1px darkgray;
+}
+
+.fila {
+    display: flex;
+    width: 100%;
+    height: 1.5em;
+/*     padding-left: 0.3em;
+    padding-right: 0.3em;
+ */    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+.titulo {
+    background: lightblue;
+    font-weight: bold;
+}
+
+.new {
+    background: lightgreen;
+    border: 1px gray;
+    border-top-style: solid;
+    border-bottom-style: solid;
+}
+
+.par {
+    background: none;
+}
+
+.impar {
+    background: lightgray;
+}
+
+.columnaNew {
+    width: 100%;
+    text-align: center;
+    align-self: center;
+    font-weight: bold;
+    color: red;
+}
+
+.columna1 {
+    width: 25%;
+    text-align: center;
+    align-self: center;
+}
+
+.detcolumna1 {
+    text-align: left;
+    padding-left: 2em;
+}
+
+.columna2 {
+    width: 20%;
+    text-align: center;
+    align-self: center;
+}
+
+.columna3 {
+    width: 20%;
+    text-align: center;
+    align-self: center;
+}
+
+.columna4 {
+    width: 25%;
+    text-align: center;
+    align-self: center;
+}
+
+.columna5 {
+    width: 10%;
+    align-self: center;
+    text-align: center;
+}
+
+.btns {
+    padding-top: 0.5em;
+    text-align: right;
+    margin-bottom: 2em;
+}
+
+.area_modal {
+    position: absolute;
+    top: 8em;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.modal {
+    text-align: center;
+    width: 45%;
+    height: auto;
+    border: solid 1px black;
+    border-radius: 5%;
+    background: white;
+    z-index: 1000;
+    padding: 5px;
+    margin: 20px auto 0;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.cmps {
+    padding: 0.5em 0 0 0;
+    display: flex;
+    flex-direction: row;
+}
+
+.etiq {
+    width: 40%;
+    height: 20px;
+    text-align: left;
+    margin-left: 10%;
+}
+
+.campo {
+    width: 40%;
+}
+
+.btns_centrado {
+    padding-top: 0.5em;
+    text-align: center;
+}
+
+@media only screen and (max-width: 780px) {
+    * {
+        width: 100%;
+    }
+    #container {
+        padding: 0;
+        margin: auto;
+        width: 96%;
+        /* min-width: 400px; */
+        /* background: lightgray; */
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+    .fila {
+        height: auto;
+        justify-content: space-around;
+        font-size: 90%;
+    }
+    .par {
+        font-size: 80%;
+    }
+    .impar {
+        font-size: 80%;
+    }
+    .detcolumna1 {
+        padding-left: 0;
+    }
+    .columna2 {
+        display: none;
+    }
+    .columna4 {
+        display: none;
+    }
+}
