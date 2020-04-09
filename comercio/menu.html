@@ -38,6 +38,15 @@
 						</div>
 					</a>
 
+					<a id="registrausuarios" href="../afiliacion" onclick="">
+						<div class="item" align="center">
+							<div class="imagen" align="center">
+								<!-- <img class="img_opcion" src="" title="Cuponera" /> -->
+								Afiliación de nuevos usuarios
+							</div>
+						</div>
+					</a>
+
 					<a id="prepago" href="../prepago" onclick="">
 						<div class="item" align="center">
 							<div class="imagen" align="center">
@@ -56,65 +65,15 @@
 						</div>
 					</a>
 
-<!-- 
-					<a id="cuponera" href="" onclick="alert('En construcción')">
-						<div class="item" align="center">
-							<div class="imagen" align="center"> -->
-								<!-- <img class="img_opcion" src="" title="Cuponera" /> -->
-<!-- 								Seguimiento de órdenes
-							</div>
-						</div>
-					</a>
- -->					
-					<!-- <a id="lector" href="../lector/index.html?menu=comercio" onclick=""> -->
-					<a id="lector" href="../lector/index.html?menu=comercio" onclick="">
+					<a id="clavecanje" href="./admin" onclick="">
 						<div class="item" align="center">
 							<div class="imagen" align="center">
-								<!-- <img class="img_opcion" src="" title="Lector" /> -->
-								Lector de códigos QR
-							</div>
-						</div>
-					</a>
-<!--
-					<a id="premios" href="" onclick="alert('En construcción')">
-						<div class="item" align="center">
-							<div class="imagen" align="center"> -->
 								<!-- <img class="img_opcion" src="" title="Cuponera" /> -->
-							<!--	Administrar premios
+								Cambiar clave para validar cupones
 							</div>
 						</div>
 					</a>
--->
-<!-- 					
-					<a id="cuponera" href="" onclick="alert('En construcción')">
-						<div class="item" align="center">
-							<div class="imagen" align="center"> -->
-								<!-- <img class="img_opcion" src="" title="Cuponera" /> -->
-<!-- 								Administrar catálogo
-							</div>
-						</div>
-					</a>
- -->
-<!--
-					<a id="cuponera" href="" onclick="alert('En construcción')">
-						<div class="item" align="center">
-							<div class="imagen" align="center"> -->
-								<!-- <img class="img_opcion" src="" title="Cuponera" /> -->
-<!--								Mesa de ayuda y solicitudes especiales
-							</div>
-						</div>
-					</a>
--->
-<!-- 					
-					<a id="cuponera" href="" onclick="alert('En construcción')">
-						<div class="item" align="center">
-							<div class="imagen" align="center"> -->
-								<!-- <img class="img_opcion" src="" title="Cuponera" /> -->
-<!-- 								e-Mail masivo
-							</div>
-						</div>
-					</a>
- -->
+
 					<a id="salir" href="" onclick="">
 						<div class="item" align="center">
 							<div class="imagen" align="center">
@@ -134,6 +93,69 @@
 				logo.title = sessionStorage.getItem("nombreprov");
 				salir.href = sessionStorage.getItem("url_back");
 				sessionStorage.setItem("url_bck2",window.location);
+			}
+		</script>
+	</body>
+</html>
+
+					<!-- 
+					<a id="cuponera" href="" onclick="alert('En construcción')">
+						<div class="item" align="center">
+							<div class="imagen" align="center"> -->
+								<!-- <img class="img_opcion" src="" title="Cuponera" /> -->
+					<!-- 								Seguimiento de órdenes
+							</div>
+						</div>
+					</a>
+					-->					
+					<!--
+					<a id="premios" href="" onclick="alert('En construcción')">
+						<div class="item" align="center">
+							<div class="imagen" align="center"> -->
+								<!-- <img class="img_opcion" src="" title="Cuponera" /> -->
+							<!--	Administrar premios
+							</div>
+						</div>
+					</a>
+
+					<a id="cuponera" href="" onclick="alert('En construcción')">
+						<div class="item" align="center">
+							<div class="imagen" align="center"> -->
+								<!-- <img class="img_opcion" src="" title="Cuponera" /> -->
+					<!-- 								Administrar catálogo
+							</div>
+						</div>
+					</a>
+
+					<a id="cuponera" href="" onclick="alert('En construcción')">
+						<div class="item" align="center">
+							<div class="imagen" align="center"> -->
+								<!-- <img class="img_opcion" src="" title="Cuponera" /> -->
+					<!--								Mesa de ayuda y solicitudes especiales
+							</div>
+						</div>
+					</a>
+
+					<a id="cuponera" href="" onclick="alert('En construcción')">
+						<div class="item" align="center">
+							<div class="imagen" align="center"> -->
+								<!-- <img class="img_opcion" src="" title="Cuponera" /> -->
+					<!-- 								e-Mail masivo
+							</div>
+						</div>
+					</a>
+
+					<a id="lector" href="../lector/index.html?menu=comercio" onclick="">
+						<div class="item" align="center">
+							<div class="imagen" align="center"> -->
+								<!-- <img class="img_opcion" src="" title="Lector" /> -->
+					<!--			Lector de códigos QR
+							</div>
+						</div>
+					</a>
+					-->
+
+<!-- 
 				// let xmlhttp = new XMLHttpRequest();
 				// xmlhttp.onreadystatechange = function () {
 				// 	if (this.readyState == 4 && this.status == 200) {
@@ -153,7 +175,4 @@
 				// };
 				// xmlhttp.open("GET", "../php/proveedores.php?prov="+idproveedor, true);
 				// xmlhttp.send();
-			}
-		</script>
-	</body>
-</html>
+ -->

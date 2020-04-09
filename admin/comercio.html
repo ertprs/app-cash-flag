@@ -43,8 +43,12 @@
 		</div>
 		<div id="ventana_modal" class="area_modal">
 			<div id="formulario" class="modal">
+				<!-- <form action="../php/registracomercio.php" method="POST" enctype="multipart/form-data"> -->
 				<!-- Variable para controlar el registro -->
-				<input id="id" class="campo" type="hidden" />
+				<div>
+					<input id="id" class="campo" type="hidden" />
+					<input id="tam" type="hidden" name="MAX_FILE_SIZE" value="10000000" />
+				</div>
 
 				<!-- nombre -->
 				<div class="cmps">
@@ -76,9 +80,52 @@
 					<span class="etiq">Teléfono</span>
 					<input id="telefono" class="campo" type="text" size="50" maxlength="100" onchange="grabar()" />
 				</div>
+				<!-- nombre -->
+<!-- 				<div class="cmps">
+					<span class="etiq">Clave para canje de cupones</span>
+					<input id="clavecanje1" class="campo" type="password" size="50" maxlength="100" onchange="grabar()" />
+				</div>
+ -->
+ 				<!-- nombre -->
+<!-- 				<div class="cmps">
+					<span class="etiq">Confirmar clave de cupones</span>
+					<input id="clavecanje2" class="campo" type="password" size="50" maxlength="100" onchange="grabar()" />
+				</div>
+ -->
+				<!-- nombre -->
+				<div class="cmps">
+					<span class="etiq">Categoría</span>
+					<div class="campo" style="text-align: left;">
+						<select id="categoria" style="width: 101.5%;" onchange="validacat(this.value)">
+							<option value="ninguna">Seleccione</option>
+						</select>
+						<br/>
+						<input id="otracat" style="width: 100%; display: none;" type="text" size="50" maxlength="100" />
+					</div>
+				</div>
+				<!-- nombre -->
+				<div class="cmps">
+					<span class="etiq">Status</span>
+					<div  class="campo" style="text-align: left; height: 1em;">
+						<input id="status" type="checkbox" onchange="cambiamsg(this.checked)" />
+						<span id="txtstatus">Inactivo</span>
+					</div>
+				</div>
+				<!-- nombre -->
+				<div class="cmps">
+					<span class="etiq">Logo:</span>
+					<div id="arealogocomercio" style="width: 40%;">
+						<img id="imgLogo" src="../img/sin_imagen.jpg" alt="" title="Doble click para cambiar" style="width: 50%; height: auto;" ondblclick="cambialogo()" />
+						<br/>
+						<!-- <button id="btncambialogo" style="width: 7em; margin-top: 0.5em;" onclick="cambialogo()">Cambiar</button> -->
+						<!-- <input id="archivoLogo" name="logoComercio" class="campo" type="file" size="50" maxlength="100" title="" style="width: 80%;" onclick="alert('x')" /> -->
+					</div>
+				</div>
 				<!-- Linea de botones -->
 				<div class="btns_centrado">
-					<button id="btnguardar" style="width: 7em; margin: 0.5em 0 0 0;" onclick="cierraFormulario()">Cerrar</button>
+					<button id="btnguardar" style="width: 7em; margin: 0.5em 0 0 0; display: none;" onclick="cierraFormulario()">Guardar</button>
+				<!-- </form> -->
+					<button id="btncerrar" style="width: 7em; margin: 0.5em 0 0 0;" onclick="volver()">Cerrar</button>
 				</div>
 			</div>
 		</div>
@@ -195,6 +242,36 @@
 
 					// Agregar la fila a la tabla
 					document.getElementById("tabla").appendChild(fila);
+
+					notfound = true;
+					vacia = false;
+					for (var j = 0; j < categoria.childNodes.length; j++) {
+						if (comercios[i].categoria=="" || comercios[i].categoria==undefined) {
+							vacia = true;
+							if (categoria.childNodes[j].value=="Otra") {
+								notfound = false;
+							}
+						} else {
+							if (categoria.childNodes[j].value==comercios[i].categoria) {
+								notfound = false;
+							}
+						}
+					}
+					if (notfound) {
+						if (vacia) {
+							txt = document.createTextNode('Otra');
+						} else {
+							txt = document.createTextNode(comercios[i].categoria);
+						}
+						opt = document.createElement("option");
+						if (vacia) {
+							opt.value='Otra';
+						} else {
+							opt.value=comercios[i].categoria;
+						}
+						opt.appendChild(txt);
+						categoria.appendChild(opt);
+					}
 				}
 			}
 
@@ -208,13 +285,33 @@
 							respuesta = JSON.parse(this.responseText);
 							console.log(respuesta);
 							if (respuesta.exito=="SI") {
-								document.getElementById("id").value        = id;
-								document.getElementById("nombre").value    = respuesta.nombre;
-								document.getElementById("email").value     = respuesta.email;
-								document.getElementById("direccion").value = respuesta.direccion;
-								document.getElementById("rif").value       = respuesta.rif;
-								document.getElementById("contacto").value  = respuesta.contacto;
-								document.getElementById("telefono").value  = respuesta.telefono;
+								document.getElementById("id").value          = id;
+								document.getElementById("nombre").value      = respuesta.nombre;
+								document.getElementById("email").value       = respuesta.email;
+								document.getElementById("direccion").value   = respuesta.direccion;
+								document.getElementById("rif").value         = respuesta.rif;
+								document.getElementById("contacto").value    = respuesta.contacto;
+								document.getElementById("telefono").value    = respuesta.telefono;
+
+								// document.getElementById("clavecanje1").value = "";
+								// document.getElementById("clavecanje2").value = "";
+								if (respuesta.categoria=="" || respuesta.categoria==undefined) {
+									document.getElementById("categoria").value   = 'Otra';
+								} else {
+									document.getElementById("categoria").value   = respuesta.categoria;
+								}
+								// document.getElementById("status").value = respuesta.status;
+								document.getElementById("status").checked = respuesta.status;
+								if (respuesta.status) {
+									document.getElementById("txtstatus").innerHTML = "Activo";
+								} else {
+									document.getElementById("txtstatus").innerHTML = "Inactivo";
+								}
+								if (respuesta.logo=="") {
+									document.getElementById("imgLogo").src       = '../img/sin_imagen.jpg';
+								} else {
+									document.getElementById("imgLogo").src       = '../img/'+respuesta.logo;
+								}
 							} else {
 								alert("No hay comercios registrados.");
 							}
@@ -223,13 +320,20 @@
 					xmlhttp.open("GET", "../php/comerciocompleto.php?id="+id, true);
 					xmlhttp.send();
 				} else {
-					document.getElementById("id").value        = id;
-					document.getElementById("nombre").value    = "";
-					document.getElementById("email").value     = "";
-					document.getElementById("direccion").value = "";
-					document.getElementById("rif").value       = "";
-					document.getElementById("contacto").value  = "";
-					document.getElementById("telefono").value  = "";
+					document.getElementById("id").value            = id;
+					document.getElementById("nombre").value        = "";
+					document.getElementById("email").value         = "";
+					document.getElementById("direccion").value     = "";
+					document.getElementById("rif").value           = "";
+					document.getElementById("contacto").value      = "";
+					document.getElementById("telefono").value      = "";
+
+					// document.getElementById("clavecanje1").value   = "";
+					// document.getElementById("clavecanje2").value   = "";
+					document.getElementById("categoria").value     = 'ninguna';
+					document.getElementById("status").checked      = false;
+					document.getElementById("txtstatus").innerHTML = "Inactivo";
+					document.getElementById("imgLogo").src         = '../img/sin_imagen.jpg';
 				}
 				ventana_modal.style.display = 'block';
 			}
@@ -249,6 +353,34 @@
 					vacios++;
 					campo = "email";
 				}
+
+
+				if ((document.getElementById("direccion").value=="" || document.getElementById("direccion").value==undefined) && vacios == 0) {
+					alert("El campo direccion no puede quedar en blanco");
+					vacios++;
+					campo = "direccion";
+				}
+				if ((document.getElementById("rif").value=="" || document.getElementById("rif").value==undefined) && vacios == 0) {
+					alert("El campo rif no puede quedar en blanco");
+					vacios++;
+					campo = "rif";
+				}
+				if ((document.getElementById("contacto").value=="" || document.getElementById("contacto").value==undefined) && vacios == 0) {
+					alert("El campo contacto no puede quedar en blanco");
+					vacios++;
+					campo = "contacto";
+				}
+				if ((document.getElementById("telefono").value=="" || document.getElementById("telefono").value==undefined) && vacios == 0) {
+					alert("El campo telefono no puede quedar en blanco");
+					vacios++;
+					campo = "telefono";
+				}
+				if (document.getElementById("categoria").value=="ninguna" && vacios == 0) {
+					alert("El campo categoria no puede quedar en blanco");
+					vacios++;
+					campo = "categoria";
+				}
+
 				if (vacios>0) {
 					continuar = false;
 					nocontinuar = true;
@@ -260,7 +392,7 @@
 			}
 
 			function cierraFormulario() {
-				if (btnguardar.innerHTML=="Guardar") {
+				// if (btnguardar.innerHTML=="Guardar") {
 					if (validaciones()) {
 						datos = new FormData();
 						datos.append("id",        document.getElementById("id").value);
@@ -270,6 +402,15 @@
 						datos.append("rif",       document.getElementById("rif").value);
 						datos.append("contacto",  document.getElementById("contacto").value);
 						datos.append("telefono",  document.getElementById("telefono").value);
+						if (document.getElementById("categoria").value=='Otra') {
+							datos.append("categoria", document.getElementById("otracat").value);
+							otracat.style.display = 'none';
+						} else {
+							datos.append("categoria", document.getElementById("categoria").value);
+						}
+						datos.append("status",    document.getElementById("status").checked);
+						// datos.append("logo",      document.getElementById("imgLogo").src);
+
 
 						xmlhttp = new XMLHttpRequest();
 						xmlhttp.onreadystatechange = function() {
@@ -295,7 +436,8 @@
 									xmlhttp.open("GET", "../php/buscacomercios2.php", true);
 									xmlhttp.send();
 
-									btnguardar.innerHTML = "Cerrar";
+									// btnguardar.innerHTML = "Cerrar";
+									btnguardar.style.display = "none";
 								} else {
 									alert("Falló el registro");
 								}
@@ -304,15 +446,47 @@
 						xmlhttp.open("POST", "../php/registracomercio.php", true);
 						xmlhttp.send(datos);
 					}
-				}
+				// }
 				ventana_modal.style.display = 'none';
 			}
 
 			function grabar() {
-				btnguardar.innerHTML = "Guardar";
+				// btnguardar.innerHTML = "Guardar";
+				btnguardar.style.display = "inline-block";
 			}
 
+			function volver() {
+				btnguardar.style.display = "none";
+				ventana_modal.style.display = 'none';
+			}
 
+			function validacat(valor) {
+				if (valor=="Otra") {
+					otracat.style.display = 'inline-block';
+				} else {
+					otracat.style.display = 'none';
+				}
+				grabar();
+			}
+
+			function cambiamsg(valor) {
+				if (valor) {
+					txtstatus.innerHTML = 'Activo';
+				} else {
+					txtstatus.innerHTML = 'Inactivo';
+				}
+				grabar();
+			}
+
+			function cambialogo() {
+				id = document.getElementById("id").value;
+				console.log(id);
+				if (id=='New') {
+					alert('Antes de cambiar el logo debe registrar el comercio.');
+				} else {
+					window.open('./cambialogo.html?id='+id, "_blank")
+				}
+			}
 		</script>
 	</body>
 </html>

@@ -12,7 +12,10 @@ if ($ro0 = mysqli_fetch_array($resul0)) {
     $respuesta .= '"direccion":"' . $ro0["direccion"] . '",';
     $respuesta .= '"rif":"'       . $ro0["rif"]       . '",';
     $respuesta .= '"contacto":"'  . $ro0["contacto"]  . '",';
-    $respuesta .= '"telefono":"'  . $ro0["telefono"]  . '"';
+    $respuesta .= '"telefono":"'  . $ro0["telefono"]  . '",';
+    $respuesta .= '"categoria":"' . $ro0["categoria"] . '",';
+    $respuesta .= '"status":'     . $ro0["status"]    . ',';
+    $respuesta .= '"logo":"'      . $ro0["logo"]      . '"';
     $respuesta .= '}';
 } else {
     $respuesta = '{"exito":"NO"}';

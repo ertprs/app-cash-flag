@@ -397,12 +397,13 @@
 					alert("El campo correo electrónico no puede quedar en blanco");
 					document.getElementById("email").focus();
 				} else {
-					btnemail.style.display = 'none';
 					var xmlhttp = new XMLHttpRequest();
 					xmlhttp.onreadystatechange = function () {
 						if (this.readyState == 4 && this.status == 200) {
 							respuesta = JSON.parse(this.responseText);
+							console.log(respuesta);
 							if (respuesta.exito == 'SI') {
+								btnemail.style.display = 'none';
 								// document.title = 'Menú principal';
 								div3.style.display = 'flex';
 								div4.style.display = 'flex';
@@ -427,7 +428,8 @@
 								nombres = document.getElementById("nombres").value;
 								apellidos = document.getElementById("apellidos").value;
 								telefono = document.getElementById("telefono").value;
-
+							} else {
+								alert("Debe registrar al socio para poder recargar tarjetas prepagadas.");
 							}
 						}
 					};

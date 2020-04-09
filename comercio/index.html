@@ -118,14 +118,18 @@
 									if (respuesta.mensaje=="error de tipo") {
 										alert("Este correo electrónico no está registrado como comercio.\nUtilice otro correo electrónico o comuniquese al\n+58-424-407.1820 para solicitar el cambio de tipo.");
 									} else {
-										document.getElementById("div2").style.display = 'flex';
-										document.getElementById("div3").style.display = 'flex';
-										document.getElementById("div4").style.display = 'flex';
-										document.getElementById("div5").style.display = 'flex';
-										document.getElementById("buscar").style.display = 'none';
-										document.getElementById("login").style.display = 'none';
-										document.getElementById("registro").style.display = 'inline-block';
-										document.getElementById("olvido").style.display = 'none';
+										if (respuesta.mensaje=="error de status") {
+											alert("Este proveedor está inactivo.\nComuniquese al +58-424-407.1820\npara solicitar el cambio de status.");
+										} else {
+											document.getElementById("div2").style.display = 'flex';
+											document.getElementById("div3").style.display = 'flex';
+											document.getElementById("div4").style.display = 'flex';
+											document.getElementById("div5").style.display = 'flex';
+											document.getElementById("buscar").style.display = 'none';
+											document.getElementById("login").style.display = 'none';
+											document.getElementById("registro").style.display = 'inline-block';
+											document.getElementById("olvido").style.display = 'none';
+										}
 									}
 								}
 							}

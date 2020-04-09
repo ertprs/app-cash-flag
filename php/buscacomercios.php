@@ -2,7 +2,7 @@
 header('Content-Type: application/json');
 include_once("../_config/conexion.php");
 
-$quer0 = "SELECT categoria FROM proveedores group by categoria order by categoria";
+$quer0 = "SELECT categoria FROM proveedores where status=1 group by categoria order by categoria";
 
 if ($resul0 = mysqli_query($link, $quer0)) {
     $categoria = '';
@@ -23,7 +23,7 @@ if ($resul0 = mysqli_query($link, $quer0)) {
     $categoria .= ($cierre) ? ']' : '';
 }
 
-$quer0 = "select * from proveedores order by categoria,nombre";
+$quer0 = "select * from proveedores where status=1 order by categoria,nombre";
 if ($resul0 = mysqli_query($link,$quer0)) {
     $respuesta = '';
     $cierto = true;
