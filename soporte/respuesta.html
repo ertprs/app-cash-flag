@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>POPCLIK - Soporte técnico</title>
+	<link rel="stylesheet" href="">
+<style>
+	* {
+		margin: 0;
+		padding:0;
+	}
+	.logo {
+		margin-top: 10px;
+		height: 10em;
+		width: 12em;
+		text-align: center;
+/*		display: flex;
+		align-items: center;
+		justify-content: center;
+*/	}
+	img {
+		width: 100%;
+		height: auto;
+		object-fit: contain;
+	}
+	#container {
+		padding: 1em;
+		margin: auto;
+		width: 38%;
+		min-width: 400px;
+		background: lightgray;
+		display: flex;
+		flex-direction: column;
+		flex-wrap: wrap;
+	}
+	.cmps {
+		padding: 0.5em 0 0 0;
+		display: flex;
+		flex-direction: row;
+	}
+	.etiq {
+		width: 37.4%;
+		height: 20px;
+		justify-content: middle;
+	}
+	.campo {
+		height: 20px;
+		width: 61.5%;
+	}
+	.selec {
+		height: 20px;
+		width: 62.5%;
+	}
+	.btns {
+		padding-top: 0.5em;
+		text-align: right;
+	}
+	@media only screen and (max-width: 1260px) {
+		.logo {
+			padding-bottom: 0.5em;
+		}
+		h3 {
+			padding-bottom: 0.5em;
+		}
+		.cmps {
+			padding: 0 0 2.25em 0;
+		}
+	}
+</style>
+</head>
+<body onload="cargar()">
+	<div align="center">
+		<div class="logo">
+			<img src="../../img/popclik.png" alt="">
+		</div>
+	</div>
+	<div id="container">
+		<h3 align="center">Responder un ticket de soporte</h3>
+		<div class="cmps">
+			<span class="etiq">Ticket</span>
+			<input id="ticket" class="campo" type="text" size="11" maxlength="11" readonly style="background:yellow;text-align:right;width:auto;" />
+		</div>
+		<div class="cmps">
+			<span class="etiq">Fecha de apertura:</span>
+			<input id="fechaticket" class="campo" type="text" size="19" maxlength="19" readonly style="background:yellow;text-align:center;;width:auto;" />
+		</div>
+		<div class="cmps">
+			<span class="etiq">Cliente</span>
+			<input id="cliente" class="campo" type="text" size="50" maxlength="100" readonly style="background:yellow;" />
+		</div>
+		<div class="cmps">
+			<span class="etiq">Sistema</span>
+			<input id="sistema" class="campo" type="text" size="50" maxlength="100" readonly style="background:yellow;" />
+		</div>
+		<div class="cmps">
+			<span class="etiq">Módulo</span>
+			<input id="modulo" class="campo" type="text" size="50" maxlength="100" readonly style="background:yellow;" />
+		</div>
+		<div class="cmps">
+			<span class="etiq">Tipo de solicitud</span>
+			<input id="tipo" class="campo" type="text" size="50" maxlength="100" readonly style="background:yellow;" />
+		</div>
+		<div class="cmps">
+			<span class="etiq">Detalles:</span>
+			<textarea id="detalles" rows="5" style="background:yellow;width: 62.5%;" maxlength="250" readonly></textarea>
+		</div>
+		<div class="cmps">
+			<span class="etiq">Impacto sobre el negocio:</span>
+			<input id="impacto" class="campo" type="text" size="50" maxlength="100" readonly style="background:yellow;" />
+		</div>
+		<div class="cmps">
+			<span class="etiq">Nombre de quien reporta:</span>
+			<input id="nombre" class="campo" type="text" size="50" maxlength="100" readonly style="background:yellow;" />
+		</div>
+		<div class="cmps">
+			<span class="etiq">correo electrónico:</span>
+			<input id="email" class="campo" type="email" size="50" maxlength="100" readonly style="background:yellow;" />
+		</div>
+		<div class="cmps">
+			<span class="etiq">Teléfono de contacto:</span>
+			<input id="telefono" class="campo" type="text" size="50" maxlength="100" readonly style="background:yellow;" />
+		</div>
+		<div class="cmps">
+			<hr width="100%" />
+		</div>
+		<div class="cmps">
+			<span class="etiq">Severidad</span>
+			<select id="severidad" class="selec" >
+				<option value="3">3 - Plazo de respuesta: 5 días hábiles</option>
+				<option value="2">2 - Plazo de respuesta: 3 días hábiles</option>
+				<option value="1">1 - Plazo de respuesta: 1 día hábil</option>
+			</select>
+		</div>
+		<div class="cmps">
+			<span class="etiq">Prioridad:</span>
+			<input id="prioridad" class="campo" type="number" min="1" max="1000" size="4" maxlength="4" style="text-align:right;width:4em;" value="1" placeholder="1" />
+		</div>
+		<div class="cmps">
+			<span class="etiq">Respuesta:</span>
+			<textarea id="respuesta" rows="5" style="width: 62.5%;" maxlength="250"></textarea>
+		</div>
+		<div class="cmps">
+			<span class="etiq">Asignado a:</span>
+			<select id="asignado" class="selec"></select>
+		</div>
+		<div class="cmps">
+			<span class="etiq">Plan de acción:</span>
+			<textarea id="plandeaccion" rows="5" style="width: 62.5%;" maxlength="250"></textarea>
+		</div>
+ 		<div class="btns">
+			<button id="enviar" onclick="fenviar()" style="width: 7em;">Enviar</button>
+			<button id="limpiar" onclick="flimpiar()" style="width: 7em;">Limpiar</button>
+		</div>
+	</div>
+<script>
+function cargar() {
+	var paramstr = window.location.search.substr(1);
+	var paramarr = paramstr.split("=");
+	ticket = paramarr[1];
+	document.getElementById("ticket").value = ticket;
+
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			respuesta = JSON.parse(this.responseText);
+			if (respuesta.exito=='SI') {
+				document.getElementById('fechaticket').value = respuesta.ticket.fechaticket;
+				document.getElementById('cliente').value = respuesta.ticket.cliente;
+				document.getElementById('sistema').value = respuesta.ticket.sistema;
+				document.getElementById('modulo').value = respuesta.ticket.modulo;
+				document.getElementById('tipo').value = respuesta.ticket.tipo;
+				document.getElementById('detalles').value = respuesta.ticket.detalles;
+				document.getElementById('impacto').value = respuesta.ticket.impacto;
+				document.getElementById('nombre').value = respuesta.ticket.nombre;
+				document.getElementById('email').value = respuesta.ticket.email;
+				document.getElementById('telefono').value = respuesta.ticket.telefono;
+				document.getElementById('severidad').value = respuesta.ticket.severidad;
+
+				if (respuesta.consultores != undefined) {
+					for (i = 0; i < respuesta.consultores.length; i++) {
+						var sel = document.createElement("option");
+						var txt = document.createTextNode(respuesta.consultores[i].nombre);
+						sel.appendChild(txt);
+						sel.value = respuesta.consultores[i].id;
+						document.getElementById('asignado').appendChild(sel);
+					}
+					document.getElementById('asignado').value = respuesta.consultores[0].id
+				}
+			} else {
+				alert("El ticket ya fue asignado, cerrado o no existe");
+			}
+		}
+	};
+	xmlhttp.open("GET", "buscaticket.php?ticket="+ticket, true);
+	xmlhttp.send();
+}
+
+function fenviar() {
+	var datos = new FormData();
+	datos.append("ticket", document.getElementById("ticket").value);
+	datos.append("severidad", document.getElementById("severidad").value);
+	datos.append("prioridad", document.getElementById("prioridad").value);
+	datos.append("respuesta", document.getElementById("respuesta").value);
+	datos.append("asignado", document.getElementById("asignado").value);
+	datos.append("plandeaccion", document.getElementById("plandeaccion").value);
+
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function () {
+		if (this.readyState == 4 && this.status == 200) {
+			respuesta = JSON.parse(this.responseText);
+			if (respuesta.exito == 'SI') {
+				mensaje = "Transacción registrada exitosamente.";
+				alert(mensaje);
+				flimpiar();
+			} else {
+				alert("Falló el registro de la transacción");
+			}
+		}
+	};
+	xmlhttp.open("POST", "registrarespuesta.php", true);
+	xmlhttp.send(datos);
+}
+
+function flimpiar() {
+	document.getElementById('severidad').value = 3;
+	document.getElementById('prioridad').value = 1;
+	document.getElementById('respuesta').value = '';
+	document.getElementById('asignado').value = '';
+	document.getElementById('plandeaccion').value = '';
+}
+</script>
+</body>
+</html>

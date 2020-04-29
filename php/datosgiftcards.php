@@ -1,3 +1,4 @@
+
 <?php
 include_once("../_config/conexion.php");
 include_once("./funciones.php");
@@ -136,12 +137,12 @@ if ($result = mysqli_query($link,$query)) {
 			}
 		    $respuesta = '{"exito":"SI","mensaje":'.$mensaje.',"card":"'.$card.'","hash":"'.$hash.'"}';	
 		} else {
-		    $respuesta = '{"exito":"NO","mensaje":"La tarjeta no pudo generarse por favor comuniquese con soporte técnico","card":"'.$card.'","hash":"'.$hash.'"}';	
+		    $respuesta = '{"exito":"NO","mensaje":"La tarjeta no pudo generarse por favor comuniquese con soporte técnico [0]","card":"'.$card.'","hash":"'.$hash.'"}';	
 		}
 	} else {
 		$quer0 = "INSERT INTO cards (card, tipo) VALUES ('".$card."','giftcard')";
 		if ($resul0 = mysqli_query($link,$quer0)) {
-			$query = "INSERT INTO giftcards (card, remitente, nombres, apellidos, telefono, email, saldo, moneda, fechacompra, fechavencimiento, validez, status, id_socio, id_proveedor, hash, tipopago, origen, referencia) VALUES ('".$card."','".$remitente."','".$nombres."','".$apellidos."','".$telefono."','".$email."',".$monto.",'".$moneda."','".$fecha."','".$fechavencimiento."','".$validez."','".$status."',".$idsocio.",".$idproveedor.",'".$hash."','".$tipopago."','".$origen."','".$referencia."')";
+			$query = "INSERT INTO giftcards (card, remitente, nombres, apellidos, telefono, email, saldo, saldoentransito, moneda, fechacompra, fechavencimiento, validez, status, id_socio, id_proveedor, hash, tipopago, origen, referencia) VALUES ('".$card."','".$remitente."','".$nombres."','".$apellidos."','".$telefono."','".$email."',".$monto.",0,'".$moneda."','".$fecha."','".$fechavencimiento."','".$validez."','".$status."',".$idsocio.",".$idproveedor.",'".$hash."','".$tipopago."','".$origen."','".$referencia."')";
 			if ($result = mysqli_query($link,$query)) {
 				$txtcard = substr($card,0,4).'-'.substr($card,4,4).'-'.substr($card,8,4).'-'.substr($card,12,4);
 				if ($tipopago == 'efectivo') {
@@ -173,14 +174,14 @@ if ($result = mysqli_query($link,$query)) {
 				}
 			    $respuesta = '{"exito":"SI","mensaje":'.$mensaje.',"card":"'.$card.'","hash":"'.$hash.'"}';	
 			} else {
-			    $respuesta = '{"exito":"NO","mensaje":"La tarjeta no pudo generarse por favor comuniquese con soporte técnico","card":"'.$card.'","hash":"'.$hash.'"}';	
+			    $respuesta = '{"exito":"NO","mensaje":"La tarjeta no pudo generarse por favor comuniquese con soporte técnico [1]","card":"'.$card.'","hash":"'.$hash.'"}';	
 			}
 		} else {
-		    $respuesta = '{"exito":"NO","mensaje":"La tarjeta no pudo generarse por favor comuniquese con soporte técnico","card":"'.$card.'","hash":"'.$hash.'"}';	
+		    $respuesta = '{"exito":"NO","mensaje":"La tarjeta no pudo generarse por favor comuniquese con soporte técnico [2]","card":"'.$card.'","hash":"'.$hash.'"}';	
 		}
 	}
 } else {
-    $respuesta = '{"exito":"NO","mensaje":"La transacción no pudo completarse por favor comuniquese con soporte técnico","card":"'.$card.'","hash":"'.$hash.'"}';	
+    $respuesta = '{"exito":"NO","mensaje":"La transacción no pudo completarse por favor comuniquese con soporte técnico [3]","card":"'.$card.'","hash":"'.$hash.'"}';	
 }
 echo $respuesta;
 

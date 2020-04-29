@@ -107,15 +107,12 @@
 
 		let card1, saldo=0.00;
 
-		let idproveedor="";
+		let idproveedor=0, token="";
 		// , ficha='';
 		let datos = new FormData();
 		let beep = '../lector/audio/beep.mp3';
 		let scanner = "";
 		// const mysocket = new WebSocket("ws://demos.kaazing.com/echo");
-
-		idproveedor = (idproveedor==undefined) ? 2 : idproveedor;
-
 
 		function generacard() {
 			var xmlhttp = new XMLHttpRequest();
@@ -136,6 +133,7 @@
 					);
 
 					saldo = respuesta.saldo;
+					idproveedor = respuesta.idproveedor;
 
 					// const card1 = new Card(
 					// 	'mycard',
@@ -240,17 +238,20 @@
 			return continuar;
 		}
 
+		function limpiar() {
+			document.getElementById("monto").value = "";
+			monto.focus();
+		}
+
 		// Enviar la transacción para procesar
 		function enviar() {
 			console.log('enviar');
 			// mysocket.send(document.getElementById("tarjeta").value+' monto: '+document.getElementById("monto").value);
 			datos.append("idproveedor", idproveedor);
-			datos.append("monto", document.getElementById("monto").value);
-			datos.append("tarjeta", tarjeta);
-
-			console.log(idproveedor);
-			console.log(document.getElementById("monto").value);
-			console.log(tarjeta);
+			datos.append("monto",       document.getElementById("monto").value);
+			datos.append("tarjeta",     tarjeta);
+			datos.append("origen",      origen);
+			datos.append("token",       token);
 
 			var xmlhttp = new XMLHttpRequest();
 			xmlhttp.onreadystatechange = function() {
@@ -278,9 +279,67 @@
 				if (content) { 
 					PlaySound(beep);
 				}
-				idproveedor = respuesta.idp;
+				avanzar = false;
+				if(respuesta.idp!=undefined) {
+					proveedor = respuesta.idp;
+					if (proveedor==idproveedor) {
+						origen = "Tarjeta en punto de venta";
+						avanzar = true;
+					} else {
+						alert("El proveedor no coincide");						
+					}
+				}
+				if (respuesta.t!=undefined) {
+					origen    = "Boton de pago";
+					token     = respuesta.t;
+					proveedor = respuesta.p;
+					card      = respuesta.c
+					xmonto    = respuesta.m;
+					valido = "";
+					if (proveedor==idproveedor) {
+						valido = valido;
+					} else {
+						valido = "p";
+					}
+					if (tarjeta==card) {
+						tarjeta = card;
+						valido  = valido;
+					} else {
+						valido += "c";
+					}
+					if (xmonto==document.getElementById("monto").value) {
+						valido  = valido;
+					} else {
+						valido += "m";
+					}
+					switch (valido) {
+						case "p":
+							mensaje = "El comercio no coincide con el punto de venta";
+							break;
+						case "c":
+							mensaje = "La tarjeta no coincide con la introducida en el punto de venta";
+							break;
+						case "m":
+							mensaje = "El monto no coincide con el introducido en el punto de venta";
+							break;
+						case "pc":
+							mensaje = "El comercio y la tarjeta no coinciden";
+							break;
+						case "pm":
+							mensaje = "El comercio y el monto no coincide con lo introducido en el punto de venta";
+							break;
+						case "cm":
+							mensaje = "La tarjeta y el monto no coinciden con lo introducido en el punto de venta";
+							break;
+					}
+					if(valido=="") { 
+						avanzar = true;
+					} else {
+						alert(mensaje);
+					}
+				}
 				cerrar_lector();
-				enviar();
+				if(avanzar) { enviar() }
 			});
 
 			Instascan.Camera.getCameras().then(function (cameras) {

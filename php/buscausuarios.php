@@ -15,41 +15,67 @@ if ($ro0 = mysqli_fetch_array($resul0)) {
         $valido = true;
         if ($ro0["tipo"]=='comercio') {
             $query = 'SELECT * FROM proveedores where email="'.$_GET["email"].'"';
+            $result = mysqli_query($link, $query);
+            if ($row = mysqli_fetch_array($result)) {
+                if ($row["status"]==1) {
+                    if ($ro0["tipo"]=='comercio') {
+                        $logo = ($row['logo']<>'') ? $row['logo'] : 'sin_imagen.jpg' ;
+                        $nombreprov = utf8_encode($row["nombre"]);
+                    } else {
+                        $logo = 'sin_imagen.jpg';
+                    }
+                    $id = $row['id'];
+                } else {
+                    $valido = false;
+                }
+            }
+            if ($valido) {    
+                $respuesta = '{"exito":"SI",';
+                $respuesta .= '"id":'.$id.',';
+                $respuesta .= '"logo":"'.$logo.'",';
+                $respuesta .= '"nombreprov":"'.$nombreprov.'",';
+                $respuesta .= '"hashp":"'. $ro0["hashp"] .'",';
+                $respuesta .= '"pregunta":"' . utf8_encode($ro0["pregunta"]) . '",';
+                $respuesta .= '"hashr":"' . $ro0["hashr"] . '",';
+                $respuesta .= '"mensaje":"exito"}';
+            } else {
+                $respuesta = '{"exito":"NO",';
+                $respuesta .= '"id":0,';
+                $respuesta .= '"logo":"",';
+                $respuesta .= '"nombreprov":"",';
+                $respuesta .= '"hashp":"",';
+                $respuesta .= '"pregunta":"",';
+                $respuesta .= '"hashr":"",';
+                $respuesta .= '"mensaje":"error de status"}';
+            }
         } else {
             $query = 'SELECT * FROM socios where email="'.$_GET["email"].'"';
-        }
-        $result = mysqli_query($link, $query);
-        if ($row = mysqli_fetch_array($result)) {
-            if ($row["status"]==1) {
-                if ($ro0["tipo"]=='comercio') {
-                    $logo = ($row['logo']<>'') ? $row['logo'] : 'sin_imagen.jpg' ;
-                    $nombreprov = utf8_encode($row["nombre"]);
+            $result = mysqli_query($link, $query);
+            if ($row = mysqli_fetch_array($result)) {
+                if ($row["status"]=="Activo") {
+                    $id = $row['id'];
+
                 } else {
-                    $logo = 'sin_imagen.jpg';
+                    $valido = false;
                 }
-                $id = $row['id'];
-            } else {
-                $valido = false;
             }
-        }
-        if ($valido) {    
-            $respuesta = '{"exito":"SI",';
-            $respuesta .= '"id":'.$id.',';
-            $respuesta .= '"logo":"'.$logo.'",';
-            $respuesta .= '"nombreprov":"'.$nombreprov.'",';
-            $respuesta .= '"hashp":"'. $ro0["hashp"] .'",';
-            $respuesta .= '"pregunta":"' . utf8_encode($ro0["pregunta"]) . '",';
-            $respuesta .= '"hashr":"' . $ro0["hashr"] . '",';
-            $respuesta .= '"mensaje":"exito"}';
-        } else {
-            $respuesta = '{"exito":"NO",';
-            $respuesta .= '"id":0,';
-            $respuesta .= '"logo":"",';
-            $respuesta .= '"nombreprov":"",';
-            $respuesta .= '"hashp":"",';
-            $respuesta .= '"pregunta":"",';
-            $respuesta .= '"hashr":"",';
-            $respuesta .= '"mensaje":"error de status"}';
+            if ($valido) {    
+                $respuesta = '{"exito":"SI",';
+                $respuesta .= '"id":'.$id.',';
+                $respuesta .= '"nombre":"'.$row["nombres"]." ".$row["apellidos"].'",';
+                $respuesta .= '"hashp":"'. $ro0["hashp"] .'",';
+                $respuesta .= '"pregunta":"' . utf8_encode($ro0["pregunta"]) . '",';
+                $respuesta .= '"hashr":"' . $ro0["hashr"] . '",';
+                $respuesta .= '"mensaje":"exito"}';
+            } else {
+                $respuesta = '{"exito":"NO",';
+                $respuesta .= '"id":0,';
+                $respuesta .= '"nombre":"",';
+                $respuesta .= '"hashp":"",';
+                $respuesta .= '"pregunta":"",';
+                $respuesta .= '"hashr":"",';
+                $respuesta .= '"mensaje":"error de status"}';
+            }
         }
     } else {
         $respuesta = '{"exito":"NO",';

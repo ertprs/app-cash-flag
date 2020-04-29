@@ -4,6 +4,7 @@ header('Content-Type: application/json');
 include_once("../_config/conexion.php");
 
 $saldo = 0.00;
+$vencimiento = '12/2020';
 // Buscar prepago
 $query = "SELECT * from prepago where card=".$_GET["t"];
 $result = mysqli_query($link, $query);
@@ -12,7 +13,7 @@ if ($row = mysqli_fetch_array($result)) {
 	$tipo = 'prepago';
 	$nombres = trim($row["nombres"])." ".trim($row["apellidos"]);
 	$saldo = $row["saldo"]-$row["saldoentransito"];
-	$vencimiento = '12/2020';
+	$vencimiento = $row["validez"];
 	$qr = '';
 } else {
 	$query = "SELECT * from giftcards where card=".$_GET["t"];
@@ -22,7 +23,7 @@ if ($row = mysqli_fetch_array($result)) {
 		$tipo = 'giftcard';
 		$nombres = trim($row["nombres"])." ".trim($row["apellidos"]);
 		$saldo = $row["saldo"];
-		$vencimiento = '12/2020';
+		$vencimiento = $row["validez"];
 		$qr = '';
 	}
 }
@@ -34,7 +35,7 @@ if ($row = mysqli_fetch_array($result)) {
 	$logo = $row["logocard"];
 }
 
-$respuesta = '{"logocard":"'.$logo.'","tipo":"'.$tipo.'","nombres":"'.$nombres.'","vencimiento":"'.$vencimiento.'","saldo":'.$saldo.',"qr":"'.$qr.'"}';
+$respuesta = '{"logocard":"'.$logo.'","tipo":"'.$tipo.'","nombres":"'.$nombres.'","vencimiento":"'.$vencimiento.'","saldo":'.$saldo.',"qr":"'.$qr.'","idproveedor":'.$idproveedor.'}';
 
 echo $respuesta;
 ?>

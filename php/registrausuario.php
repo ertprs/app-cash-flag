@@ -8,10 +8,13 @@ if ($ro0 = mysqli_fetch_array($resul0)) {
     $respuesta = '{"exito":"NO",';
     $respuesta .= '"mensaje":"Correo ya registrado"}';
 } else {
-    $query = 'INSERT INTO usuarios (email, tipo, pregunta, hashp, hashr) VALUES ("'.$_GET["email"].'","'.$_GET["tipo"].'","'.$_GET["question"].'","'.$_GET["hashp"].'","'.$_GET["hashr"].'")';
+    $query = 'INSERT INTO usuarios (email, tipo, password, pregunta, respuesta, hashp, hashr) VALUES ("'.$_GET["email"].'","'.$_GET["tipo"].'","","'.$_GET["question"].'","","'.$_GET["hashp"].'","'.$_GET["hashr"].'")';
     if($result = mysqli_query($link, $query)) {
         $respuesta = '{"exito":"SI",';
         $respuesta .= '"mensaje":"Registro exitoso"}';
+    } else {
+	    $respuesta = '{"exito":"NO",';
+	    $respuesta .= '"mensaje":"Ocurrió un error"}';
     }
 }
 echo $respuesta;

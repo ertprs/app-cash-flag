@@ -7,6 +7,8 @@ include_once("../lib/phpqrcode/qrlib.php");
 // Buscar tipo de instrumento
 $instrumento = "";
 $query = "select * from cards where card='".trim($_POST["tarjeta"])."'";
+$token = isset($_POST["token"]) ? $_POST["token"] : "" ;
+$origen = isset($_POST["origen"]) ? $_POST["origen"] : "" ;
 $result = mysqli_query($link, $query);
 $instrumento = ($row = mysqli_fetch_array($result)) ? $row["tipo"] : "" ;
 // if ($row = mysqli_fetch_array($result)) {
@@ -57,9 +59,9 @@ if ($instrumento<>"") {
 		if ($disponible - $monto > 0.00) {
 			// Insertar transacción para confirmar
 			$query  = "INSERT INTO pdv_transacciones (fecha, id_proveedor, id_socio, tipo, moneda, monto, ";
-			$query .= "instrumento, id_instrumento, documento, status) ";
-			$query .= "VALUES ('".$fecha."',".$id_proveedor.",".$id_socio.",'".$tipo."','".$moneda."',".$monto;
-			$query .= ",'".$instrumento."','".$id_instrumento."','".$documento."','".$status."')";
+			$query .= "instrumento, id_instrumento, documento, status, origen, token) ";
+			$query .= "VALUES ('".$fecha."',".$id_proveedor.",".$id_socio.",'".$tipo."','".$cardmoneda."',".$monto;
+			$query .= ",'".$instrumento."','".$id_instrumento."','".$documento."','".$status."','".$origen."','".$token."')";
 			if ($result = mysqli_query($link, $query)) {
 				$saldo -= $monto;
 				if ($instrumento=='prepago') {
