@@ -53,6 +53,30 @@ if (isset($result)) {
 }
 
 // /////////////////////////////////////////////////////////////////////
+// // A partir de acá es el código para actualizar el valor del dolar //
+// /////////////////////////////////////////////////////////////////////
+
+$url           = 'https://openexchangerates.org/api/latest.json?app_id='.$app_id_openexchange;
+$monedas       = '&symbols="BTC","COP","ETH","EUR","VEF_BLKMKT","VES"';
+$alternativas  = '&show_alternative=true';
+$url          .= $monedas.$alternativas;
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL,$url );
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
+
+$response = curl_exec($ch);
+
+$currencies = json_decode($response,true);
+
+$dolar = $currencies["rates"]["VEF_BLKMKT"];
+
+$query  = 'UPDATE _parametros SET dolar='.$dolar.', fechadolar="'.date("Y-m-d").'"';
+$result = mysqli_query($link, $query);
+
+
+// /////////////////////////////////////////////////////////////////////
 // // A partir de acá es el código para actualizar las tablas de zoom //
 // /////////////////////////////////////////////////////////////////////
 // $url = "http://sandbox.grupozoom.com/baaszoom/public/canguroazul/getCiudades?filtro=nacional";

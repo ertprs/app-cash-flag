@@ -8,6 +8,8 @@ if ($ro0 = mysqli_fetch_array($resul0)) {
     $respuesta = '{"exito":"SI",';
     $respuesta .= '"nombres":"'. trim(utf8_encode($ro0["nombres"])) .'",';
     $respuesta .= '"apellidos":"' . trim(utf8_encode($ro0["apellidos"])) . '",';
+    $respuesta .= '"telefono":"' . trim(utf8_encode($ro0["telefono"])) . '",';
+    $respuesta .= '"email":"' . trim(utf8_encode($ro0["email"])) . '",';
     $respuesta .= '"comercios":[';
 	$query = 'SELECT * FROM proveedores ORDER BY nombre';
 	$result = mysqli_query($link, $query);
@@ -28,6 +30,8 @@ if ($ro0 = mysqli_fetch_array($resul0)) {
     $respuesta = '{"exito":"NO",';
     $respuesta .= '"nombres":"",';
     $respuesta .= '"apellidos":""';
+    $respuesta .= '"telefono":"",';
+    $respuesta .= '"email":"",';
     $respuesta .= '"comercios":[]}';
 }
 echo $respuesta;

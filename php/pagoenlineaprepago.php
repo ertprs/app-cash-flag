@@ -18,7 +18,7 @@ include_once('../apis/pagoflash.api.client.php');
 $key_public = $key_public_pf;
 $key_secret = $key_secret_pf;
 // ------------------ O J O
-$api = new apiPagoflash($key_public,$key_secret, $urlcb, false);
+$api = new apiPagoflash($key_public,$key_secret, $urlcb, true);
 $cabeceraDeCompra = array(
     "pc_order_number" => "0",
     "pc_amount"       => trim(strval($monto)) 
@@ -44,6 +44,6 @@ $pfResponse = json_decode($response);
 if($pfResponse->success){
    header("Location: ".$pfResponse->url_to_buy);
 }else{
-    //manejo del error.
+    Echo "Ocurrió un error cargando la pasarela de pagos.";
 }
 ?>

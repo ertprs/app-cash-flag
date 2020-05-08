@@ -11,38 +11,37 @@
 <body onload="inicio()">
 	<table border="1" style="margin: auto;">
 		<caption id="titulo"></caption>
+		<!-- <caption id="hora"></caption> -->
 		<thead>
 			<tr>
-				<th style="width: 7em;">CRIPTO/FIAT</th>
-				<th style="width: 7em;">US Dolares</th>
-				<th style="width: 7em;">Euros</th>
-				<th style="width: 7em;">Pesos<br/>colombianos</th>
+				<th style="width: 10em;">MONEDA</th>
+				<th style="width: 7em;">VALOR</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-				<td><b>PTR</b></td>
-				<td id="usd_ptr" style="text-align: right;"></td>
-				<td id="eur_ptr" style="text-align: right;"></td>
-				<td id="cop_ptr" style="text-align: right;"></td>
+				<td><b>BTC</b></td>
+				<td id="btc" style="text-align: right;"></td>
 			</tr>
 			<tr>
-				<td><b>BTC</b></td>
-				<td id="usd_btc" style="text-align: right;"></td>
-				<td id="eur_btc" style="text-align: right;"></td>
-				<td id="cop_btc" style="text-align: right;"></td>
+				<td><b>COP</b></td>
+				<td id="cop" style="text-align: right;"></td>
 			</tr>
 			<tr>
 				<td><b>ETH</b></td>
-				<td id="usd_eth" style="text-align: right;"></td>
-				<td id="eur_eth" style="text-align: right;"></td>
-				<td id="cop_eth" style="text-align: right;"></td>
+				<td id="eth" style="text-align: right;"></td>
 			</tr>
 			<tr>
-				<td><b>DASH</b></td>
-				<td id="usd_dash" style="text-align: right;"></td>
-				<td id="eur_dash" style="text-align: right;"></td>
-				<td id="cop_dash" style="text-align: right;"></td>
+				<td><b>EUR</b></td>
+				<td id="eur" style="text-align: right;"></td>
+			</tr>
+			<tr>
+				<td><b>VEF (mercado negro)</b></td>
+				<td id="vef_blkmkt" style="text-align: right;"></td>
+			</tr>
+			<tr>
+				<td><b>VES</b></td>
+				<td id="ves" style="text-align: right;"></td>
 			</tr>
 		</tbody>
 	</table>
@@ -51,29 +50,30 @@
 			let xmlhttp = new XMLHttpRequest();
 			xmlhttp.onreadystatechange = function () {
 				if (this.readyState == 4 && this.status == 200) {
-					respuesta = JSON.parse(this.responseText.substr(0,this.responseText.length-1));
+					respuesta = JSON.parse(this.responseText);
+					console.log(respuesta);
 
 					hoy = new Date();
 					mes = hoy.getMonth()+1;
-					titulo.innerHTML = "<b>COTIZACION DEL PETRO AL "+hoy.getDate()+"/"+mes+"/"+hoy.getFullYear()+"</b>";
-
-					usd_ptr.innerHTML  = formatNumber.new(respuesta.data.PTR.USD);
-					usd_btc.innerHTML  = formatNumber.new(respuesta.data.BTC.USD);
-					usd_eth.innerHTML  = formatNumber.new(respuesta.data.ETH.USD);
-					usd_dash.innerHTML = formatNumber.new(respuesta.data.DASH.USD);
-
-					eur_ptr.innerHTML  = formatNumber.new(respuesta.data.PTR.EUR);
-					eur_btc.innerHTML  = formatNumber.new(respuesta.data.BTC.EUR);
-					eur_eth.innerHTML  = formatNumber.new(respuesta.data.ETH.EUR);
-					eur_dash.innerHTML = formatNumber.new(respuesta.data.DASH.EUR);
-
-					cop_ptr.innerHTML  = formatNumber.new(respuesta.data.PTR.COP);
-					cop_btc.innerHTML  = formatNumber.new(respuesta.data.BTC.COP);
-					cop_eth.innerHTML  = formatNumber.new(respuesta.data.ETH.COP);
-					cop_dash.innerHTML = formatNumber.new(respuesta.data.DASH.COP);
+					titulo.innerHTML = "<b>CAMBIO DEL DOLAR AL "+hoy.getDate()+"/"+mes+"/"+hoy.getFullYear()+"</b>";
+					// hora.innerHTML = "timestamp "+respuesta.timestamp;
+					/*
+					btc.innerHTML        = Math.round(respuesta.rates.BTC*100)/100;
+					cop.innerHTML        = Math.round(respuesta.rates.COP*100)/100;
+					eth.innerHTML        = Math.round(respuesta.rates.ETH*100)/100;
+					eur.innerHTML        = Math.round(respuesta.rates.EUR*100)/100;
+					vef_blkmkt.innerHTML = Math.round(respuesta.rates.VEF_BLKMKT*100)/100;
+					ves.innerHTML        = Math.round(respuesta.rates.VES*100)/100;
+					*/
+					btc.innerHTML        = respuesta.rates.BTC;
+					cop.innerHTML        = respuesta.rates.COP;
+					eth.innerHTML        = respuesta.rates.ETH;
+					eur.innerHTML        = respuesta.rates.EUR;
+					vef_blkmkt.innerHTML = respuesta.rates.VEF_BLKMKT;
+					ves.innerHTML        = respuesta.rates.VES;
 				}
 			};
-			xmlhttp.open("GET", "./getpetro.php", true);
+			xmlhttp.open("GET", "./getcurrencies.php", true);
 			xmlhttp.send();
 		}
 	</script>

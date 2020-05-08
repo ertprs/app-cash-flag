@@ -100,7 +100,6 @@ class apiPagoflash
             $PagoFlashTokenBuilder->addParameter($k, $val);
         }
     }
-
     $response=$PagoFlashTokenBuilder->send(apiPagoflash::$GLOBAL_PARAMETERS[$this->_env]["domain"]);
     return $response;
   }
