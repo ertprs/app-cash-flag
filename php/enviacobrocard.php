@@ -57,6 +57,13 @@ if ($instrumento<>"") {
 		// Calcular disponibilidad
 		$disponible = $saldo - $saldoentransito;
 		if ($disponible - $monto > 0.00) {
+			$querx = "select auto_increment from information_schema.tables where table_schema='clubdeconsumidores' and table_name='pdv_transacciones'";
+			$resulx = mysqli_query($link,$querx);
+			if($rox = mysqli_fetch_array($resulx)) {
+				$pdv_id = $rox["auto_increment"];
+			} else {
+				$pdv_id = 0;
+			}
 			// Insertar transacción para confirmar
 			$query  = "INSERT INTO pdv_transacciones (fecha, id_proveedor, id_socio, tipo, moneda, monto, ";
 			$query .= "instrumento, id_instrumento, documento, status, origen, token) ";
@@ -71,15 +78,15 @@ if ($instrumento<>"") {
 				}
 				if ($result = mysqli_query($link, $query)) {
 					$mensaje = '["Registro exitoso."]';
-					$respuesta = '{"exito":"SI","mensaje":'.$mensaje.',"transaccion":"'.$documento.'"';
+					$respuesta = '{"exito":"SI","mensaje":'.$mensaje.',"transaccion":"'.$documento.'","pdv_id":'.$pdv_id;
 					$respuesta .= '}';
 				} else {
 					$mensaje = '["Fallo el registro, por favor comuniquese con soporte técnico."]';
-					$respuesta = '{"exito":"NO","mensaje":'.$mensaje.',"transaccion":"'.$documento.'"}';
+					$respuesta = '{"exito":"NO","mensaje":'.$mensaje.',"transaccion":"'.$documento.'","pdv_id":0}';
 				}
 			} else {
 				$mensaje = '["Fallo el registro, por favor comuniquese con soporte técnico."]';
-				$respuesta = '{"exito":"NO","mensaje":'.$mensaje.',"transaccion":"'.$documento.'"}';
+				$respuesta = '{"exito":"NO","mensaje":'.$mensaje.',"transaccion":"'.$documento.'","pdv_id":0}';
 			}
 		} else {
 			$mensaje = '["Ups! Ocurrió un problema."';
@@ -89,13 +96,13 @@ if ($instrumento<>"") {
 			} else {
 				$mensaje .= ',"Puede recargar saldo a esta tarjeta para poder usarla."]';
 			}
-			$respuesta = '{"exito":"NO","mensaje":'.$mensaje.',"transaccion":"'.$documento.'"}';
+			$respuesta = '{"exito":"NO","mensaje":'.$mensaje.',"transaccion":"'.$documento.'","pdv_id":0}';
 		}
 	} else {
-		$respuesta = '{"exito":"NO","mensaje":"No coinciden tarjeta y comercio","transaccion":"'.$documento.'"}';
+		$respuesta = '{"exito":"NO","mensaje":"No coinciden tarjeta y comercio","transaccion":"'.$documento.'","pdv_id":0}';
 	}	
 } else {
-	$respuesta = '{"exito":"NO","mensaje":"Número de tarjeta no existe.","transaccion":""}';
+	$respuesta = '{"exito":"NO","mensaje":"Número de tarjeta no existe.","transaccion":"","pdv_id":0}';
 }
 echo $respuesta;
 ?>

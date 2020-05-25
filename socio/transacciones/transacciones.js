@@ -1,5 +1,6 @@
+var socket = io('https://ws.sgc-consultores.com.ve');
+
 let respuesta;
-const mysocket = new WebSocket("ws://demos.kaazing.com/echo");
 
 // Inicializa la aplicación
 function inicio() {
@@ -13,7 +14,7 @@ function inicio() {
 			// Rellena la lista de transacciones
 			pintartransacciones();
 			limpiar();
-			inicializarSocket();
+			// inicializarSocket();
 		}
 	};
 	xmlhttp.open("GET", "../../php/transac_socio.php?idsocio="+idsocio, true);
@@ -22,7 +23,7 @@ function inicio() {
 		window.open(sessionStorage.getItem("url_bck2"), "_self") }
 	);
 }
-
+/*
 // Abrir socket
 function inicializarSocket() {
 	mysocket.onopen = function(evt) {
@@ -41,7 +42,7 @@ function inicializarSocket() {
 		console.log("ERROR: " + evt.data);
 	}
 }
-
+*/
 // limpia el formulario
 function limpiar() {
 	var acciones = document.getElementsByTagName('input');
@@ -59,13 +60,15 @@ function accion(id) {
 	let datos = new FormData();
 	datos.append("accion", arr_accion[0]);
 	datos.append("transaccion", arr_accion[1]);
-	mysocket.send("Confirmar transaccion "+arr_accion[1]);
+	// mysocket.send("Confirmar transaccion "+arr_accion[1]);
 
 	let xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			respuesta = JSON.parse(this.responseText);
 			if (respuesta.exito == 'SI') {
+				console.log(respuesta.pdv_id);
+				socket.emit('manual', '{"pdv_id":'+respuesta.pdv_id+'}');
 				alert(respuesta.mensaje);
 				for (var i = transacciones.length-1; i >= 0; i--) {
 					document.getElementById("tabla").removeChild(document.getElementById('fila-'+transacciones[i].id));

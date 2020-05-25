@@ -49,37 +49,10 @@ if ($result = mysqli_query($link, $query)) {
   if ($result = mysqli_query($link, $query)) {
     $respuesta = '{';
     $respuesta .= '"exito":"SI",';
-    $respuesta .= '"mensaje":"' . utf8_encode('Proceso exitoso.') . '"';
+    $respuesta .= '"mensaje":"' . utf8_encode('Proceso exitoso.') . '",';
+    $respuesta .= '"pdv_id":' . $_POST["transaccion"];
     $respuesta .= '}';
   }
 }
 echo $respuesta;
 ?>
-<!-- 
-switch ($_POST["accion"]) {
-  case 'confirmar':
-    $query = 'UPDATE pdv_transacciones SET status="Confirmada" WHERE id='.$_POST["transaccion"];
-    $quer2 = 'UPDATE prepago_transacciones SET status="Confirmada" WHERE ';
-    $quer2 .= 'card="'.$card.'" and documento="'.$referencia.'" and fecha="'.$fecha.'"';
-    $saldo -= $monto;
-    $saldoentransito -= $monto;
-    break;
-  case 'rechazar':
-    $query = 'UPDATE pdv_transacciones SET status="Rechazada" WHERE id='.$_POST["transaccion"];
-    $quer2 = 'UPDATE prepago_transacciones SET status="Rechazada" WHERE ';
-    $quer2 .= 'card="'.$card.'" and documento="'.$referencia.'" and fecha="'.$fecha.'"';
-    $saldoentransito -= $monto;
-    break;
-}
-if ($result = mysqli_query($link, $query)) {
-  if ($result = mysqli_query($link, $quer2)) {
-    $query = 'UPDATE prepago SET saldo='.$saldo.', saldoentransito='.$saldoentransito.' WHERE card="'.trim($card).'"';
-    if ($result = mysqli_query($link, $query)) {
-      $respuesta = '{';
-      $respuesta .= '"exito":"SI",';
-      $respuesta .= '"mensaje":"' . utf8_encode('Proceso exitoso.') . '"';
-      $respuesta .= '}';
-    }
-  }
-}
- -->

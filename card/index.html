@@ -100,7 +100,10 @@
 	<script type="text/javascript" src="./classes.js"></script>
 	<!-- <script type="text/javascript" src="./cardlector.js"></script> -->
 	<script type="text/javascript" src="../lector/instascan.min.js"></script>
+	<script src="../lib/socket.io.js"></script>
 	<script>
+        var socket = io('https://ws.sgc-consultores.com.ve');
+
 		let tarjeta, params = fparamurl(window.location.search.substr(1));
 
 		tarjeta = (params==undefined) ? '1111222233334444' : params.card ;
@@ -259,6 +262,7 @@
 					respuesta = JSON.parse(this.responseText);
 					if (respuesta.exito == 'SI') {
 						alert(fmensaje(respuesta.mensaje));
+						socket.emit('card', '{"pdv_id":'+respuesta.pdv_id+'}');
 						limpiar();
 					} else {
 						alert(respuesta.mensaje);

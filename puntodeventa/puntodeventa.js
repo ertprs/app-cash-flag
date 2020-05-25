@@ -1,13 +1,21 @@
-// function inicio() {
-// 	pdv.appendChild(new Campo('monto_div_id','cmps','monto_etq_id','etiq','Monto a pagar','monto_cmp_id','campo','input','50','20'));
-// }
-
 let monto="", idproveedor=sessionStorage.getItem("idproveedor"), moneda='bs', tarjeta='';
-let datos = new FormData();
 let beep = '../lector/audio/beep.mp3';
 let scanner = "";
 
-// const mysocket = new WebSocket("ws://demos.kaazing.com/echo");
+var socket = io('https://ws.sgc-consultores.com.ve');
+
+socket.on('manual', function(msg){
+	datos = JSON.parse(msg);
+	document.getElementById("status-"+datos.pdv_id).innerHTML = "Confirmada";
+	document.getElementById("status-"+datos.pdv_id).classList.remove("rojo");
+	document.getElementById("status-"+datos.pdv_id).classList.add("negro");
+});
+
+socket.on('card', function(msg){
+	datos = JSON.parse(msg);
+	console.log(msg);
+	console.log('card '+datos);
+});
 
 idproveedor = (idproveedor==undefined) ? 2 : idproveedor;
 
@@ -145,6 +153,7 @@ function enviar() {
 	// if (localStorage.getItem("pin")!="" && localStorage.getItem("pin")!=undefined) {
 		if (validaciones()) {
 			// mysocket.send(document.getElementById("tarjeta").value+' monto: '+document.getElementById("monto").value);
+			var datos = new FormData();
 			datos.append("idproveedor", idproveedor);
 			datos.append("moneda", document.getElementById("divisa").value);
 			datos.append("monto", document.getElementById("monto").value);
@@ -207,6 +216,7 @@ function rellenatransacciones(transacciones) {
 		// status en la columna 4
 		txtstatus = document.createTextNode(transacciones[i].status);
 		cl4 = document.createElement("div");
+		cl4.id = 'status-'+transacciones[i].id;
 		cl4.classList.add("columna4");
 		if (transacciones[i].status=='Por confirmar') {
 			cl4.classList.add("rojo");
