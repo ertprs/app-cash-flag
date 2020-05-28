@@ -9,7 +9,7 @@ $monto = $_GET["m"];
 $transaccion = random_int(0, $monto);
 
 // código qr
-// $dir = 'https://www.cash-flag.com/php/temp/';
+// $dir = 'https://app.cash-flag.com/php/temp/';
 $dir = 'temp/';
 	
 // $filename = $dir.'test.png';
@@ -17,7 +17,7 @@ $filename = $dir.'trx-'.$transaccion.'.png';
 $tamanio = 5;
 $level = 'H';
 $frameSize = 1;
-$contenido = 'https://www.cash-flag.com/php/preparatransaccion.php?j={"t":"'.$tipo.'","c":"'.$card.'","m":'.$monto.'}';
+$contenido = 'https://app.cash-flag.com/php/preparatransaccion.php?j={"t":"'.$tipo.'","c":"'.$card.'","m":'.$monto.'}';
 
 QRcode::png($contenido, $filename, $level, $tamanio, $frameSize);
 

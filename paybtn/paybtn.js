@@ -67,7 +67,7 @@ function PayButton(event) {
 	dlog.style.textAlign = "center";
 	// Imagen
 	ilog = document.createElement("img");
-	ilog.src = "https://www.cash-flag.com/img/logoclub.png";
+	ilog.src = "https://app.cash-flag.com/img/logoclub.png";
 	// ilog.src = "../img/logoclub.png";
 	ilog.style.width = "10em";
 	ilog.style.height = "auto";
@@ -391,7 +391,7 @@ function enviar() {
 				}
 			}
 		};
-		xmlhttp.open("POST", "https://www.cash-flag.com/php/paybtn_token.php", true);
+		xmlhttp.open("POST", "https://app.cash-flag.com/php/paybtn_token.php", true);
 		// xmlhttp.open("POST", "../php/paybtn_token.php", true);
 		xmlhttp.send(datos);
 	} else {
@@ -418,7 +418,7 @@ function callback(card, token, monto) {
 			}
 		}
 	};
-	xmlhttp.open("POST", "https://www.cash-flag.com/php/paybtn_verify.php", true);
+	xmlhttp.open("POST", "https://app.cash-flag.com/php/paybtn_verify.php", true);
 	// xmlhttp.open("POST", "../php/paybtn_verify.php", true);
 	xmlhttp.send(datos);
 }

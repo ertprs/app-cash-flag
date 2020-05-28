@@ -160,7 +160,7 @@ echo $respuesta;
 
 // 			// codigo de barras
 // 			$mensaje .= '<p style="text-align:center;">';
-// 				$mensaje .= '<img src="https://www.cash-flag.com/php/barcode.php?';
+// 				$mensaje .= '<img src="https://app.cash-flag.com/php/barcode.php?';
 // 				$mensaje .= 'text='.$cuponlargo;
 // 				$mensaje .= '&size=50';
 // 				$mensaje .= '&orientation=horizontal';
@@ -172,9 +172,9 @@ echo $respuesta;
 // 			// código qr
 // 			$mensaje .= utf8_decode('<p style="text-align:center;">Para canjear desde el móvil:</p>');
 
-// 	//		$dir = 'https://www.cash-flag.com/php/temp/';
+// 	//		$dir = 'https://app.cash-flag.com/php/temp/';
 // 	//		if(!file_exists($dir)) mkdir($dir);
-// 			$ruta = 'https://www.cash-flag.com/php/';
+// 			$ruta = 'https://app.cash-flag.com/php/';
 // 			$dir = 'qr/';
 // 			if(!file_exists($dir)) mkdir($dir);
 
@@ -184,7 +184,7 @@ echo $respuesta;
 // 			$frameSize = 1;
 // 	//		$contenido = $cuponlargo;
 // 	//		$contenido = '{"id_proveedor":'.$_POST['id_proveedor'].',"cupon":"'.$cuponlargo.'"}';
-// 			$contenido = 'https://www.cash-flag.com/canje/canje.html?cJson={"id_proveedor":'.$_POST['id_proveedor'].',"cupon":"'.$cuponlargo.'"}';
+// 			$contenido = 'https://app.cash-flag.com/canje/canje.html?cJson={"id_proveedor":'.$_POST['id_proveedor'].',"cupon":"'.$cuponlargo.'"}';
 
 // 	//		QRcode::png($contenido, $filename, $level, $tamanio, $frameSize);
 // 			QRcode::png($contenido,$dir.$numcupon.'.png', $level, $tamanio, $frameSize);

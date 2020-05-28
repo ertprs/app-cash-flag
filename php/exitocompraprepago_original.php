@@ -4,7 +4,7 @@ include_once("../_config/conexion.php");
 include_once("./funciones.php");
 
 $registro = json_decode($_GET['registro'],true);
-$url = (isset($_GET['url'])) ? $_GET['url'] : "https://www.cash-flag.com" ;
+$url = (isset($_GET['url'])) ? $_GET['url'] : "https://app.cash-flag.com" ;
 // $_GET["tk"]
 
 // Asignación de variables
@@ -176,7 +176,7 @@ if ($result = mysqli_query($link,$query)) {
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 $cadena = $url.'&exito=si&mensaje='.$mensaje; 
-// $cadena = 'https://www.cash-flag.com/prepago/exito.html'; 
+// $cadena = 'https://app.cash-flag.com/prepago/exito.html'; 
 
 echo "
 	<script>

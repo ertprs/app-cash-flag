@@ -130,7 +130,7 @@ if ($row = mysqli_fetch_array($result)) {
 
 		// codigo de barras
 		$mensaje .= '<p style="text-align:center;">';
-			$mensaje .= '<img src="https://www.cash-flag.com/php/barcode.php?';
+			$mensaje .= '<img src="https://app.cash-flag.com/php/barcode.php?';
 			$mensaje .= 'text='.$cuponlargo;
 			$mensaje .= '&size=50';
 			$mensaje .= '&orientation=horizontal';
@@ -142,9 +142,9 @@ if ($row = mysqli_fetch_array($result)) {
 		// código qr
 		$mensaje .= utf8_decode('<p style="text-align:center;">Para canjear desde el móvil:</p>');
 
-//		$dir = 'https://www.cash-flag.com/php/temp/';
+//		$dir = 'https://app.cash-flag.com/php/temp/';
 //		if(!file_exists($dir)) mkdir($dir);
-		$ruta = 'https://www.cash-flag.com/php/';
+		$ruta = 'https://app.cash-flag.com/php/';
 		$dir = 'qr/';
 		if(!file_exists($dir)) mkdir($dir);
 
@@ -154,7 +154,7 @@ if ($row = mysqli_fetch_array($result)) {
 		$frameSize = 1;
 //		$contenido = $cuponlargo;
 //		$contenido = '{"id_proveedor":'.$_POST['id_proveedor'].',"cupon":"'.$cuponlargo.'"}';
-		$contenido = 'https://www.cash-flag.com/canje/canje.html?cJson={"id_proveedor":'.$_POST['id_proveedor'].',"cupon":"'.$cuponlargo.'"}';
+		$contenido = 'https://app.cash-flag.com/canje/canje.html?cJson={"id_proveedor":'.$_POST['id_proveedor'].',"cupon":"'.$cuponlargo.'"}';
 
 //		QRcode::png($contenido, $filename, $level, $tamanio, $frameSize);
 		QRcode::png($contenido,$dir.$numcupon.'.png', $level, $tamanio, $frameSize);
@@ -274,7 +274,7 @@ function mensajebienvenida($reg) {
 	$mensaje = utf8_decode('Hola '.trim($reg["nombres"]).',<br/><br/>');
 	$mensaje .= utf8_decode('¡Gracias por querer formar parte de nuestra comunidad!<br/><br/>');
 
-	$mensaje .= utf8_decode('Queremos conocerte un poco más y ofrecerte premios, promociones o productos/servicios especialmente diseñados para ti, pero necesitamos que nos brindes alguna información que nos ayudará a prestarte un mejor servicio, innovar en nuestros premios y hacerte la vida mucho más fácil y gratificante, además desde ya comenzaras a ganar, luego de completar <a href="https://www.cash-flag.com/registro/index.html?idp='.$_POST['id_proveedor'].'&ids='.$reg["id"].'">este formulario</a> recibirás un premio de bienvenida.<br/><br/>');
+	$mensaje .= utf8_decode('Queremos conocerte un poco más y ofrecerte premios, promociones o productos/servicios especialmente diseñados para ti, pero necesitamos que nos brindes alguna información que nos ayudará a prestarte un mejor servicio, innovar en nuestros premios y hacerte la vida mucho más fácil y gratificante, además desde ya comenzaras a ganar, luego de completar <a href="https://app.cash-flag.com/registro/index.html?idp='.$_POST['id_proveedor'].'&ids='.$reg["id"].'">este formulario</a> recibirás un premio de bienvenida.<br/><br/>');
 
 	$mensaje .= utf8_decode('<b>Te garantizamos que tu información será guardada celosamente y nunca será compartida con ningún tercero sin tu consentimiento y te aseguramos que siempre cumpliremos con las Leyes vigentes en lo relacionado al tratamiento de tus datos personales.</b><br/><br/>');
 

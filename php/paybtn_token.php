@@ -71,7 +71,7 @@ if ($row = mysqli_fetch_array($result)) {
 			$hash = hash("sha256",$idproveedor.$card.$vencimiento.$monto.time());
 
 			// código qr
-			// $dir = 'https://www.cash-flag.com/php/temp/';
+			// $dir = 'https://app.cash-flag.com/php/temp/';
 			$dir = 'temp/';
 	
 			// $filename = $dir.'test.png';
@@ -83,7 +83,7 @@ if ($row = mysqli_fetch_array($result)) {
 
 			QRcode::png($contenido, $filename, $level, $tamanio, $frameSize);
 
-			$respuesta = '{"exito":"SI","token":"'.$hash.'","status":'.$valida.',"mensaje":"'.$mensaje.'","qr":"'.'https://www.cash-flag.com/php/'.$filename.'"}';
+			$respuesta = '{"exito":"SI","token":"'.$hash.'","status":'.$valida.',"mensaje":"'.$mensaje.'","qr":"'.'https://app.cash-flag.com/php/'.$filename.'"}';
 			// $respuesta = '{"exito":"SI","token":"'.$hash.'","status":'.$valida.',"mensaje":"'.$mensaje.'","qr":"'.'../php/'.$filename.'"}';
 		} else {
 			$respuesta = '{"exito":"NO","token":"","status":'.$valida.',"mensaje":"'.$mensaje.'","qr":""}';

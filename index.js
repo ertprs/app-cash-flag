@@ -65,6 +65,7 @@ function comercio(valor) {
 
 
 function dibujaropcion(registro) {
+	console.log(registro);
 	// Logo del comercio
 	imgprov = document.createElement("img");
 	imgprov.classList.add("img_comercio");

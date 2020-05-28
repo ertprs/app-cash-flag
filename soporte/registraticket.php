@@ -85,7 +85,7 @@ if ($row = mysqli_fetch_array($result)) {
 	// if (strpos($_SERVER["SERVER_NAME"],'localhost')===FALSE) {	           	
 	// 	$mensaje .= '<a href="localhost/sgcnew/soporte/respuesta.html?ticket='.$ticket.'">Responder al ticket</a><br/><br/>';
 	// } else {
-		$mensaje .= '<a href="https://www.cash-flag.com/soporte/respuesta.html?ticket='.$ticket.'">Responder al ticket</a><br/><br/>';
+		$mensaje .= '<a href="https://app.cash-flag.com/soporte/respuesta.html?ticket='.$ticket.'">Responder al ticket</a><br/><br/>';
 	// }
 
 	$asunto = "Ticket de soporte No.: ".$ticket;
