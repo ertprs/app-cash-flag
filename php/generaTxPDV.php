@@ -11,7 +11,7 @@ $transaccion = '11223344';
 
 
 // código qr
-// $dir = 'https://www.cash-flag.com/php/temp/';
+// $dir = 'https://app.cash-flag.com/php/temp/';
 $dir = 'temp/';
 	
 // $filename = $dir.'test.png';
@@ -19,7 +19,7 @@ $filename = $dir.'trx-'.$transaccion.'.png';
 $tamanio = 5;
 $level = 'H';
 $frameSize = 1;
-$contenido = 'https://www.cash-flag.com/php/preparaTxPDV.php?j={"p":'.$proveedor.',"d":"'.$divisa.'","m":'.$monto.'}';
+$contenido = 'https://app.cash-flag.com/php/preparaTxPDV.php?j={"p":'.$proveedor.',"d":"'.$divisa.'","m":'.$monto.'}';
 
 QRcode::png($contenido, $filename, $level, $tamanio, $frameSize);
 

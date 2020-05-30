@@ -17,7 +17,7 @@
     /* background: lightgray; */
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
 }
 
 .logo {
@@ -49,7 +49,7 @@ h5 {
     grid-template-rows: repeat(auto-fit, var(--alto));
     justify-content: center;
     grid-auto-columns: 1fr;
-    grid-auto-rows: auto;
+    grid-auto-rows: none;
     grid-gap: var(--linea);
     grid-auto-flow: row dense;
 }

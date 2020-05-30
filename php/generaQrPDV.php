@@ -13,7 +13,7 @@ $nombreproveedor=$row["nombre"];
 $logo=$row["logo"];
 
 // código qr
-// $dir = 'https://www.cash-flag.com/php/temp/';
+// $dir = 'https://app.cash-flag.com/php/temp/';
 $dir = 'temp/';
 	
 // $filename = $dir.'test.png';

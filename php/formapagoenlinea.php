@@ -4,8 +4,8 @@ include_once("../_config/conexion.php");
 
 $monto = (isset($_GET['monto'])) ? $_GET['monto'] : 0 ;
 $ruta = (isset($_GET['ruta'])) ? $_GET['ruta'] : '' ;
-$urlback = (isset($_GET['urlback'])) ? $_GET['urlback'] : 'https://www.cash-flag.com' ;
-// $urlback = 'https://www.cash-flag.com';
+$urlback = (isset($_GET['urlback'])) ? $_GET['urlback'] : 'https://app.cash-flag.com' ;
+// $urlback = 'https://app.cash-flag.com';
 
 $urlok = '';
 $okrequest = '';
@@ -14,19 +14,19 @@ $registro = '';
 switch ($ruta) {
     case 'giftcard':
         $registro = (isset($_GET['registro'])) ? $_GET['registro'] : '{"remitente":"","nombres":"","apellidos":"","telefono":"","email":"","moneda":"","monto":0.00,"idproveedor":0,"tipopago":"online","origen":"online","referencia":"0"}' ;
-        $urlok = 'https://www.cash-flag.com/php/exitocompragiftcards.php?url='.$urlback.'&registro='.$registro;
+        $urlok = 'https://app.cash-flag.com/php/exitocompragiftcards.php?url='.$urlback.'&registro='.$registro;
         // $urlok = 'exitocompragiftcards.php?hash='.$hash.'&url='.$urlback;
         $urlcb = $urlback;
-        // $urlok = 'https://www.cash-flag.com/php/exitocompragiftcards.php?orden='.trim($orden).'&orden='.trim($monto);
-        $okrequest = "https://www.cash-flag.com/php/procesagiftcard.php?url=".$urlback."&registro=".$registro;
+        // $urlok = 'https://app.cash-flag.com/php/exitocompragiftcards.php?orden='.trim($orden).'&orden='.trim($monto);
+        $okrequest = "https://app.cash-flag.com/php/procesagiftcard.php?url=".$urlback."&registro=".$registro;
         break;
     case 'prepago':
         $registro = (isset($_GET['registro'])) ? $_GET['registro'] : '{"nombres":"","apellidos":"","telefono":"","email":"","moneda":"","monto":0.00,"idproveedor":0,"tipopago":"online","origen":"online","referencia":"0"}' ;
-        $urlok = 'https://www.cash-flag.com/php/exitocompraprepago.php?url='.$urlback.'&registro='.$registro;
+        $urlok = 'https://app.cash-flag.com/php/exitocompraprepago.php?url='.$urlback.'&registro='.$registro;
         // ?card='.$card;
         $urlcb = $urlback;
-        // $urlok = 'https://www.cash-flag.com/php/exitocompragiftcards.php?orden='.trim($orden).'&orden='.trim($monto);
-        $okrequest = "https://www.cash-flag.com/php/procesaprepago.php?url=".$urlback."&registro=".$registro;
+        // $urlok = 'https://app.cash-flag.com/php/exitocompragiftcards.php?orden='.trim($orden).'&orden='.trim($monto);
+        $okrequest = "https://app.cash-flag.com/php/procesaprepago.php?url=".$urlback."&registro=".$registro;
         break;
     default:
         $urlok = '';
