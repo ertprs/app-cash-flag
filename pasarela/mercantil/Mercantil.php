@@ -1,5 +1,7 @@
 <?php
 
+include_once("../_config/conexion.php");
+
 /**
  * Pasarela Llave Mercantil
  *
