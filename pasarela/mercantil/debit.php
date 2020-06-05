@@ -71,7 +71,8 @@ $amount = $_GET["monto"];
     var cvv = "";
     var twofactor = "";
     var amount = "";
-
+    var datos = new FormData();
+    
     // limpia el formulario
       function limpiar() {
         monto = "";
@@ -139,21 +140,31 @@ $amount = $_GET["monto"];
           return;
         }
         console.log(number);
-        // var xmlhttp = new XMLHttpRequest();
-        // xmlhttp.onreadystatechange = function() {
-        //   if (this.readyState == 4 && this.status == 200) {
-        //     respuesta = JSON.parse(this.responseText);
-        //     if (respuesta.exito == 'SI') {
-        //       alert(fmensaje(respuesta.mensaje));
-        //       limpiar()
-        //     } else {
-        //       alert(respuesta.mensaje);
-        //     }
-        //   }
-        // };
-        // xmlhttp.open("POST", "../php/datosprepago2.php", false);
-        // xmlhttp.send(datos);
-        // return respuesta;
+
+        datos.append("number", document.getElementById("number").value);
+        datos.append("holder_name", document.getElementById("holder_name").value);
+        datos.append("holder_id", document.getElementById("holder_id").value);
+        datos.append("cvv", document.getElementById("cvv").value);
+        datos.append("amount", document.getElementById("amount").value);
+
+        console.log(datos);
+
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            respuesta = JSON.parse(this.responseText);
+            if (respuesta.exito == 'SI') {
+              alert(fmensaje(respuesta));
+              limpiar()
+            } else {
+              alert(respuesta);
+            }
+          }
+        };
+        xmlhttp.open("POST", "./debit/getauth.php", false);
+        xmlhttp.send(datos);
+        console.log(respuesta);
+        return respuesta;
       }
   </script>
 </body>

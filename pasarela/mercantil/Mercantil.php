@@ -1,7 +1,5 @@
 <?php
 
-include_once("../_config/conexion.php");
-
 /**
  * Pasarela Llave Mercantil
  *
@@ -15,15 +13,15 @@ class Mercantil
     protected $integratorId;
     protected $merchantId;
     protected $terminalId;
-    
-    public function __construct(array $parameters)
+
+    public function __construct()
     {
-        $this->apiKey = $parameters['api_key'];
-        $this->environment = $parameters['environment'];
-        $this->xIbmClientId = $parameters['x_ibm_client_id'];
-        $this->integratorId = $parameters['integrator_id'];
-        $this->merchantId = $parameters['merchant_id'];
-        $this->terminalId = $parameters['terminal_id'];
+        $this->apiKey = $_ENV["APIBU_API_KEY"];
+        $this->environment = $_ENV["APIBU_ENVIROMENT"];
+        $this->xIbmClientId = $_ENV["APIBU_XIBM_CLIENT"];
+        $this->integratorId = $_ENV["APIBU_INTEGRATOR_ID"];
+        $this->merchantId = $_ENV["APIBU_MERCHANT_ID"];
+        $this->terminalId = $_ENV["APIBU_TERMINAL_ID"];
 
         $this->headers = [
             "Content-Type: application/json",
@@ -34,9 +32,31 @@ class Mercantil
         ];
     }
     
-    public function getAuth(Request $request, $entity) 
+    public function getAuth($data = []) 
     {
         $success = true;
+        $parameters = [
+            "merchant_identify" => [
+                "integratorId" => $this->integratorId,
+                "merchantId" => $this->merchantId,
+                "terminalId" => $this->terminalId
+            ],
+            "client_identify" => [
+                "ipaddress" => "127.0.0.1"
+            ],
+            "transaction_authInfo" => [
+                "trx_type" => "solaut",
+                "payment_method" => "tdd",
+                "card_number" => $data["card_number"],
+                "customer_id" => $data["customer_id"]
+            ]
+        ];
+
+        $success = false;
+        $url = "https://apimbu.mercantilbanco.com:9443/mercantil-banco/desarrollo/v1/payment/getauth";
+        $response = $this->executePost($url, $parameters);
+        var_dump($response);die;
+
         return $success;
     }
 
@@ -66,6 +86,8 @@ class Mercantil
         $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close ($ch);
 
-        return $this->response;
+        $response = new static($content, $statusCode);
+
+        return $response;
     }
 }
