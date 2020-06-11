@@ -33,6 +33,7 @@ $query = "SELECT * from proveedores where id=".$idproveedor;
 $result = mysqli_query($link, $query);
 if ($row = mysqli_fetch_array($result)) {
 	$logo = $row["logocard"];
+	$logo = ($tipo=='prepago') ? $row["logoprepago"] : $row["logogiftcard"] ;
 }
 
 $respuesta = '{"logocard":"'.$logo.'","tipo":"'.$tipo.'","nombres":"'.$nombres.'","vencimiento":"'.$vencimiento.'","saldo":'.$saldo.',"qr":"'.$qr.'","idproveedor":'.$idproveedor.'}';
