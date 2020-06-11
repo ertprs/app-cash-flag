@@ -1,5 +1,7 @@
 <?php
 
+include_once("../../PaymentGatewayResponse.php");
+
 /**
  * Pasarela Llave Mercantil
  *
@@ -55,9 +57,8 @@ class Mercantil
         $success = false;
         $url = "https://apimbu.mercantilbanco.com:9443/mercantil-banco/desarrollo/v1/payment/getauth";
         $response = $this->executePost($url, $parameters);
-        var_dump($response);die;
 
-        return $success;
+        return $response;
     }
 
     public function createPayment() 
@@ -86,7 +87,7 @@ class Mercantil
         $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close ($ch);
 
-        $response = new static($content, $statusCode);
+        $response = PaymentGatewayResponse::create($content, $statusCode);
 
         return $response;
     }

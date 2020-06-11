@@ -1,8 +1,10 @@
 <?php
 
-// header('Content-Type: application/json');
+header('Content-Type: application/json');
+
 include_once("../../../_config/conexion.php");
 include_once("../Mercantil.php");
+include_once("../../PaymentGatewayResponse.php");
 
 $mercantilManager = new Mercantil();
 $response = $mercantilManager->getAuth([
@@ -10,4 +12,11 @@ $response = $mercantilManager->getAuth([
 	"customer_id" => $_POST["holder_id"]
 ]);
 
-echo $response;
+// if($response->getStatusCode() == PaymentGatewayResponse::HTTP_OK){
+
+// } else {
+// }
+
+$data = $response->getData();
+
+echo json_encode($data);
