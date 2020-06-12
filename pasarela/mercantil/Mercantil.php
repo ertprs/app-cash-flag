@@ -61,10 +61,38 @@ class Mercantil
         return $response;
     }
 
-    public function createPayment() 
+    public function getPay($data = []) 
     {
         $success = true;
-        return $success;
+        $parameters = [
+            "merchant_identify" => [
+                "integratorId" => $this->integratorId,
+                "merchantId" => $this->merchantId,
+                "terminalId" => $this->terminalId
+            ],
+            "client_identify" => [
+                "ipaddress" => "127.0.0.1"
+            ],
+            "transaction" => [
+                "trx_type" => "compra",
+                "payment_method" => "tdd",
+                "card_number" => $data["card_number"],
+                "customer_id" => $data["customer_id"],
+                "invoice_number" => "123456789012",
+                "account_type" => "CC",
+                "twofactor_auth" => $data["twofactor"],
+                "expiration_date" => date("m/Y"),
+                "cvv" => $data["cvv"],
+                "currency" => "ves",
+                "amount" => $data["amount"]
+            ]
+        ];
+        var_dump($parameters);die;
+        $success = false;
+        $url = "https://apimbu.mercantilbanco.com:9443/mercantil-banco/desarrollo/v1/payment/getauth";
+        $response = $this->executePost($url, $parameters);
+
+        return $response;
     }
 
     public function executePost($url, array $parameters)
