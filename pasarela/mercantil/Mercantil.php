@@ -55,7 +55,7 @@ class Mercantil
         ];
 
         $success = false;
-        $url = "https://apimbu.mercantilbanco.com:9443/mercantil-banco/desarrollo/v1/payment/getauth";
+        $url = $_ENV["APIBU_URL_AUTH"];
         $response = $this->executePost($url, $parameters);
 
         return $response;
@@ -89,7 +89,7 @@ class Mercantil
         ];
         var_dump($parameters);die;
         $success = false;
-        $url = "https://apimbu.mercantilbanco.com:9443/mercantil-banco/desarrollo/v1/payment/getauth";
+        $url = $_ENV["APIBU_URL_PAY"];
         $response = $this->executePost($url, $parameters);
 
         return $response;
