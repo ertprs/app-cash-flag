@@ -28,9 +28,4 @@ $array = [
 	"message" => $response->getStatusCode()
 ];
 
-if($response->getStatusCode() == PaymentGatewayResponse::HTTP_OK){
-	var_dump($response);
-}
-die;
-
 echo json_encode($array);

@@ -87,7 +87,7 @@ class Mercantil
                 "amount" => $data["amount"]
             ]
         ];
-        var_dump($parameters);die;
+        
         $success = false;
         $url = $_ENV["APIBU_URL_PAY"];
         $response = $this->executePost($url, $parameters);
