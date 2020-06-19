@@ -50,7 +50,7 @@ $amount = $_GET["monto"];
           </div>
           <!-- Factor de autenticación -->
           <div id="div3" class="cmps" style="display: none;">
-              <span class="etiq">Clave de operaciones internet:</span>
+              <span class="etiq">Clave Telefonica:</span>
               <input id="twofactor" class="campo" type="password" size="20" maxlength="20" title="Debe introducir clave de operaciones internet" style="text-align: left;"/>
           </div>
           <!-- Linea de botones -->
@@ -139,7 +139,6 @@ $amount = $_GET["monto"];
         if (!validation) {
           return;
         }
-        console.log(number);
 
         datos.append("number", document.getElementById("number").value);
         datos.append("holder_name", document.getElementById("holder_name").value);
@@ -147,17 +146,16 @@ $amount = $_GET["monto"];
         datos.append("cvv", document.getElementById("cvv").value);
         datos.append("amount", document.getElementById("amount").value);
 
-        console.log(datos);
-
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function() {
           if (this.readyState == 4 && this.status == 200) {
             respuesta = JSON.parse(this.responseText);
-            if (respuesta.exito == 'SI') {
-              alert(fmensaje(respuesta));
-              limpiar()
+            if (respuesta.twofactor != "" && respuesta.twofactor == "clavetelefonica") {
+              document.getElementById("btn_proccess").style.display = 'show';
+              document.getElementById("twofactor").style.display = 'show';
+              console.log("success");
             } else {
-              alert(respuesta);
+              alert(respuesta.message);
             }
           }
         };

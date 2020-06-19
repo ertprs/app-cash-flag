@@ -16,6 +16,9 @@ $_ENV["APIBU_XIBM_CLIENT"] = "";
 $_ENV["APIBU_INTEGRATOR_ID"] = "";
 $_ENV["APIBU_MERCHANT_ID"] = "";
 $_ENV["APIBU_TERMINAL_ID"] = "";
+$_ENV["APIBU_AES_KEY"] = "";
+$_ENV["APIBU_URL_AUTH"] = "";
+$_ENV["APIBU_URL_PAY"] = "";
 
 if ($_ENV["APP_DEBUG"]) {
 	ini_set('display_errors', 1);

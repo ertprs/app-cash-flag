@@ -1,5 +1,7 @@
 <?php
 
+include_once("../../PaymentGatewayResponse.php");
+
 /**
  * Pasarela Llave Mercantil
  *
@@ -53,17 +55,44 @@ class Mercantil
         ];
 
         $success = false;
-        $url = "https://apimbu.mercantilbanco.com:9443/mercantil-banco/desarrollo/v1/payment/getauth";
+        $url = $_ENV["APIBU_URL_AUTH"];
         $response = $this->executePost($url, $parameters);
-        var_dump($response);die;
 
-        return $success;
+        return $response;
     }
 
-    public function createPayment() 
+    public function getPay($data = []) 
     {
         $success = true;
-        return $success;
+        $parameters = [
+            "merchant_identify" => [
+                "integratorId" => $this->integratorId,
+                "merchantId" => $this->merchantId,
+                "terminalId" => $this->terminalId
+            ],
+            "client_identify" => [
+                "ipaddress" => "127.0.0.1"
+            ],
+            "transaction" => [
+                "trx_type" => "compra",
+                "payment_method" => "tdd",
+                "card_number" => $data["card_number"],
+                "customer_id" => $data["customer_id"],
+                "invoice_number" => "123456789012",
+                "account_type" => "CC",
+                "twofactor_auth" => $data["twofactor"],
+                "expiration_date" => date("m/Y"),
+                "cvv" => $data["cvv"],
+                "currency" => "ves",
+                "amount" => $data["amount"]
+            ]
+        ];
+        
+        $success = false;
+        $url = $_ENV["APIBU_URL_PAY"];
+        $response = $this->executePost($url, $parameters);
+
+        return $response;
     }
 
     public function executePost($url, array $parameters)
@@ -86,7 +115,7 @@ class Mercantil
         $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close ($ch);
 
-        $response = new static($content, $statusCode);
+        $response = PaymentGatewayResponse::create($content, $statusCode);
 
         return $response;
     }
