@@ -27,6 +27,10 @@ if($response->getStatusCode() == PaymentGatewayResponse::HTTP_OK){
 	$aes->setData($data["authentication_info"]["twofactor_type"]);
     $decrypt = $aes->decrypt();
 	$array["twofactor"] = $decrypt;
+} else {
+	if (isset($data["status"]) && isset($data["status"]["description"])) {
+		$array["message"] = $data["status"]["description"];
+	}
 }
 
 echo json_encode($array);

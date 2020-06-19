@@ -16,7 +16,7 @@ $mercantilManager = new Mercantil();
 $response = $mercantilManager->getPay([
 	"card_number" => $_POST["number"],
 	"customer_id" => $_POST["holder_id"],
-	"amount" => $_POST["amount"],
+	"amount" => $_POST["monto"],
 	"twofactor_auth" => $twofactor,
 	"cvv" => $cvv
 ]);
