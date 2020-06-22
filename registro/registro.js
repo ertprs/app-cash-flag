@@ -5,12 +5,12 @@ function cargaforma() {
 
 	var params = fparamurl(window.location.search.substr(1));
 
-	sessionStorage.setItem("id_proveedor",params.idp);
-	sessionStorage.setItem("id_socio",params.ids);
-	var prov = sessionStorage.getItem("id_proveedor");
-	var socio = sessionStorage.getItem("id_socio");
+	localStorage.setItem("id_proveedor",params.idp);
+	localStorage.setItem("id_socio",params.ids);
+	var prov = localStorage.getItem("id_proveedor");
+	var socio = localStorage.getItem("id_socio");
 
-	var titulo = sessionStorage.getItem("nombresistema");
+	var titulo = localStorage.getItem("nombresistema");
 	// cargar parámetros de la tabla
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function () {
@@ -62,9 +62,9 @@ function limpiar() {
 
 // Enviar los datos del formulario para procesar en el servidor
 function enviar() {
-	var id_proveedor = sessionStorage.getItem("id_proveedor");
+	var id_proveedor = localStorage.getItem("id_proveedor");
 	document.getElementById("id_proveedor").value = id_proveedor;
-	var id_socio = sessionStorage.getItem("id_socio");
+	var id_socio = localStorage.getItem("id_socio");
 	document.getElementById("id_socio").value = id_socio;
 
 	var datos = new FormData();
@@ -102,7 +102,7 @@ function buscatitulo() {
 			respuesta = JSON.parse(this.responseText);
 			if (respuesta.exito == 'SI') {
 				document.title = respuesta.parametros.nombresistema;
-				sessionStorage.setItem("nombresistema", respuesta.parametros.nombresistema);
+				localStorage.setItem("nombresistema", respuesta.parametros.nombresistema);
 			}
 		}
 	};

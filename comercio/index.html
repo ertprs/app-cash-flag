@@ -80,9 +80,9 @@
 				document.getElementById("registro").style.display = 'none';
 				document.getElementById("olvido").style.display = 'none';
 				document.getElementById("cambiapass").style.display = 'none';
-				sessionStorage.setItem("url_back",window.location);				
+				localStorage.setItem("url_back",window.location);				
 				volver.addEventListener('click', function(){
-					sessionStorage.clear();
+					localStorage.clear();
 					window.open("../index.html", "_self");
 				});
 			}
@@ -151,10 +151,10 @@
 				console.log(respuesta.hashp);
 				console.log(hashp);
 				if (respuesta.hashp==hashp) {
-					sessionStorage.setItem("email", usuario);
-					sessionStorage.setItem("idproveedor", idproveedor);
-					sessionStorage.setItem("logoprov", logoprov);
-					sessionStorage.setItem("nombreprov", nombreprov);
+					localStorage.setItem("email", usuario);
+					localStorage.setItem("idproveedor", idproveedor);
+					localStorage.setItem("logoprov", logoprov);
+					localStorage.setItem("nombreprov", nombreprov);
 					window.location.replace("menu.html");
 				} else {
 					alert('no valido');

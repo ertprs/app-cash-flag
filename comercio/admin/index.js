@@ -67,5 +67,5 @@ function filtrar(filtro) {
 }
 
 function sesionprov(valor) {
-	sessionStorage.setItem("id_proveedor", valor);
+	localStorage.setItem("id_proveedor", valor);
 }

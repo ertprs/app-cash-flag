@@ -60,8 +60,8 @@
 		</div>
 		<script>
 			function generalink() {
-				idp = sessionStorage.getItem("id_proveedor");
-				sessionStorage.setItem("url_back",window.location);
+				idp = localStorage.getItem("id_proveedor");
+				localStorage.setItem("url_back",window.location);
 				document.getElementById("cupon").href = "./cupones/cupon.html?id="+idp+"&btn=1";
 				// document.getElementById("prepago").href = "./prepago/compra.html?id="+idp;
 				// document.getElementById("giftcard").href = "./giftcards/compra.html?id="+idp;
@@ -89,7 +89,7 @@
 			}
 
 			function canjear() {
-				idp = sessionStorage.getItem("id_proveedor");
+				idp = localStorage.getItem("id_proveedor");
 				console.log(idp);
 				console.log("./cupones/cupon.html?id="+idp);
 				// window.location.replace("./cupones/cupon.html?id="+idp);

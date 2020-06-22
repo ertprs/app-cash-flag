@@ -67,7 +67,7 @@ function filtrar(filtro) {
 }
 
 function sesionprov(valor) {
-	sessionStorage.setItem("id_proveedor", valor);
+	localStorage.setItem("id_proveedor", valor);
 }
 
 // Cargar los parámetros generales del sistema
@@ -81,7 +81,7 @@ function param() {
 			respuesta = JSON.parse(this.responseText);
 			if (respuesta.exito == 'SI') {
 				document.title = respuesta.parametros.nombresistema;
-				sessionStorage.setItem("nombresistema", respuesta.parametros.nombresistema);
+				localStorage.setItem("nombresistema", respuesta.parametros.nombresistema);
 			}
 		}
 	};

@@ -48,7 +48,7 @@
 
 		</div>
 		<script>
-			let respuesta, tarjetas, paroimpar, idsocio = sessionStorage.getItem("idsocio");
+			let respuesta, tarjetas, paroimpar, idsocio = localStorage.getItem("idsocio");
 
 			// Inicializa la aplicación
 			function inicio() {
@@ -68,7 +68,7 @@
 				xmlhttp.open("GET", "../php/tarjetas.php?idsocio="+idsocio, true);
 				xmlhttp.send();
 				document.getElementById("btnvolver").addEventListener('click', function(){
-					window.open(sessionStorage.getItem("url_bck2"), "_self") });
+					window.open(localStorage.getItem("url_bck2"), "_self") });
 			}
 
 			// Rellena la tabla

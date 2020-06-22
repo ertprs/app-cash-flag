@@ -14,14 +14,14 @@ function cargaforma() {
 			params = JSON.parse(params.cJson);
 			prov = params.id_proveedor;
 		} else {
-			prov = 	sessionStorage.getItem("idproveedor");
+			prov = 	localStorage.getItem("idproveedor");
 
 		}
 	}
 
-	sessionStorage.setItem("id_proveedor",prov);
+	localStorage.setItem("id_proveedor",prov);
 
-	var titulo = sessionStorage.getItem("nombresistema");
+	var titulo = localStorage.getItem("nombresistema");
 	// cargar parámetros de la tabla
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function () {
@@ -75,7 +75,7 @@ function limpiacupon() {
 
 // Enviar los datos del formulario para procesar en el servidor
 function buscausuario() {
-	var id_proveedor = sessionStorage.getItem("id_proveedor");
+	var id_proveedor = localStorage.getItem("id_proveedor");
 	// var id_proveedor = params.id_proveedor;
 	document.getElementById("id_proveedor").value = id_proveedor;
 
@@ -159,7 +159,7 @@ function buscatitulo() {
 			respuesta = JSON.parse(this.responseText);
 			if (respuesta.exito == 'SI') {
 				document.title = respuesta.parametros.nombresistema;
-				sessionStorage.setItem("nombresistema", respuesta.parametros.nombresistema);
+				localStorage.setItem("nombresistema", respuesta.parametros.nombresistema);
 			}
 		}
 	};
@@ -168,6 +168,6 @@ function buscatitulo() {
 }
 
 function volver() {
-	// console.log(sessionStorage);
-	window.open(sessionStorage.getItem("url_bck2"), "_self");
+	// console.log(localStorage);
+	window.open(localStorage.getItem("url_bck2"), "_self");
 }

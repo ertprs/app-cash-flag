@@ -96,10 +96,10 @@
 		<script type="text/javascript">
 			// Inicializa la aplicación
 			function inicio() {
-				console.log(sessionStorage);
-				let idsocio = sessionStorage.getItem("idsocio");
-				salir.href = sessionStorage.getItem("url_back");
-				sessionStorage.setItem("url_bck2",window.location);
+				console.log(localStorage);
+				let idsocio = localStorage.getItem("idsocio");
+				salir.href = localStorage.getItem("url_back");
+				localStorage.setItem("url_bck2",window.location);
 
 				let xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function () {

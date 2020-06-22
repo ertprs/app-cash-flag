@@ -96,12 +96,12 @@
 		</div>
 		<script>
 			function inicio() {
-				console.log(sessionStorage);
-				let idproveedor = sessionStorage.getItem("idproveedor");
-				logo.src = "../img/" + sessionStorage.getItem("logoprov");
-				logo.title = sessionStorage.getItem("nombreprov");
-				salir.href = sessionStorage.getItem("url_back");
-				sessionStorage.setItem("url_bck2",window.location);
+				console.log(localStorage);
+				let idproveedor = localStorage.getItem("idproveedor");
+				logo.src = "../img/" + localStorage.getItem("logoprov");
+				logo.title = localStorage.getItem("nombreprov");
+				salir.href = localStorage.getItem("url_back");
+				localStorage.setItem("url_bck2",window.location);
 			}
 		</script>
 	</body>

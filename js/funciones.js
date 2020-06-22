@@ -31,7 +31,7 @@ function fparametros() {
 			respuesta = JSON.parse(this.responseText);
 			if (respuesta.exito == 'SI') {
 				document.title = respuesta.parametros.nombresistema;
-				sessionStorage.setItem("nombresistema", respuesta.parametros.nombresistema);
+				localStorage.setItem("nombresistema", respuesta.parametros.nombresistema);
 			}
 		}
 	};
