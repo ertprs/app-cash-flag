@@ -76,7 +76,11 @@
 				par = true;
 				for (var i = 0; i < tarjetas.length; i++) {
 					// proveedor en la columna 1
-					txtNombre = document.createTextNode(tarjetas[i].nombre);
+					if (tarjetas[i].premium) {
+						txtNombre = document.createTextNode(tarjetas[i].nombre+" - PREMIUM");
+					} else {
+						txtNombre = document.createTextNode(tarjetas[i].nombre);
+					}
 					// txtTipo = document.createTextNode(tarjetas[i].tipo);
 					cl1 = document.createElement("div");
 					cl1.classList.add("columna1");
@@ -145,9 +149,15 @@
 					// Agregar la fila a la tabla
 					document.getElementById("tabla").appendChild(fila);
 					if (tarjetas[i].status=="Lista para usar") {
-						document.getElementById(fila.id).addEventListener('click', function(){
-							window.open("../card/index.html?card="+this.id.substr(5), "_blank");
-						});
+						if (tarjetas[i].premium) {
+							document.getElementById(fila.id).addEventListener('click', function(){
+								window.open("../card/cashflag.html?card="+this.id.substr(5), "_blank");
+							});
+						} else {
+							document.getElementById(fila.id).addEventListener('click', function(){
+								window.open("../card/index.html?card="+this.id.substr(5), "_blank");
+							});
+						}
 					}
 				}
 			}
