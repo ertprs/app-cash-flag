@@ -24,7 +24,7 @@
 			</div>
 		</div>	
 		<script>
-			var nombres="", apellidos="", telefono="", email="", monto="", idproveedor=sessionStorage.getItem("id_proveedor"), moneda='bs', datos = new FormData(), formadepago = "", tipo = 'efectivo';
+			var nombres="", apellidos="", telefono="", email="", monto="", idproveedor=localStorage.getItem("id_proveedor"), moneda='bs', datos = new FormData(), formadepago = "", tipo = 'efectivo';
 
 			function inicio() {
 				// Mostrar mensaje de éxito cuando se pague con tarjeta de crédito
@@ -38,7 +38,7 @@
 				// Hasta aquí
 
 				// document.getElementById("btnvolver").addEventListener('click', function(){
-				// 	window.open(sessionStorage.getItem("url_back"), "_self") });
+				// 	window.open(localStorage.getItem("url_back"), "_self") });
 				// cargar parámetros de la tabla
 				var xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function () {

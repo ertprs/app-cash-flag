@@ -34,7 +34,7 @@
 		</div>
 		<script>
 			// Variables públicas, constantes y función de transformación de números.
-			var ruta = "../../img/", idproveedor=sessionStorage.getItem("idproveedor"), datos= new FormData();
+			var ruta = "../../img/", idproveedor=localStorage.getItem("idproveedor"), datos= new FormData();
 
 			function cargadatos() {
 				// cargar parámetros de la tabla
@@ -44,7 +44,7 @@
 						respuesta = JSON.parse(this.responseText);
 						if (respuesta.exito == 'SI') {
 							document.title = respuesta.parametros.nombresistema;
-							sessionStorage.setItem("nombresistema", respuesta.parametros.nombresistema);
+							localStorage.setItem("nombresistema", respuesta.parametros.nombresistema);
 						}
 					}
 				};

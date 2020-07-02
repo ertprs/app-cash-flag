@@ -5,7 +5,7 @@ let respuesta;
 // Inicializa la aplicación
 function inicio() {
 	var paroimpar, idsocio, xmlhttp = new XMLHttpRequest();
-	idsocio = sessionStorage.getItem("idsocio");
+	idsocio = localStorage.getItem("idsocio");
 	xmlhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			respuesta = JSON.parse(this.responseText);
@@ -20,7 +20,7 @@ function inicio() {
 	xmlhttp.open("GET", "../../php/transac_socio.php?idsocio="+idsocio, true);
 	xmlhttp.send();
 	document.getElementById("btnvolver").addEventListener('click', function(){
-		window.open(sessionStorage.getItem("url_bck2"), "_self") }
+		window.open(localStorage.getItem("url_bck2"), "_self") }
 	);
 }
 /*

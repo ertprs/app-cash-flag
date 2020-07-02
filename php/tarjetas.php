@@ -14,7 +14,7 @@ if ($row = mysqli_fetch_array($result)) {
 	$inicio = true;
 
 	// Buscar prepagos
-	$query = "SELECT proveedores.nombre, 'prepago' as tipo, simbolo, card, saldo, saldoentransito, validez, prepago.status from prepago left outer join proveedores on prepago.id_proveedor=proveedores.id left outer join _monedas on prepago.moneda=_monedas.moneda where prepago.email='".$email."' union SELECT proveedores.nombre, 'giftcard' as tipo, simbolo, card, saldo, 0 as saldoentransito, validez, giftcards.status from giftcards left outer join proveedores on giftcards.id_proveedor=proveedores.id left outer join _monedas on giftcards.moneda=_monedas.moneda where giftcards.email='".$email."' order by status, nombre, tipo desc, validez, card";
+	$query = "SELECT proveedores.nombre, 'prepago' as tipo, simbolo, card, saldo, saldoentransito, validez, prepago.status, prepago.premium from prepago left outer join proveedores on prepago.id_proveedor=proveedores.id left outer join _monedas on prepago.moneda=_monedas.moneda where prepago.email='".$email."' union SELECT proveedores.nombre, 'giftcard' as tipo, simbolo, card, saldo, 0 as saldoentransito, validez, giftcards.status, giftcards.premium from giftcards left outer join proveedores on giftcards.id_proveedor=proveedores.id left outer join _monedas on giftcards.moneda=_monedas.moneda where giftcards.email='".$email."' order by premium desc, status, nombre, tipo desc, validez, card";
 	$result = mysqli_query($link, $query);
 	while ($row = mysqli_fetch_array($result)) {
 		$monto = $row["saldo"]-$row["saldoentransito"];
@@ -32,7 +32,8 @@ if ($row = mysqli_fetch_array($result)) {
 			$respuesta .= '"tarjeta":"'.$row["card"].'",';
 			$respuesta .= '"saldo":'.$monto.',';
 			$respuesta .= '"validez":"'.$row["validez"].'",';
-			$respuesta .= '"status":"'.$row["status"].'"';
+			$respuesta .= '"status":"'.$row["status"].'",';
+			$respuesta .= '"premium":'.$row["premium"];
 			$respuesta .= '}';
 		}
 	}

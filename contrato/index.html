@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Cash-Flag</title>
+		<link rel="stylesheet" href="./contrato.css">
+		<script type="text/javascript" src="../js/funciones.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/ipfs/dist/index.min.js"></script>
+		<script type="text/javascript">
+			document.addEventListener('DOMContentLoaded', async () => {
+				const node = await Ipfs.create({ repo: 'ipfs-' + Math.random() })
+				window.node = node
+
+				const status = node.isOnline() ? 'online' : 'offline'
+
+				console.log(`Node status: ${status}`)
+				// You can write more code here to use it. Use methods like
+				// node.add, node.get. See the API docs here:
+				// https://github.com/ipfs/js-ipfs/tree/master/packages/interface-ipfs-core
+		    });
+
+		    async function addFile (archivo) {
+		      for await (const { cid } of node.add(archivo)) {
+		        console.log('successfully stored', cid)
+		        return cid.string;
+		      }
+		    }
+
+		</script>
+	</head>
+	<body onload="inicio()">
+		<div id="container">
+			<div class="logo" align="center">
+				<img class="img-logo" id="logo" src="../img/logoclub.png" alt="">
+			</div>
+			<h3 align="center" style="margin: -1em 0 0 0;">Contrato de adhesión de comercios</h3>
+			<div id="div1" align="center">
+				<div class="informacion">
+					<!-- Razon social -->
+					<div id="div2" class="cmps">
+						<span class="etiq">Razón social del afiliado:</span>
+						<input id="razonsocial" class="campo" type="text" size="50" maxlength="100" onkeyup="rellenacontrato(this.id,this.value)" />
+					</div>
+					<!-- Nombre -->
+					<div id="div2" class="cmps">
+						<span class="etiq">Nombre comercial:</span>
+						<input id="nombre" class="campo" type="text" size="50" maxlength="100" onkeyup="rellenacontrato(this.id,this.value)" />
+					</div>
+					<!-- Nombre -->
+					<div id="div2" class="cmps">
+						<span class="etiq">Número de RIF:</span>
+						<input id="rif" class="campo" type="text" size="50" maxlength="12" onkeyup="rellenacontrato(this.id,this.value)" />
+					</div>
+					<!-- Nombre -->
+					<div id="div2" class="cmps">
+						<span class="etiq">Dirección:</span>
+						<input id="direccion" class="campo" type="text" size="50" maxlength="100" onkeyup="rellenacontrato(this.id,this.value)" />
+					</div>
+				</div>
+				<div>
+					<iframe id="contenido" src="./contenido.html" style="width: 95%; height: 300px; background: white; margin-top: 0.75em;"></iframe>
+				</div>
+				<div class="btns">
+					<button id="btnregistrar" onclick="registrar()" style="width: 9em; display: none;">Registrar</button>
+					<button id="btnenviar" onclick="enviar()" style="width: 9em;">Firmar</button>
+					<button id="btnlimpiar" onclick="limpiar()" style="width: 9em;">Limpiar</button>
+					<!-- <button id="btnvolver" style="width: 9em; margin: 0.5em 0 0 0;">Cerrar</button> -->
+				</div>
+			</div>
+		</div>
+		<script>
+			var razonsocial="", nombre="", rif="", direccion="", email="";
+
+			// limpia el formulario
+			function limpiar() {
+				razonsocial="";
+				nombre="";
+				rif="";
+				direccion="";
+
+				document.getElementById("razonsocial").value = "";
+				document.getElementById("nombre").value = "";
+				document.getElementById("rif").value = "";
+				document.getElementById("direccion").value = "";
+
+				contenido.contentWindow.razonsocial.innerHTML  = razonsocial;
+				contenido.contentWindow.nombre.innerHTML       = nombre;
+				contenido.contentWindow.rif.innerHTML          = rif;
+				contenido.contentWindow.direccion.innerHTML    = direccion;
+				contenido.contentWindow.firmasgc.innerHTML     = "";
+				contenido.contentWindow.firmacliente.innerHTML = "";
+				contenido.contentWindow.email.innerHTML        = "";
+
+				aChks = contenido.contentWindow.document.getElementsByTagName("input");
+				totchks = aChks.length;
+				cntchks = 0;
+				for (var i = 0; i < aChks.length; i++) {
+					aChks[i].checked = false;
+				}
+
+				btnenviar.style.display = 'inline-block';
+				btnregistrar.style.display = 'none';
+
+				document.getElementById("razonsocial").focus();
+			}
+
+			function inicio() {
+				limpiar();
+				// document.getElementById("btnvolver").addEventListener('click', function(){
+					// window.open(localStorage.getItem("url_bck2"), "_self") });
+			}
+
+			// valida la entrada en los campos
+			function validaciones() {
+				var continuar = true, vacios = 0, campo = "";
+				if ((document.getElementById("razonsocial").value=="" || document.getElementById("razonsocial").value==undefined) && vacios == 0) {
+					alert("El campo razón social no puede quedar en blanco");
+					vacios++;
+					campo = "razonsocial";
+					continuar = false;
+				}
+				if ((document.getElementById("nombre").value=="" || document.getElementById("nombre").value==undefined) && vacios == 0) {
+					alert("El campo nombre no puede quedar en blanco");
+					vacios++;
+					campo = "nombre";
+				}
+				if ((document.getElementById("rif").value=="" || document.getElementById("rif").value==undefined) && vacios == 0) {
+					alert("El campo rif no puede quedar en blanco");
+					vacios++;
+					campo = "rif";
+				}
+				if ((document.getElementById("direccion").value=="" || document.getElementById("direccion").value==undefined) && vacios == 0) {
+					alert("El campo direccion no puede quedar en blanco");
+					vacios++;
+					campo = "direccion";
+				}
+				aChks = contenido.contentWindow.document.getElementsByTagName("input");
+				totchks = aChks.length;
+				cntchks = 0;
+				for (var i = 0; i < aChks.length; i++) {
+					if (aChks[i].checked) {
+						cntchks++;
+					}
+				}
+				if (cntchks!=totchks && vacios == 0) {
+					alert("Debe marcar todas las casillas en señal de aprobación");
+					vacios++;
+					campo = "contenido";
+				}
+
+				if (vacios>0) { continuar = false; }
+				if (continuar) {
+					email = prompt("En el seguiente recuadro, por favor escriba su email.\n\nIMPORTANTE: Al hacerlo, se considerará como la firma del documento y se asume la aceptación de todos los términos y condiciones.");
+
+				} else {
+					if(campo=="contenido") {
+						idchk = 0;
+						for (var i = 0; i < aChks.length; i++) {
+							if (!aChks[i].checked) {
+								idchk = i;
+								break;
+							}
+						}
+						aChks[idchk].focus();
+					} else {
+						document.getElementById(campo).focus();
+					}
+				}
+				return continuar;
+			}
+
+			function enviar() {
+				if (validaciones()) {
+					var datos = new FormData();
+					datos.append("razonsocial", razonsocial);
+					datos.append("nombre",      nombre);
+					datos.append("rif",         rif);
+					datos.append("direccion",   direccion);
+					datos.append("email",       email);
+
+					var xmlhttp = new XMLHttpRequest();
+					xmlhttp.onreadystatechange = function() {
+						if (this.readyState == 4 && this.status == 200) {
+							respuesta = JSON.parse(this.responseText);
+							if (respuesta.exito == 'SI') {
+								contenido.contentWindow.firmasgc.innerHTML     = respuesta.firmasgc;
+								contenido.contentWindow.firmacliente.innerHTML = respuesta.firmacliente;
+								contenido.contentWindow.email.innerHTML        = email;
+								btnenviar.style.display = 'none';
+								btnregistrar.style.display = 'inline-block';
+								btnregistrar.focus();
+
+							} else {
+								alert("Ocurrió un error en al firma, intente de nuevo");
+							}
+						}
+					};
+					xmlhttp.open("POST", "../php/firma.php", false);
+					xmlhttp.send(datos);
+
+				}
+			}
+
+			function rellenacontrato(id,valor) {
+				contenido.contentWindow.document.getElementById(id).innerHTML = valor;
+				if (id=="razonsocial") {
+					contenido.contentWindow.document.getElementById("razonsocial2").innerHTML = valor;
+				}
+			}
+
+			function registrar() {
+				var datos = new FormData();
+				datos.append("razonsocial",  contenido.contentWindow.razonsocial.innerText);
+				datos.append("nombre",       contenido.contentWindow.nombre.innerText);
+				datos.append("rif",          contenido.contentWindow.rif.innerText);
+				datos.append("direccion",    contenido.contentWindow.direccion.innerText);
+				datos.append("email",        contenido.contentWindow.email.innerText);
+				datos.append("firmasgc",     contenido.contentWindow.firmasgc.innerText);
+				datos.append("firmacliente", contenido.contentWindow.firmacliente.innerText);
+				datos.append("fecha",        contenido.contentWindow.fecha.innerText);
+
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						respuesta = JSON.parse(this.responseText);
+						if (respuesta.exito == 'SI') {
+							console.log(respuesta.archivo);
+							// console.log(respuesta.contenido);
+							// var file = new File(['string'], respuesta.archivo);
+							// console.log(file);
+							// window.open(file.name,"_blank");
+
+							addFile(respuesta.contenido).then(hash => {
+								if(confirm("Contrato registrado exitosamente. El documento está diponible y público en la siguiente url:\n\n"+"https://ipfs.io/ipfs/"+hash+"\n\n¿Desea abrirlo?")) {
+									limpiar();
+									window.open("https://ipfs.io/ipfs/"+hash,"_blank");
+									guardahash(hash,respuesta);
+								}
+							});
+						} else {
+							alert("Ocurrió un error en al firma, intente de nuevo");
+						}
+					}
+				};
+				xmlhttp.open("POST", "../php/generafileipfs.php", false);
+				xmlhttp.send(datos);
+			}
+
+			function guardahash(hash,registro) {
+				var datos = new FormData();
+				datos.append("razonsocial",  registro.razonsocial);
+				datos.append("nombre",       registro.nombre);
+				datos.append("rif",          registro.rif);
+				datos.append("direccion",    registro.direccion);
+				datos.append("email",        registro.email);
+				datos.append("firmasgc",     registro.firmasgc);
+				datos.append("firmacliente", registro.firmacliente);
+				datos.append("fecha",        registro.fecha);
+				datos.append("hash",         hash);
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						respuesta = JSON.parse(this.responseText);
+						if (respuesta.exito == 'SI') {
+							window.open("./RecordSent.html","_self");
+						} else {
+							alert("Ocurrió un error en el registro, intente de nuevo");
+						}
+					}
+				};
+				xmlhttp.open("POST", "../php/registracontrato.php", false);
+				xmlhttp.send(datos);
+			}
+		</script>
+	</body>
+</html>

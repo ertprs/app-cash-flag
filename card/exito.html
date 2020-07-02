@@ -24,7 +24,7 @@
 			</div>
 		</div>	
 		<script>
-			var nombres="", apellidos="", telefono="", email="", monto="", idproveedor=sessionStorage.getItem("id_proveedor"), moneda='bs', datos = new FormData(), formadepago = "", tipo = 'efectivo';
+			var nombres="", apellidos="", telefono="", email="", monto="", idproveedor=localStorage.getItem("id_proveedor"), moneda='bs', datos = new FormData(), formadepago = "", tipo = 'efectivo';
 
 			function inicio() {
 				params = fparamurl(window.location.search.substr(1));

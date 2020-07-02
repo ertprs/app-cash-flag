@@ -50,12 +50,12 @@
 		<script>
 			let anterior = "", nueva = "", confirmacion = "", hash = "";
 			let datos = new FormData();
-			let idp = sessionStorage.getItem("id_proveedor");
+			let idp = localStorage.getItem("id_proveedor");
 
 			function inicio() {
 				limpiar();
 				document.getElementById("btnvolver").addEventListener('click', function(){
-					window.open(sessionStorage.getItem("url_back"), "_self");
+					window.open(localStorage.getItem("url_back"), "_self");
 				});
 
 				let xmlhttp = new XMLHttpRequest();

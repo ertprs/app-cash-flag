@@ -50,7 +50,7 @@
 			</div>
 		</div>
 		<script>
-			var nombres="", apellidos="", telefono="", email="", idproveedor=sessionStorage.getItem("idproveedor"), datos = new FormData();
+			var nombres="", apellidos="", telefono="", email="", idproveedor=localStorage.getItem("idproveedor"), datos = new FormData();
 
 			// limpia el formulario
 			function limpiar() {
@@ -77,7 +77,7 @@
 			function inicio() {
 				limpiar();
 				document.getElementById("btnvolver").addEventListener('click', function(){
-					window.open(sessionStorage.getItem("url_bck2"), "_self") });
+					window.open(localStorage.getItem("url_bck2"), "_self") });
 				// cargar parámetros de la tabla
 				var xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function () {

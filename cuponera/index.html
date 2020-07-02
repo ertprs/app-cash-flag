@@ -86,7 +86,7 @@
 			</div>
 		</div>
 		<script>
-			var idsocio = sessionStorage.getItem("idsocio");
+			var idsocio = localStorage.getItem("idsocio");
 			if (idsocio==undefined) {
 				idsocio = 1;
 			}
@@ -143,7 +143,7 @@
 				xmlhttp.open("GET", "../php/buscacupones.php?idsocio="+idsocio, false);
 				xmlhttp.send();
 				document.getElementById("btnvolver").addEventListener('click', function(){
-					window.open(sessionStorage.getItem("url_bck2"), "_self") }
+					window.open(localStorage.getItem("url_bck2"), "_self") }
 				);
 			}
 

@@ -4,7 +4,7 @@ let opcfiltro = 'Todas';
 let datos;
 
 function cargadatos() {
-	fparametros();
+	lparametros();
 	let xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function () {
 		if (this.readyState == 4 && this.status == 200) {
@@ -59,7 +59,7 @@ function filtrar(filtro) {
 
 
 function comercio(valor) {
-	sessionStorage.setItem("id_proveedor", valor);
+	localStorage.setItem("id_proveedor", valor);
 	// window.location.replace("menu.html?id_proveedor="+valor);
 }
 
@@ -102,4 +102,21 @@ function dibujaropcion(registro) {
 
 	// Agregar al menú
 	comercios.appendChild(lnkprov);
+}
+
+// Cargar los parámetros generales del sistema
+function lparametros() {
+	// cargar parámetros de la tabla
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function () {
+		if (this.readyState == 4 && this.status == 200) {
+			respuesta = JSON.parse(this.responseText);
+			if (respuesta.exito == 'SI') {
+				document.title = respuesta.parametros.nombresistema;
+				localStorage.setItem("nombresistema", respuesta.parametros.nombresistema);
+			}
+		}
+	};
+	xmlhttp.open("GET", "php/parametros.php", true);
+	xmlhttp.send();
 }

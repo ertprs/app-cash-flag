@@ -1,6 +1,6 @@
 var cards, tipomoneda = 'bs';
-var idsocio = sessionStorage.getItem("idsocio");
-var idproveedor = sessionStorage.getItem("idproveedor");
+var idsocio = localStorage.getItem("idsocio");
+var idproveedor = localStorage.getItem("idproveedor");
 
 if (idsocio==undefined) { idsocio = 1; }
 if (idproveedor==undefined) { idproveedor = 1; }

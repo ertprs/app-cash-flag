@@ -183,7 +183,7 @@
 			</div>
 		</div>
 		<script>
-			var monto="", idproveedor="", idsocio=sessionStorage.getItem("idsocio"), moneda='bs', datos = new FormData(), formadepago = "", tipo = 'efectivo';
+			var monto="", idproveedor="", idsocio=localStorage.getItem("idsocio"), moneda='bs', datos = new FormData(), formadepago = "", tipo = 'efectivo';
 			var nombres="", apellidos="", telefono="", email="";
 
 			function inicio() {
@@ -199,7 +199,7 @@
 
 				limpiar();
 				document.getElementById("btnvolver").addEventListener('click', function(){
-					window.open(sessionStorage.getItem("url_bck2"), "_self") });
+					window.open(localStorage.getItem("url_bck2"), "_self") });
 				// cargar parámetros de la tabla
 				var xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function () {
@@ -324,7 +324,7 @@
 				switch (monedayformadepago) {
 					// case 'bs-online':
 					// 	propiedades="top=20%, left=50%, width=450, height=635, menubar=0, resizable=0, status=0, titlebar=0, toolbar=0";
-					// 	window.open("../php/formapagoenlinea.php?monto="+monto+"&ruta=prepago&urlback="+sessionStorage.getItem("url_back")+"&hash="+respuesta.hash,"_blank",propiedades);
+					// 	window.open("../php/formapagoenlinea.php?monto="+monto+"&ruta=prepago&urlback="+localStorage.getItem("url_back")+"&hash="+respuesta.hash,"_blank",propiedades);
 					// 	// De ahi llamar a registro prepago
 					// 	// Generar la tarjeta
 					// 	break;
@@ -374,7 +374,7 @@
 									// registro += '}';
 
 									// url = window.location;
-									// // url = sessionStorage.getItem("url_back");
+									// // url = localStorage.getItem("url_back");
 
 									// propiedades="top=20%, left=50%, width=450, height=635, menubar=0, resizable=0, status=0, titlebar=0, toolbar=0";
 									// // window.open("../php/formapagoenlinea.php?monto="+monto+"&ruta=prepago&registro="+registro,"_blank",propiedades);

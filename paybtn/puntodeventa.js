@@ -2,7 +2,7 @@
 // 	pdv.appendChild(new Campo('monto_div_id','cmps','monto_etq_id','etiq','Monto a pagar','monto_cmp_id','campo','input','50','20'));
 // }
 
-let monto="", idproveedor=sessionStorage.getItem("idproveedor"), moneda='bs', tarjeta='';
+let monto="", idproveedor=localStorage.getItem("idproveedor"), moneda='bs', tarjeta='';
 let datos = new FormData();
 let beep = '../lector/audio/beep.mp3';
 let scanner = "";
@@ -12,17 +12,17 @@ let scanner = "";
 idproveedor = (idproveedor==undefined) ? 2 : idproveedor;
 
 function inicio() {
-	// console.log(sessionStorage);
+	// console.log(localStorage);
 	limpiar();
 	// document.getElementById("btnenviar").addEventListener('click', function(){
-		// window.open(sessionStorage.getItem("url_bck2"), "_self") });
+		// window.open(localStorage.getItem("url_bck2"), "_self") });
 	div10_1.style.display = 'block';
 	div10_2.style.display = 'none';
 	btn_enviar.style.display = 'none';
 
 	document.getElementById("btnvolver").addEventListener('click', function(){
 		// mysocket.close();
-		window.open(sessionStorage.getItem("url_bck2"), "_self") });
+		window.open(localStorage.getItem("url_bck2"), "_self") });
 	// cargar parámetros de la tabla
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function () {
@@ -368,7 +368,7 @@ function cerrar_lector() {
 // 	switch (monedayformadepago) {
 // 		case 'bs-online':
 // 			propiedades="top=20%, left=50%, width=450, height=635, menubar=0, resizable=0, status=0, titlebar=0, toolbar=0";
-// 			window.open("../php/formapagoenlinea.php?monto="+monto+"&ruta=giftcard&urlback="+sessionStorage.getItem("url_back")+"&hash="+respuesta.hash,"_blank",propiedades);
+// 			window.open("../php/formapagoenlinea.php?monto="+monto+"&ruta=giftcard&urlback="+localStorage.getItem("url_back")+"&hash="+respuesta.hash,"_blank",propiedades);
 // 			// De ahi llamar a registro giftcard
 // 			// Generar la tarjeta
 // 			break;

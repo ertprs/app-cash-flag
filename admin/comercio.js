@@ -10,16 +10,16 @@ function cargaforma() {
 	var prov;
 
 	if (params==undefined) {
-		prov = sessionStorage.getItem("id_proveedor");
+		prov = localStorage.getItem("id_proveedor");
 	} else {
 		prov = params.id;
-		sessionStorage.setItem("id_proveedor",params.id);
+		localStorage.setItem("id_proveedor",params.id);
 		if (params.btn!=1) {
 	        document.getElementById("botonvolver").style.display = 'none';
 		}
 	}
 
-	var titulo = sessionStorage.getItem("nombresistema");
+	var titulo = localStorage.getItem("nombresistema");
 	// cargar parámetros de la tabla
 	document.title = titulo;
 	document.getElementById("logo").src = "../img/" + 'logoclub.png';
@@ -78,7 +78,7 @@ function limpiar() {
 
 // Enviar los datos del formulario para procesar en el servidor
 function enviar() {
-	var id_proveedor = sessionStorage.getItem("id_proveedor");
+	var id_proveedor = localStorage.getItem("id_proveedor");
 	document.getElementById("id_proveedor").value = id_proveedor;
 
 	var datos = new FormData();
@@ -142,7 +142,7 @@ function buscasocio(valor,opc) {
 					}
 
 					document.getElementById("socio").style.display = 'none';
-					sessionStorage.setItem("socio", true);
+					localStorage.setItem("socio", true);
 
 					document.getElementById("factura").focus();
 
@@ -152,7 +152,7 @@ function buscasocio(valor,opc) {
 					document.getElementsByClassName("cmps")[campo].style.display = 'flex';
 				}
 				document.getElementById("socio").style.display = 'flex';
-				sessionStorage.setItem("socio", false);
+				localStorage.setItem("socio", false);
 				document.getElementById("nombres").focus();
 
 			}
@@ -177,7 +177,7 @@ function buscatitulo() {
 			respuesta = JSON.parse(this.responseText);
 			if (respuesta.exito == 'SI') {
 				document.title = respuesta.parametros.nombresistema;
-				sessionStorage.setItem("nombresistema", respuesta.parametros.nombresistema);
+				localStorage.setItem("nombresistema", respuesta.parametros.nombresistema);
 			}
 		}
 	};
@@ -186,5 +186,5 @@ function buscatitulo() {
 }
 
 function volver() {
-	window.open(sessionStorage.getItem("url_back"), "_self");
+	window.open(localStorage.getItem("url_back"), "_self");
 }

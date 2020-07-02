@@ -1,6 +1,6 @@
 var cards, tipomoneda = 'bs';
 var email;
-var idproveedor = sessionStorage.getItem("idproveedor");
+var idproveedor = localStorage.getItem("idproveedor");
 
 if (email==undefined) { email = 'soluciones2000@gmail.com'; }
 if (idproveedor==undefined) { idproveedor = 1; }
