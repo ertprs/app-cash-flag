@@ -22,10 +22,14 @@ $response = $mercantilManager->getPay([
 ]);
 
 $data = $response->getData();
+$messageResponse = "";
+if ($response->getStatusCode() != 200) {
+	$messageResponse = $mercantilManager->parseResponse($response);
+}
 
 $array = [
 	"code" => $response->getStatusCode(),
-	"message" => $response->getStatusCode()
+	"message" => $messageResponse
 ];
 
 echo json_encode($array);

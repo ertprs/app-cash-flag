@@ -96,7 +96,7 @@
 				              <input id="cvv" class="campo" type="password" size="3" maxlength="3" title="Debe introducir sólo números" style="text-align: left;"/>
 				          </div>
 				          <!-- Factor de autenticación -->
-				          <div id="div3" class="cmps" style="display: none;">
+				          <div id="div3-twofactor" class="cmps" style="display: none;">
 				              <span class="etiq">Clave Telefonica:</span>
 				              <input id="twofactor" class="campo" type="password" size="20" maxlength="20" title="Debe introducir clave de operaciones internet" style="text-align: left;"/>
 				          </div>
@@ -452,6 +452,7 @@
 		        document.getElementById("twofactor").value = "";
 		        document.getElementById("monto").value = "";
 		        document.getElementById("btn_proccess").style.display = 'none';
+		        document.getElementById("div3-twofactor").style.display = 'none';
 		      }
 
 		      // valida la entrada en los campos
@@ -520,8 +521,9 @@
 		          if (this.readyState == 4 && this.status == 200) {
 		            respuesta = JSON.parse(this.responseText);
 		            if (respuesta.twofactor != "" && respuesta.twofactor == "clavetelefonica") {
-		              document.getElementById("btn_proccess").style.display = 'show';
-		              document.getElementById("twofactor").style.display = 'show';
+		              document.getElementById("btn_auth").style.display = 'none';
+		              document.getElementById("btn_proccess").style.display = 'block';
+		              document.getElementById("div3-twofactor").style.display = 'flex';
 		              console.log("success");
 		            } else {
 		              alert(respuesta.message);
@@ -550,12 +552,7 @@
 		        xmlhttp.onreadystatechange = function() {
 		          if (this.readyState == 4 && this.status == 200) {
 		            respuesta = JSON.parse(this.responseText);
-		            if (respuesta.twofactor != "" && respuesta.twofactor == "clavetelefonica") {
-		              enviardatos();
-		              console.log("success");
-		            } else {
-		              alert(respuesta.message);
-		            }
+		            enviardatos();		            
 		          }
 		        };
 		        xmlhttp.open("POST", "../pasarela/mercantil/debit/getpay.php", false);
