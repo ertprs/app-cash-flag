@@ -32,7 +32,6 @@ function cargadatos() {
 			}
 		}
 	}
-
 	xmlhttp.open("GET", "php/buscacomercios.php", true);
 	xmlhttp.send();
 }

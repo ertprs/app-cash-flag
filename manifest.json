@@ -1,0 +1,16 @@
+{
+	"name": "Cash-Flag, puente digital entre comercio y consumidores",
+	"short_name": "Cash-Flag",
+	"lang": "es-US",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "white",
+	"theme_color": "gray",
+	"icons": [
+	    {
+	      "src": "img/icons/icon-1328x1328.png",
+	      "sizes": "1328x1328",
+	      "type": "image/png"
+	    }
+	]
+}

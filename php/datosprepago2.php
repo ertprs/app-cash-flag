@@ -2,6 +2,7 @@
 include_once("../_config/conexion.php");
 include_once("./funciones.php");
 
+var_dump($_POST);
 // Asignación de variables
 $idproveedor = (isset($_POST['idproveedor'])) ? $_POST['idproveedor'] : "" ;
 $moneda = (isset($_POST['moneda'])) ? $_POST['moneda'] : "bs" ;

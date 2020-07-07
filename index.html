@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<script type="text/javascript">
+			//function serviceworker() {
+				'use strict';
+
+				if ('serviceWorker' in navigator) {
+					navigator.serviceWorker.register('/my-sw.js');
+				}
+			//}
+		</script>
+
 		<!-- Hotjar Tracking Code for https://app.cash-flag.com -->
 		<script>
 		    (function(h,o,t,j,a,r){
@@ -19,6 +29,7 @@
 		<title>SGC Consultores C.A.</title>
 		<link rel="shortcut icon" href="favicon.ico" />
 		<link rel="stylesheet" href="css/styles.css">
+		<link rel="manifest" href="./manifest.json">
 		<script type="text/javascript" src="js/funciones.js"></script>
 		<script type="text/javascript" src="index.js"></script>
 	</head>
