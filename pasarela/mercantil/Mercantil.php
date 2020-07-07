@@ -78,10 +78,10 @@ class Mercantil
                 "payment_method" => "tdd",
                 "card_number" => $data["card_number"],
                 "customer_id" => $data["customer_id"],
-                "invoice_number" => "123456789012",
+                "invoice_number" => self::getRamdomNumber(12),
                 "account_type" => "CC",
-                "twofactor_auth" => $data["twofactor"],
-                "expiration_date" => date("m/Y"),
+                "twofactor_auth" => $data["twofactor_auth"],
+                "expiration_date" => date("Y/m"),
                 "cvv" => $data["cvv"],
                 "currency" => "ves",
                 "amount" => $data["amount"]
@@ -91,7 +91,7 @@ class Mercantil
         $success = false;
         $url = $_ENV["APIBU_URL_PAY"];
         $response = $this->executePost($url, $parameters);
-
+        
         return $response;
     }
 
@@ -118,5 +118,34 @@ class Mercantil
         $response = PaymentGatewayResponse::create($content, $statusCode);
 
         return $response;
+    }
+
+    /**
+     * Genera un número aleatorio de 20 digitos
+     * @param type $length
+     * @return string
+     */
+    public static function getRamdomNumber($length = 20)
+    {
+        $characters = '0123456789';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[mt_rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    public function parseResponse($response)
+    {
+        $message = "En este momento el servicio no esta disponible, por favor intente mas tarde.";
+        $array = json_decode($response->getContent());
+        if (isset($array->error_list)) {
+            foreach ($array->error_list as $value) {
+                $message = $value->description;
+                break;
+            }
+        }
+        return $message;
     }
 }

@@ -77,8 +77,7 @@ class AES
      */
     public function validateParams()
     {
-        if ($this->data != null &&
-                $this->method != null ) {
+        if ($this->method != null ) {
             return true;
         } else {
             return FALSE;
@@ -99,7 +98,7 @@ class AES
             $key = substr($key,0,16);
             return base64_encode(openssl_encrypt($data, $this->method, $key, OPENSSL_RAW_DATA));
         } else {
-            throw new Exception('Invlid params!');
+            throw new Exception('Invalid params!');
         }
     }
     /**
