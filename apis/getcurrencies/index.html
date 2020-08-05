@@ -20,22 +20,6 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td><b>BTC</b></td>
-				<td id="btc" style="text-align: right;"></td>
-			</tr>
-			<tr>
-				<td><b>COP</b></td>
-				<td id="cop" style="text-align: right;"></td>
-			</tr>
-			<tr>
-				<td><b>ETH</b></td>
-				<td id="eth" style="text-align: right;"></td>
-			</tr>
-			<tr>
-				<td><b>EUR</b></td>
-				<td id="eur" style="text-align: right;"></td>
-			</tr>
-			<tr>
 				<td><b>VEF (mercado negro)</b></td>
 				<td id="vef_blkmkt" style="text-align: right;"></td>
 			</tr>
@@ -43,6 +27,24 @@
 				<td><b>VES</b></td>
 				<td id="ves" style="text-align: right;"></td>
 			</tr>
+			<tr>
+				<td><b>COP</b></td>
+				<td id="cop" style="text-align: right;"></td>
+			</tr>
+			<tr>
+				<td><b>EUR</b></td>
+				<td id="eur" style="text-align: right;"></td>
+			</tr>
+			<!-- 
+			<tr>
+				<td><b>BTC</b></td>
+				<td id="btc" style="text-align: right;"></td>
+			</tr>
+			<tr>
+				<td><b>ETH</b></td>
+				<td id="eth" style="text-align: right;"></td>
+			</tr>
+			 -->
 		</tbody>
 	</table>
 	<script type="text/javascript">
@@ -65,12 +67,12 @@
 					vef_blkmkt.innerHTML = Math.round(respuesta.rates.VEF_BLKMKT*100)/100;
 					ves.innerHTML        = Math.round(respuesta.rates.VES*100)/100;
 					*/
-					btc.innerHTML        = respuesta.rates.BTC;
-					cop.innerHTML        = respuesta.rates.COP;
-					eth.innerHTML        = respuesta.rates.ETH;
-					eur.innerHTML        = respuesta.rates.EUR;
-					vef_blkmkt.innerHTML = respuesta.rates.VEF_BLKMKT;
-					ves.innerHTML        = respuesta.rates.VES;
+					vef_blkmkt.innerHTML = formatNumber.new(Math.round(respuesta.rates.VEF_BLKMKT*100)/100);
+					ves.innerHTML        = formatNumber.new(Math.round(respuesta.rates.VES*100)/100);
+					cop.innerHTML        = formatNumber.new(Math.round(respuesta.rates.COP*100)/100);
+					eur.innerHTML        = formatNumber.new(Math.round(respuesta.rates.EUR*100)/100);
+					// btc.innerHTML        = respuesta.rates.BTC;
+					// eth.innerHTML        = respuesta.rates.ETH;
 				}
 			};
 			xmlhttp.open("GET", "./getcurrencies.php", true);

@@ -23,7 +23,7 @@ if ($row = mysqli_fetch_array($result)) {
 	} else {
 		$success = 2;
 	}
-	$socio = '"socio":{"id":"' .$_GET["socio"]. '","nombres":"' .utf8_encode(trim($row["nombres"])). '"}';
+	$socio = '"socio":{"id":"' .$_GET["socio"]. '","nombres":"' .trim($row["nombres"]). '"}';
 } else {
 	$socio = '"socio":{}';
 }

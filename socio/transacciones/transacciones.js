@@ -1,4 +1,13 @@
-var socket = io('https://ws.sgc-consultores.com.ve');
+var socket = io('https://ws.sgc-consultores.com.ve:3000', { transports: ['websocket']});
+
+socket.on('connect', function () {
+	console.log('conectado!');
+	socket.emit('greet', { message: 'Hello Mr.Server!' });
+});
+
+socket.on('respond', function (data) {
+	console.log(data);
+});
 
 let respuesta;
 

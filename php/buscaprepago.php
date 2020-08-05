@@ -7,7 +7,7 @@ include_once("../_config/conexion.php");
 $query = "SELECT * from socios where id=".$_GET["idsocio"];
 $result = mysqli_query($link, $query);
 $row = mysqli_fetch_array($result);
-$respuesta = '{"nombresocio":"'.utf8_encode(trim($row["nombres"]).' '.trim($row["apellidos"])).'"';
+$respuesta = '{"nombresocio":"'.trim($row["nombres"]).' '.trim($row["apellidos"]).'"';
 
 // Buscar prepago
 $query = "SELECT * from prepago where id_socio=".$_GET["idsocio"];

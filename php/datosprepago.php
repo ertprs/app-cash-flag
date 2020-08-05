@@ -50,25 +50,32 @@ if ($row = mysqli_fetch_array($result)) {
 }
 
 // Generar numero de tarjeta partiendo de los datos enviados
-$card = generaprepago($nombres,$apellidos,$telefono,$email,$nombreproveedor,$moneda,$link);
+$cardnew = generaprepago($nombres,$apellidos,$telefono,$email,$nombreproveedor,$moneda,$link);
+/*
+   El número de la tarjeta está compuesto por 10 caracteres en el orden que sigue:
+   AAGBBGCCDDGEEGFF -> AAGB BGCC DDGE EGFF
+   0123456789012345
+	  x  x    x  x
+*/
+$dcp = intval(substr($cardnew,2,1).substr($cardnew,5,1).substr($cardnew,10,1).substr($cardnew,13,1));
 
 // Buscar datos de la tarjeta
 $tarjetaexiste = false;
-// $query = "select * from prepago where email='".trim($email)."' and moneda='".trim($moneda)."'";
-$query = "select * from prepago where card='".trim($card)."'";
+$query = "select * from prepago where nombres='".trim($nombres)."' and apellidos='".trim($apellidos)."' and telefono='".trim($telefono)."' and email='".trim($email)."' and id_proveedor=".$idproveedor." and moneda='".trim($moneda)."'";
+// $query = "select * from prepago where card='".trim($card)."'";
 $result = mysqli_query($link, $query);
 if ($row = mysqli_fetch_array($result)) {
 	// Busca la tarjeta existente
 	$tarjetaexiste = true;
-    // $card = $row["card"];
-    $saldoant = $row["saldo"];
-    $saldo = ($tipopago == 'efectivo') ? $row["saldo"]+$monto : $row["saldo"] ;
+   $card = $row["card"];
+   $saldoant = $row["saldo"];
+   $saldo = ($tipopago == 'efectivo') ? $row["saldo"]+$monto : $row["saldo"] ;
 } else {
 	// Generar la tarjeta
 	$tarjetaexiste = false;
-	// $card = generaprepago($nombres,$apellidos,$telefono,$email,$nombreproveedor,$moneda,$link);
-    $saldoant = 0.00;
-    $saldo = ($tipopago == 'efectivo') ? $monto : 0.00 ;
+	$card = $cardnew;
+   $saldoant = 0.00;
+   $saldo = ($tipopago == 'efectivo') ? $monto : 0.00 ;
 }
 
 // Fecha de compra
@@ -141,7 +148,7 @@ if ($result = mysqli_query($link,$query)) {
 	} else {
 		$quer0 = "INSERT INTO cards (card, tipo) VALUES ('".$card."','prepago')";
 		if ($resul0 = mysqli_query($link,$quer0)) {
-			$query = "INSERT INTO prepago (card, nombres, apellidos, telefono, email, saldo, saldoentransito, moneda, fechacompra, fechavencimiento, validez, status, id_socio, id_proveedor, hash) VALUES ('".$card."','".$nombres."','".$apellidos."','".$telefono."','".$email."',".$monto.",0.00,'".$moneda."','".$fecha."','".$fechavencimiento."','".$validez."','".$status."',".$idsocio.",".$idproveedor.",'".$hash."')";
+			$query = "INSERT INTO prepago (card, nombres, apellidos, telefono, email, saldo, saldoentransito, moneda, fechacompra, fechavencimiento, validez, status, id_socio, id_proveedor, hash, premium) VALUES ('".$card."','".$nombres."','".$apellidos."','".$telefono."','".$email."',".$monto.",0.00,'".$moneda."','".$fecha."','".$fechavencimiento."','".$validez."','".$status."',".$idsocio.",".$idproveedor.",'".$hash."',0)";
 			if ($result = mysqli_query($link,$query)) {
 				$txtcard = substr($card,0,4).'-'.substr($card,4,4).'-'.substr($card,8,4).'-'.substr($card,12,4);
 				if ($tipopago == 'efectivo') {
@@ -171,16 +178,18 @@ if ($result = mysqli_query($link,$query)) {
 					}
 					$mensaje .= number_format($saldoant+$monto,2,',','.').'"]';
 				}
-			    $respuesta = '{"exito":"SI","mensaje":'.$mensaje.',"card":"'.$card.'","hash":"'.$hash.'"}';	
+				$querx = 'UPDATE _parametros SET dcp='.$dcp;
+				$resulx = mysqli_query($link,$querx);
+				$respuesta = '{"exito":"SI","mensaje":'.$mensaje.',"card":"'.$card.'","hash":"'.$hash.'"}';	
 			} else {
-			    $respuesta = '{"exito":"NO","mensaje":"La tarjeta no pudo generarse por favor comuniquese con soporte técnico","card":"'.$card.'","hash":"'.$hash.'"}';	
+			   $respuesta = '{"exito":"NO","mensaje":"La tarjeta no pudo generarse por favor comuniquese con soporte técnico [2]","card":"'.$card.'","hash":"'.$hash.'"}';	
 			}
 		} else {
-		    $respuesta = '{"exito":"NO","mensaje":"La tarjeta no pudo generarse por favor comuniquese con soporte técnico","card":"'.$card.'","hash":"'.$hash.'"}';	
+		   $respuesta = '{"exito":"NO","mensaje":"La tarjeta no pudo generarse por favor comuniquese con soporte técnico[1]","card":"'.$card.'","hash":"'.$hash.'"}';	
 		}
 	}
 } else {
-    $respuesta = '{"exito":"NO","mensaje":"La transacción no pudo completarse por favor comuniquese con soporte técnico","card":"'.$card.'","hash":"'.$hash.'"}';	
+   $respuesta = '{"exito":"NO","mensaje":"La transacción no pudo completarse por favor comuniquese con soporte técnico","card":"'.$card.'","hash":"'.$hash.'"}';	
 }
 echo $respuesta;
 ?>

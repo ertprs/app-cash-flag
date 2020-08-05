@@ -8,7 +8,7 @@ $query = "SELECT DISTINCT nombres, apellidos from giftcards where email='".$_GET
 // echo $query;
 $result = mysqli_query($link, $query);
 $row = mysqli_fetch_array($result);
-$respuesta = '{"nombresocio":"'.utf8_encode(trim($row["nombres"]).' '.trim($row["apellidos"])).'"';
+$respuesta = '{"nombresocio":"'.trim($row["nombres"]).' '.trim($row["apellidos"]).'"';
 
 // Buscar giftcards
 $query = "SELECT * from giftcards where email='".$_GET["email"]."'";

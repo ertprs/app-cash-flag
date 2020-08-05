@@ -28,6 +28,9 @@
 					<button id="login" onclick="enviar()" style="width: 7em;">Enviar</button>
 					<button id="limpiar" onclick="limpiar()" style="width: 7em;">Limpiar</button>
 				</div>
+				<div class="btns">
+					<button id="volver" style="width: 7em;">Volver</button>
+				</div>
 			</div>
 		</div>
 		<script>
@@ -38,6 +41,8 @@
 			primeravez = params.flag;
 
 			function inicio() {
+				document.getElementById("volver").addEventListener('click', function(){
+					window.open(localStorage.getItem("url_bck2"), "_self") });
 				var xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function () {
 					if (this.readyState == 4 && this.status == 200) {

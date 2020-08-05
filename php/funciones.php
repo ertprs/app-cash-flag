@@ -103,16 +103,17 @@ function codigocaracter($valor) {
 
 function generagiftcard($nombres,$apellidos,$telefono,$email,$nombreproveedor,$moneda,$link) {
     // Busca el próximo número correlativo (único)
-    $query = "select auto_increment from information_schema.tables where table_schema='clubdeconsumidores' and table_name='giftcards'";
+    $query = "select dcg from _parametros";
     $result = mysqli_query($link,$query);
     if($row = mysqli_fetch_array($result)) {
-        $numgiftcard = $row["auto_increment"];
+        $numgiftcard = $row["dcg"];
     } else {
         $numgiftcard = 0;
     }
+    $numgiftcard++;
 
     // Si el número del correlativo supera los cuatro dígitos se trunca a cuatro
-    if ($numgiftcard > 9999) { $numgiftcard -= intval($numgiftcard/10000)*10000; }
+    if ($numgiftcard > 9999) { $numgiftcard = 1; }
 
     // Rellena con ceros los caracteres faltantes hasta 4
     if ($numgiftcard < 10) {
@@ -154,26 +155,27 @@ function generagiftcard($nombres,$apellidos,$telefono,$email,$nombreproveedor,$m
 
 function generaprepago($nombres,$apellidos,$telefono,$email,$nombreproveedor,$moneda,$link) {
     // Busca el próximo número correlativo (único)
-    $query = "select auto_increment from information_schema.tables where table_schema='clubdeconsumidores' and table_name='prepago'";
+    $query = "select dcp from _parametros";
     $result = mysqli_query($link,$query);
     if($row = mysqli_fetch_array($result)) {
-        $numgiftcard = $row["auto_increment"];
+        $numprepago = $row["dcp"];
     } else {
-        $numgiftcard = 0;
+        $numprepago = 0;
     }
+    $numprepago++;
 
     // Si el número del correlativo supera los cuatro dígitos se trunca a cuatro
-    if ($numgiftcard > 9999) { $numgiftcard -= intval($numgiftcard/10000)*10000; }
+    if ($numprepago > 9999) { $numprepago = 1; }
 
     // Rellena con ceros los caracteres faltantes hasta 4
-    if ($numgiftcard < 10) {
-        $txtgiftcard = "000".trim($numgiftcard);
-    } elseif ($numgiftcard < 100) {
-        $txtgiftcard = "00".trim($numgiftcard);
-    } elseif ($numgiftcard < 1000) {
-        $txtgiftcard = "0".trim($numgiftcard);
+    if ($numprepago < 10) {
+        $txtprepago = "000".trim($numprepago);
+    } elseif ($numprepago < 100) {
+        $txtprepago = "00".trim($numprepago);
+    } elseif ($numprepago < 1000) {
+        $txtprepago = "0".trim($numprepago);
     } else {
-        $txtgiftcard = trim($numgiftcard);
+        $txtprepago = trim($numprepago);
     }
     /*
         El número de la tarjeta está compuesto por 10 caracteres en el orden que sigue:
@@ -193,14 +195,14 @@ function generaprepago($nombres,$apellidos,$telefono,$email,$nombreproveedor,$mo
     */
     $card = "";
     $card .= generacodigo(substr($nombres,0,1),$link);
-    $card .= substr($txtgiftcard,0,1);
+    $card .= substr($txtprepago,0,1);
     $card .= generacodigo(substr($apellidos,0,1),$link);
-    $card .= substr($txtgiftcard,1,1);
+    $card .= substr($txtprepago,1,1);
     $card .= generacodigo(substr($telefono,strlen($telefono)-1,1),$link);
     $card .= generacodigo(substr($email,0,1),$link);
-    $card .= substr($txtgiftcard,2,1);
+    $card .= substr($txtprepago,2,1);
     $card .= generacodigo(substr($nombreproveedor,0,1),$link);
-    $card .= substr($txtgiftcard,3,1);
+    $card .= substr($txtprepago,3,1);
     $card .= generacodigo(substr($moneda,0,1),$link);
 
     return $card;

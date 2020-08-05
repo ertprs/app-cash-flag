@@ -2,7 +2,7 @@ let monto="", idproveedor=localStorage.getItem("idproveedor"), moneda='bs', tarj
 let beep = '../lector/audio/beep.mp3';
 let scanner = "";
 
-var socket = io('https://ws.sgc-consultores.com.ve');
+var socket = io('https://ws.sgc-consultores.com.ve:3000', { transports: ['websocket']});
 
 socket.on('manual', function(msg){
 	datos = JSON.parse(msg);

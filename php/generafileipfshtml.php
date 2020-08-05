@@ -28,26 +28,26 @@ $file .= $_POST["rif"];
 $file .= '</b>, de domicilio fiscal ';
 $file .= $_POST["direccion"];
 
-$file .= ' quien a los efectos del presente contrato se denomina “EL AFILIADO”, se ha convenido celebrar, como en efecto se celebra, el siguiente contrato contenido en las siguientes cláusulas:</p>
+$file .= ' quien a los efectos del presente contrato se denomina “EL ALIADO”, se ha convenido celebrar, como en efecto se celebra, el siguiente contrato contenido en las siguientes cláusulas:</p>
 
 <b><u>I. Definición de términos:</u></b>
 <ul>
 <li><b>CASH-FLAG:</b> Plataforma tecnológica sobre la cual se ejecutan los productos y/o servicios objeto de este contrato.</li>
 <li><b>PROVEEDOR:</b> La empresa encargada de la producción, entrega y mantenimiento de los productos y/o servicios objeto de este contrato, es la empresa propietaria de CASH-FLAG.</li>
-<li><b>AFILIADO:</b> Persona Natural o Jurídica que utiliza CASH-FLAG generando beneficios a sus clientes y aprovechando los servicios para mejorar su negocio.</li>
-<li><b>CLIENTE:</b> Persona Natural o Jurídica que consume en el AFILIADO y obtiene beneficios de CASH-FLAG.</li>
+<li><b>ALIADO:</b> Persona Natural o Jurídica que utiliza CASH-FLAG generando beneficios a sus clientes y aprovechando los servicios para mejorar su negocio.</li>
+<li><b>CLIENTE:</b> Persona Natural o Jurídica que consume en el ALIADO y obtiene beneficios de CASH-FLAG.</li>
 <li><b>TOKEN:</b> Unidad de Valor que puede usarse dentro de CASH-FLAG para realizar transacciones.</li>
 <li><b>TRANSACCIÓN:</b> Cualquier interacción que ocurra dentro de CASH-FLAG, puede ser de valor (monto en dinero o tokens) o de datos (registro, mensaje, notificación, etc.).</li>
-<li><b>CONSUMO:</b> Canje de un TOKEN por productos y/o servicios en un AFILIADO.</li>
-<li><b>BENEFICIO:</b> Producto, servicio o monto que de manera estratégica entrega un AFILIADO a un CLIENTE.</li>
-<li><b>CUPÓN:</b> TOKEN de un sólo uso que un AFILIADO entrega a un CLIENTE como BENEFICIO por medio de CASH-FLAG, estos se generan al registrar en la plataforma la factura de una compra en el AFILIADO.</li>
-<li><b>TARJETA:</b> TOKEN que un cliente puede obtener de manera voluntaria para realizar CONSUMOS en un AFILIADO.</li>
-<li><b>TARJETA PREPAGADA:</b> TOKEN recargable personalizado para realizar CONSUMOS en un AFILIADO.</li>
-<li><b>TARJETA DE REGALO:</b> TOKEN de un solo uso que un CLIENTE puede regalar a un tercero para que realice CONSUMOS en un AFILIADO.</li>
+<li><b>CONSUMO:</b> Canje de un TOKEN por productos y/o servicios en un ALIADO.</li>
+<li><b>BENEFICIO:</b> Producto, servicio o monto que de manera estratégica entrega un ALIADO a un CLIENTE.</li>
+<li><b>CUPÓN:</b> TOKEN de un sólo uso que un ALIADO entrega a un CLIENTE como BENEFICIO por medio de CASH-FLAG, estos se generan al registrar en la plataforma la factura de una compra en el ALIADO.</li>
+<li><b>TARJETA:</b> TOKEN que un cliente puede obtener de manera voluntaria para realizar CONSUMOS en un ALIADO.</li>
+<li><b>TARJETA PREPAGADA:</b> TOKEN recargable personalizado para realizar CONSUMOS en un ALIADO.</li>
+<li><b>TARJETA DE REGALO:</b> TOKEN de un solo uso que un CLIENTE puede regalar a un tercero para que realice CONSUMOS en un ALIADO.</li>
 </ul>
 
 <b><u>II. Alcance:</u></b>
-<p style="text-align: justify;">El PROVEEDOR ofrece al AFILIADO una plataforma para ejecutar productos y/o servicios digitales orientados a generar la fidelidad de sus CLIENTES denominada CASH-FLAG, esta plataforma permitirá al AFILIADO usar los productos de CASH-FLAG a su entera libertad, siempre que sea lícito y cumpla con sus responsabilidades listadas más adelante, en la versión 1.0 el PROVEEDOR ofrece los siguientes productos:<br/>
+<p style="text-align: justify;">El PROVEEDOR ofrece al ALIADO una plataforma para ejecutar productos y/o servicios digitales orientados a generar la fidelidad de sus CLIENTES denominada CASH-FLAG, esta plataforma permitirá al ALIADO usar los productos de CASH-FLAG a su entera libertad, siempre que sea lícito y cumpla con sus responsabilidades listadas más adelante, en la versión 1.0 el PROVEEDOR ofrece los siguientes productos:<br/>
 <b>A)</b> CUPONES de BENEFICIOS<br/>
 <b>B)</b> TARJETAS PREPAGADAS<br/>
 <b>C)</b> TARJETAS DE REGALO</p>
@@ -55,14 +55,14 @@ $file .= ' quien a los efectos del presente contrato se denomina “EL AFILIADO�
 <b><u>III. Responsabilidades:</u></b>
 <p style="text-align: justify;">El PROVEEDOR tiene las siguientes responsabilidades:<br/>
 <b>A)</b> Mantener operativa la plataforma<br/>
-<b>B)</b> Entregar información estadística para los AFILIADOS<br/>
-<b>C)</b> Velar por la privacidad de AFILIADOS y CLIENTES<br/>
+<b>B)</b> Entregar información estadística para los ALIADOS<br/>
+<b>C)</b> Velar por la privacidad de ALIADOS y CLIENTES<br/>
 <b>D)</b> Moderar la actividad de la plataforma para evitar acciones cuestionables<br/>
 <b>E)</b> Cumplir con el acuerdo de nivel de servicio anexo a este contrato<br/>
-<b>F)</b> Colaborar con el AFILIADO en las iniciativas de promoción para captar más clientes o retener clientes actuales<br/>
+<b>F)</b> Colaborar con el ALIADO en las iniciativas de promoción para captar más clientes o retener clientes actuales<br/>
 <b>G)</b> Realizar labores de investigación y desarrollo para generar nuevos productos y/o servicios</p>
 
-<p style="text-align: justify;">El AFILIADO tiene las siguientes responsabilidades:<br/>
+<p style="text-align: justify;">El ALIADO tiene las siguientes responsabilidades:<br/>
 <b>A)</b> Otorgar BENEFICIOS atractivos a los clientes para hacer atractiva la plataforma<br/>
 <b>B)</b> Colaborar con el mantenimiento de CASH-FLAG honrando sus compromisos, aportando información cuando sea requerida, pagando puntualmente sus comisiones, reportando el desempeño de su cartera de CLIENTES o informando acerca de posibles oportunidades de mejora.<br/>
 <b>C)</b> Velar por la imagen de CASH-FLAG haciendo un uso adecuado de logos, material POP, etc.<br/>
@@ -72,7 +72,7 @@ $file .= ' quien a los efectos del presente contrato se denomina “EL AFILIADO�
 <b>G)</b> Mostrar receptividad y colaboración con las iniciativas de promoción que proponga el PROVEEDOR</p>
 
 <b><u>IV. Derechos:</u></b>
-<p style="text-align: justify;">El AFILIADO tiene los siguientes derechos:<br/>
+<p style="text-align: justify;">El ALIADO tiene los siguientes derechos:<br/>
 <b>A)</b> Solicitar reportes e información estadística sobre el comportamiento de su cuenta (sin incluir detalles privados de los CLIENTES)<br/>
 <b>B)</b> Recibir soporte comercial y técnico para aprovechar al máximo la plataforma.<br/>
 <b>C)</b> Recibir información detallada sobre sus transacciones y facturas.<br/>
@@ -81,41 +81,41 @@ $file .= ' quien a los efectos del presente contrato se denomina “EL AFILIADO�
 <p style="text-align: justify;">El PROVEEDOR tiene los siguientes derechos:<br/>
 <b>A)</b> Recibir retroalimentación oportuna y adecuada para garantizar el servicio<br/>
 <b>B)</b> Recibir el pago de sus servicios de manera oportuna y completa<br/>
-<b>C)</b> Solicitar a los AFILIADOS la información necesaria y suficiente para evaluar el desempeño y ejecutar iniciativas de promoción o mejoras técnicas a la plataforma.<br/>
+<b>C)</b> Solicitar a los ALIADOS la información necesaria y suficiente para evaluar el desempeño y ejecutar iniciativas de promoción o mejoras técnicas a la plataforma.<br/>
 <b>D)</b> Captar a nuevos CLIENTES para la plataforma.</p>
 
 <b><u>V. Propiedad de la información:</u></b>
-<p style="text-align: justify;">Toda la información que se genere en la plataforma será propiedad de CASH-FLAG, a excepción de los datos privados de AFILIADOS y CLIENTES.</p>
+<p style="text-align: justify;">Toda la información que se genere en la plataforma será propiedad de CASH-FLAG, a excepción de los datos privados de ALIADOS y CLIENTES.</p>
 
 <b><u>VI. Beneficios para los CLIENTES:</u></b>
-<p style="text-align: justify;">El AFILIADO se compromete a entregar a los CLIENTES los siguientes BENEFICIOS:<br/>
+<p style="text-align: justify;">El ALIADO se compromete a entregar a los CLIENTES los siguientes BENEFICIOS:<br/>
 <b>A)</b> Premio por CONSUMO.<br/>
 <b>B)</b> Premio de Bienvenida.<br/>
 <b>C)</b> Premio por ocasiones especiales.<br/>
 <b>D)</b> Premio especial para promociones: Se define en cada promoción.</p>
 
 <b><u>VII. Comisiones:</u></b>
-<p style="text-align: justify;">El AFILIADO se compromete a pagar al PROVEEDOR las siguientes comisiones:<br/>
+<p style="text-align: justify;">El ALIADO se compromete a pagar al PROVEEDOR las siguientes comisiones:<br/>
 <b>A)</b> 3% del monto promedio entre la factura que se use para generar un CUPÓN y el monto de la factura con la que se canjee, esta comisión se calcula cuando el CUPÓN es canjeado.<br/>
 <b>B)</b> 3% del monto que se recargue en una TARJETA PREPAGADA, este monto se calcula al momento de la recarga.<br/>
 <b>C)</b> 3% del monto por el que se compre una TARJETA DE REGALO, este monto se calcula al momento de la compra.</p>
 
 <p style="text-align: justify;">Los consumos con TARJETAS PREPAGADAS o TARJETAS DE REGALO no generan comisiones.</p>
 
-<b><u>VIII. Beneficio especial para el AFILIADO, comisión por consumo de sus clientes:</u></b>
-<p style="text-align: justify;">El AFILIADO recibirá de CASH-FLAG, el 15% de las comisiones generadas por los clientes que haya captado directamente y estén vinculados a su cuenta, indistintamente de donde ejecuten sus consumos, siempre  cuando el AFILIADO esté solvente con sus compromisos administrativos y activo en la plataforma. Se considera que un AFILIADO se encuentra activo en la plataforma cuando genera al menos una transacción a la semana.</p>
+<b><u>VIII. Beneficio especial para el ALIADO, comisión por consumo de sus clientes:</u></b>
+<p style="text-align: justify;">El ALIADO recibirá de CASH-FLAG, el 15% de las comisiones generadas por los clientes que haya captado directamente y estén vinculados a su cuenta, indistintamente de donde ejecuten sus consumos, siempre  cuando el ALIADO esté solvente con sus compromisos administrativos y activo en la plataforma. Se considera que un ALIADO se encuentra activo en la plataforma cuando genera al menos una transacción a la semana.</p>
 
 <b><u>IX. Facturación y liquidación de comisiones:</u></b>
-<p style="text-align: justify;">El PROVEEDOR generará una relación de transacciones a cobrar de forma semanal los días lunes junto con la factura correspondiente la cual deberá ser cancelada en un lapso de 5 días hábiles, si el AFILIADO no cumpliera con el pago de manera oportuna y completa, este se expone a ser inactivado en la plataforma y de ser recurrente en 3 oportunidades, el PROVEEDOR podrá, a su discreción, darlo de baja definitivamente.</p>
+<p style="text-align: justify;">El PROVEEDOR generará una relación de transacciones a cobrar de forma semanal los días lunes junto con la factura correspondiente la cual deberá ser cancelada en un lapso de 5 días hábiles, si el ALIADO no cumpliera con el pago de manera oportuna y completa, este se expone a ser inactivado en la plataforma y de ser recurrente en 3 oportunidades, el PROVEEDOR podrá, a su discreción, darlo de baja definitivamente.</p>
 
 <b><u>X. Nuevos productos y nuevas versiones:</u></b>
-<p style="text-align: justify;">El PROVEEDOR realizará permanentemente acciones para generar nuevos productos a incluir en la plataforma y es privilegio de los AFILIADOS participar del proceso de diseño, desarrollo y pruebas.</p>
-<p style="text-align: justify;">Este contrato abarca la versión 1.0, los nuevos productos serán incorporados en este contrato mediante la liberación de una nueva versión, si se trata de una modificación menor se generará un addendum y se hará una actualización a la versión actual, estos cambios se notificarán a los AFILIADOS mediante una comunicación vía email.</p>
+<p style="text-align: justify;">El PROVEEDOR realizará permanentemente acciones para generar nuevos productos a incluir en la plataforma y es privilegio de los ALIADOS participar del proceso de diseño, desarrollo y pruebas.</p>
+<p style="text-align: justify;">Este contrato abarca la versión 1.0, los nuevos productos serán incorporados en este contrato mediante la liberación de una nueva versión, si se trata de una modificación menor se generará un addendum y se hará una actualización a la versión actual, estos cambios se notificarán a los ALIADOS mediante una comunicación vía email.</p>
 
 <b><u>XI. Cadena de bloques (Blockchain):</u></b>
 <p style="text-align: justify;">Las transacciones finales de cada ciclo (generación y canje de cupones o recarga y consumos) serán registradas en la Blockchain de Aeternity.</p>
-<p style="text-align: justify;">Todos los AFILIADOS tendrán una cuenta en la Blockchain de Aeternity y podrán usar su llave privada para firmar electrónicamente cualquier comunicación o transacción.</p>
-<p style="text-align: justify;">Este contrato será firmado de manera electrónica por ambas partes (PROVEEDOR y AFILIADO), encriptado y registrado en la cadena de bloques de Aeternity como sello del acuerdo.</p>
+<p style="text-align: justify;">Todos los ALIADOS tendrán una cuenta en la Blockchain de Aeternity y podrán usar su llave privada para firmar electrónicamente cualquier comunicación o transacción.</p>
+<p style="text-align: justify;">Este contrato será firmado de manera electrónica por ambas partes (PROVEEDOR y ALIADO), encriptado y registrado en la cadena de bloques de Aeternity como sello del acuerdo.</p>
 
 <p style="text-align: justify;">El presente Contrato se firma en la Ciudad de Valencia, estado Carabobo en la Republica Bolivariana de Venezuela, el día '.$_POST["fecha"].'.</p>
 
@@ -221,7 +221,15 @@ $a = fopen('../contrato/ultimocontrato.html','w+');
 fwrite($a,$file);
 fclose($a);
 
-$respuesta = '{"exito":"SI","archivo":"ultimocontrato.html","contenido":'.json_encode($file).'}';
-
+$respuesta = '{"exito":"SI","archivo":"ultimocontrato.contrato","contenido":'.json_encode($file).',';
+$respuesta .= '"razonsocial":"'.$_POST["razonsocial"].'",';
+$respuesta .= '"nombre":"'.$_POST["nombre"].'",';
+$respuesta .= '"rif":"'.$_POST["rif"].'",';
+$respuesta .= '"direccion":"'.$_POST["direccion"].'",';
+$respuesta .= '"email":"'.$_POST["email"].'",';
+$respuesta .= '"firmasgc":"'.$_POST["firmasgc"].'",';
+$respuesta .= '"firmacliente":"'.$_POST["firmacliente"].'",';
+$respuesta .= '"fecha":"'.$_POST["fecha"].'"}';
+	
 echo $respuesta;
 ?>

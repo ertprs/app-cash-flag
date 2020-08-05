@@ -20,7 +20,7 @@
 			<div id="div1" align="center">
 				<!-- clave -->
 				<div class="cmps">
-					<span class="etiq">Clave</span>
+					<span class="etiq">Clave de canje anterior</span>
 					<input id="clave" class="campo" type="password" size="50" maxlength="10" title="Introduzca la clave anterior" />
 				</div>
 				<div id="primeravez">
@@ -30,6 +30,9 @@
 				<div class="btns">
 					<button id="enviar" style="width: 7em;" onclick="enviar()">Enviar</button>
 				</div>
+				<div class="btns">
+					<button id="volver" style="width: 7em;">Volver</button>
+				</div>
 			</div>
 		</div>
 		<script>
@@ -37,6 +40,8 @@
 			var ruta = "../../img/", idproveedor=localStorage.getItem("idproveedor"), datos= new FormData();
 
 			function cargadatos() {
+				document.getElementById("volver").addEventListener('click', function(){
+					window.open(localStorage.getItem("url_bck2"), "_self") });
 				// cargar parámetros de la tabla
 				var xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function () {

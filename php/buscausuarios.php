@@ -2,101 +2,156 @@
 header('Content-Type: application/json');
 include_once("../_config/conexion.php");
 
-$quer0 = 'SELECT * FROM usuarios where email="'.$_GET["email"].'"';
-// $quer0 = 'SELECT * FROM usuarios where email="'.$_GET["email"].'" and tipo="'.$_GET["tipo"].'" or tipo="ambos"';
-// var_dump($_GET);
-// echo $quer0;
-$resul0 = mysqli_query($link, $quer0);
-$id = 0;
-$logo = 'sin_imagen.jpg';
-$nombreprov = '';
-if ($ro0 = mysqli_fetch_array($resul0)) {
-    if ($ro0["tipo"]==$_GET["tipo"] or $ro0["tipo"]=="ambos") {
-        $valido = true;
-        if ($ro0["tipo"]=='comercio') {
-            $query = 'SELECT * FROM proveedores where email="'.$_GET["email"].'"';
-            $result = mysqli_query($link, $query);
-            if ($row = mysqli_fetch_array($result)) {
-                if ($row["status"]==1) {
-                    if ($ro0["tipo"]=='comercio') {
-                        $logo = ($row['logo']<>'') ? $row['logo'] : 'sin_imagen.jpg' ;
-                        $nombreprov = utf8_encode($row["nombre"]);
-                    } else {
-                        $logo = 'sin_imagen.jpg';
-                    }
-                    $id = $row['id'];
+if ($_GET["tipo"]=='comercio') {
+    $query = 'SELECT * FROM proveedores where email="'.$_GET["email"].'"';
+    $result = mysqli_query($link, $query);
+    if ($row = mysqli_fetch_array($result)) {
+        if ($row["status"]==1) {
+            $valido = true;
+            $logo = ($row['logo']<>'') ? $row['logo'] : 'sin_imagen.jpg' ;
+            $nombreprov = utf8_encode($row["nombre"]);
+            $id = $row['id'];
+        } else {
+            $valido = false;
+            $logo = 'sin_imagen.jpg';
+        }
+        if ($valido) {
+            $quer2 = 'SELECT * FROM usuarios where email="'.$_GET["email"].'"';
+            $resul2 = mysqli_query($link, $quer2);
+            if ($ro2 = mysqli_fetch_array($resul2)) {
+                if ($ro2["tipo"]==$_GET["tipo"] or $ro2["tipo"]=="ambos") {
+                    $respuesta = '{"exito":"SI",';
+                    $respuesta .= '"id":'.$id.',';
+                    $respuesta .= '"logo":"'.$logo.'",';
+                    $respuesta .= '"nombreprov":"'.$nombreprov.'",';
+                    $respuesta .= '"hashp":"'. $ro2["hashp"] .'",';
+                    $respuesta .= '"pregunta":"' . utf8_encode($ro2["pregunta"]) . '",';
+                    $respuesta .= '"hashr":"' . $ro2["hashr"] . '",';
+                    $respuesta .= '"mensaje":"exito"}';
                 } else {
-                    $valido = false;
+                    $respuesta = '{"exito":"NO",';
+                    $respuesta .= '"id":'.$id.',';
+                    $respuesta .= '"logo":"'.$logo.'",';
+                    $respuesta .= '"nombreprov":"'.$nombreprov.'",';
+                    $respuesta .= '"hashp":"",';
+                    $respuesta .= '"pregunta":"",';
+                    $respuesta .= '"hashr":"",';
+                    $respuesta .= '"mensaje":"error de tipo"}';
                 }
-            }
-            if ($valido) {    
-                $respuesta = '{"exito":"SI",';
+            } else {
+                $respuesta = '{"exito":"NO",';
                 $respuesta .= '"id":'.$id.',';
                 $respuesta .= '"logo":"'.$logo.'",';
                 $respuesta .= '"nombreprov":"'.$nombreprov.'",';
-                $respuesta .= '"hashp":"'. $ro0["hashp"] .'",';
-                $respuesta .= '"pregunta":"' . utf8_encode($ro0["pregunta"]) . '",';
-                $respuesta .= '"hashr":"' . $ro0["hashr"] . '",';
-                $respuesta .= '"mensaje":"exito"}';
-            } else {
-                $respuesta = '{"exito":"NO",';
-                $respuesta .= '"id":0,';
-                $respuesta .= '"logo":"",';
-                $respuesta .= '"nombreprov":"",';
                 $respuesta .= '"hashp":"",';
                 $respuesta .= '"pregunta":"",';
                 $respuesta .= '"hashr":"",';
-                $respuesta .= '"mensaje":"error de status"}';
+                $respuesta .= '"mensaje":"correo no registrado"}';                
             }
         } else {
-            $query = 'SELECT * FROM socios where email="'.$_GET["email"].'"';
-            $result = mysqli_query($link, $query);
-            if ($row = mysqli_fetch_array($result)) {
-                if ($row["status"]=="Activo") {
-                    $id = $row['id'];
-
+            $respuesta = '{"exito":"NO",';
+            $respuesta .= '"id":'.$id.',';
+            $respuesta .= '"logo":"'.$logo.'",';
+            $respuesta .= '"nombreprov":"'.$nombreprov.'",';
+            $respuesta .= '"hashp":"",';
+            $respuesta .= '"pregunta":"",';
+            $respuesta .= '"hashr":"",';
+            $respuesta .= '"mensaje":"error de status"}';       
+        }
+    } else {
+        $quer2 = 'SELECT * FROM socios where email="'.$_GET["email"].'"';
+        $resul2 = mysqli_query($link, $quer2);
+        if ($ro2 = mysqli_fetch_array($resul2)) {
+            $respuesta = '{"exito":"NO",';
+            $respuesta .= '"id":'.$ro2["id"].',';
+            $respuesta .= '"logo":"",';
+            $respuesta .= '"nombreprov":"",';
+            $respuesta .= '"hashp":"",';
+            $respuesta .= '"pregunta":"",';
+            $respuesta .= '"hashr":"",';
+            $respuesta .= '"mensaje":"error de tipo"}';
+        } else {
+            $respuesta = '{"exito":"NO",';
+            $respuesta .= '"id":0,';
+            $respuesta .= '"logo":"",';
+            $respuesta .= '"nombreprov":"",';
+            $respuesta .= '"hashp":"",';
+            $respuesta .= '"pregunta":"",';
+            $respuesta .= '"hashr":"",';
+            $respuesta .= '"mensaje":"usuario no registrado"}';
+        }
+    }
+} else {
+    $query = 'SELECT * FROM socios where email="'.$_GET["email"].'"';
+    $result = mysqli_query($link, $query);
+    if ($row = mysqli_fetch_array($result)) {
+        if ($row["status"]=="Activo") {
+            $valido = true;
+            $id = $row['id'];
+        } else {
+            $valido = false;
+        }
+        if ($valido) {
+            $quer2 = 'SELECT * FROM usuarios where email="'.$_GET["email"].'"';
+            $resul2 = mysqli_query($link, $quer2);
+            if ($ro2 = mysqli_fetch_array($resul2)) {
+                if ($ro2["tipo"]==$_GET["tipo"] or $ro2["tipo"]=="ambos") {
+                    $respuesta = '{"exito":"SI",';
+                    $respuesta .= '"id":'.$id.',';
+                    $respuesta .= '"nombre":"'.$row["nombres"]." ".$row["apellidos"].'",';
+                    $respuesta .= '"hashp":"'. $ro2["hashp"] .'",';
+                    $respuesta .= '"pregunta":"' . utf8_encode($ro2["pregunta"]) . '",';
+                    $respuesta .= '"hashr":"' . $ro2["hashr"] . '",';
+                    $respuesta .= '"mensaje":"exito"}';
                 } else {
-                    $valido = false;
+                    $respuesta = '{"exito":"NO",';
+                    $respuesta .= '"id":'.$id.',';
+                    $respuesta .= '"nombre":"'.$row["nombres"]." ".$row["apellidos"].'",';
+                    $respuesta .= '"hashp":"",';
+                    $respuesta .= '"pregunta":"",';
+                    $respuesta .= '"hashr":"",';
+                    $respuesta .= '"mensaje":"error de tipo"}';
                 }
-            }
-            if ($valido) {    
-                $respuesta = '{"exito":"SI",';
-                $respuesta .= '"id":'.$id.',';
-                $respuesta .= '"nombre":"'.$row["nombres"]." ".$row["apellidos"].'",';
-                $respuesta .= '"hashp":"'. $ro0["hashp"] .'",';
-                $respuesta .= '"pregunta":"' . utf8_encode($ro0["pregunta"]) . '",';
-                $respuesta .= '"hashr":"' . $ro0["hashr"] . '",';
-                $respuesta .= '"mensaje":"exito"}';
             } else {
                 $respuesta = '{"exito":"NO",';
-                $respuesta .= '"id":0,';
-                $respuesta .= '"nombre":"",';
+                $respuesta .= '"id":'.$id.',';
+                $respuesta .= '"nombre":"'.$row["nombres"]." ".$row["apellidos"].'",';
                 $respuesta .= '"hashp":"",';
                 $respuesta .= '"pregunta":"",';
                 $respuesta .= '"hashr":"",';
-                $respuesta .= '"mensaje":"error de status"}';
+                $respuesta .= '"mensaje":"correo no registrado"}';                
             }
+        } else {
+            $respuesta = '{"exito":"NO",';
+            $respuesta .= '"id":'.$id.',';
+            $respuesta .= '"nombre":"'.$row["nombres"]." ".$row["apellidos"].'",';
+            $respuesta .= '"hashp":"",';
+            $respuesta .= '"pregunta":"",';
+            $respuesta .= '"hashr":"",';
+            $respuesta .= '"mensaje":"error de status"}';       
         }
     } else {
-        $respuesta = '{"exito":"NO",';
-        $respuesta .= '"id":'.$id.',';
-        $respuesta .= '"logo":"'.$logo.'",';
-        $respuesta .= '"nombreprov":"'.$nombreprov.'",';
-        $respuesta .= '"hashp":"",';
-        $respuesta .= '"pregunta":"",';
-        $respuesta .= '"hashr":"",';
-        $respuesta .= '"mensaje":"error de tipo"}';
+        $quer2 = 'SELECT * FROM proveedores where email="'.$_GET["email"].'"';
+        $resul2 = mysqli_query($link, $quer2);
+        if ($ro2 = mysqli_fetch_array($resul2)) {
+            $respuesta = '{"exito":"NO",';
+            $respuesta .= '"id":'.$ro2["id"].',';
+            $respuesta .= '"nombre":"",';
+            $respuesta .= '"hashp":"",';
+            $respuesta .= '"pregunta":"",';
+            $respuesta .= '"hashr":"",';
+            $respuesta .= '"mensaje":"error de tipo"}';
+        } else {
+            $respuesta = '{"exito":"NO",';
+            $respuesta .= '"id":0,';
+            $respuesta .= '"logo":"",';
+            $respuesta .= '"nombre":"",';
+            $respuesta .= '"hashp":"",';
+            $respuesta .= '"pregunta":"",';
+            $respuesta .= '"hashr":"",';
+            $respuesta .= '"mensaje":"usuario no registrado"}';
+        }
     }
-    
-} else {
-    $respuesta = '{"exito":"NO",';
-    $respuesta .= '"id":'.$id.',';
-    $respuesta .= '"logo":"'.$logo.'",';
-    $respuesta .= '"nombreprov":"'.$nombreprov.'",';
-    $respuesta .= '"hashp":"",';
-    $respuesta .= '"pregunta":"",';
-    $respuesta .= '"hashr":"",';
-    $respuesta .= '"mensaje":"correo no registrado"}';
 }
 echo $respuesta;
 ?>
