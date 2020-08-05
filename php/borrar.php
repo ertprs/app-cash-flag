@@ -43,8 +43,8 @@ while ($row = mysqli_fetch_array($result)) {
 	while ($ro3 = mysqli_fetch_array($resul3)) {
 		$contador++;
 		$quer4  = "select id from ".$row["TABLE_NAME"]." where id=".$ro3["id"];
-		if($resul4 = mysqli_query($link2, $quer4) {
-			if ($ro4 = mysqli_fetch_array($resul4)) {
+		if ($resul4=mysqli_query($link2, $quer4)) {
+			if ($ro4=mysqli_fetch_array($resul4)) {
 				// Actualizar
 				$quer5  = "update ".$row["TABLE_NAME"]." set ";
 				for ($i=0; $i < count($campos); $i++) {
