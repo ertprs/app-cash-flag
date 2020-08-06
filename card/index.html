@@ -93,6 +93,57 @@
 			height: auto;
 			display: none;
 		}
+
+		.fila {
+			display: flex;
+			width: 100%;
+			height: 1.5em;
+		   padding-top: 0.5em;
+			padding-bottom: 0.5em;
+		}
+
+		.titulo {
+			background: lightblue;
+			font-weight: bold;
+		}
+
+		.par {
+			background: none;
+		}
+
+		.impar {
+			background: lightgray;
+		}
+
+		.columna1 {
+			width: 25%;
+			text-align: center;
+			align-self: center;
+			font-size: 90%;
+		}
+
+		.columna2 {
+			width: 25%;
+			text-align: center;
+			align-self: center;
+			display: block;
+			font-size: 90%;
+		}
+
+		.columna3 {
+			width: 20%;
+			text-align: right;
+			align-self: center;
+			padding-right: 1em;
+			font-size: 90%;
+		}
+
+		.columna4 {
+			width: 25%;
+			align-self: center;
+			text-align: center;
+			font-size: 90%;
+		}
 	</style>
 	<!--
 	margin: auto; <script type="text/javascript" src="./html2canvas.js"></script> -->
@@ -165,6 +216,83 @@
 			// 	'./0000000021.png'
 			// );
 
+
+			// cargar transacciones de la tarjeta
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200) {
+					respuesta = JSON.parse(this.responseText);
+					if (respuesta.exito == 'SI') {
+						transacciones = respuesta.transacciones;
+						rellenatransacciones(transacciones);
+					}
+				}
+			};
+			xmlhttp.open("GET", "../php/ult10transacciones.php?card="+tarjeta, true);
+			xmlhttp.send();
+
+		}
+
+
+		function rellenatransacciones(transacciones) {
+			par = true;	
+			for (var i = 0; i < transacciones.length; i++) {
+				// tarjeta en la columna 1
+				fecha = transacciones[i].fecha.substr(8,2)+'/'+transacciones[i].fecha.substr(5,2)+'/'+transacciones[i].fecha.substr(0,4);
+				txtfecha = document.createTextNode(fecha);
+				cl1 = document.createElement("div");
+				cl1.classList.add("columna1");
+				cl1.appendChild(txtfecha);
+
+				// referencia en la columna 2
+				txtreferencia = document.createTextNode(transacciones[i].referencia);
+				cl2 = document.createElement("div");
+				cl2.classList.add("columna2");
+				cl2.appendChild(txtreferencia);
+
+				// monto en la columna 3
+				if (transacciones[i].recarga>0.00) {
+					recarga = formatNumber.new(transacciones[i].recarga);
+				} else {
+					recarga = "";
+				}
+				txtrecarga = document.createTextNode(recarga);
+				cl3 = document.createElement("div");
+				cl3.classList.add("columna3");
+				cl3.appendChild(txtrecarga);
+
+				// monto en la columna 3
+				if (transacciones[i].consumo>0.00) {
+					consumo = formatNumber.new(transacciones[i].consumo);
+				} else {
+					consumo = "";
+				}
+				txtconsumo = document.createTextNode(consumo);
+				cl4 = document.createElement("div");
+				cl4.classList.add("columna3");
+				cl4.appendChild(txtconsumo);
+
+				// Crear fila para la transacción
+				fila = document.createElement("div");
+				fila.classList.add("fila");
+				// Agregar la clase para definir el comportamiento del css
+				if (par) {
+					fila.classList.add("par");
+					paroimpar = "par";
+					par = false;
+				} else {
+					fila.classList.add("impar");
+					paroimpar = "impar";
+					par = true;
+				}
+				// Agregar las columnas a la fila
+				fila.appendChild(cl1);
+				fila.appendChild(cl2);
+				fila.appendChild(cl3);
+				fila.appendChild(cl4);
+				// Agregar la fila a la tabla
+				document.getElementById("transaccionestarjeta").appendChild(fila);
+			}
 		}
 
 		function mostrarQR(){
@@ -408,6 +536,27 @@
 		</div>
 		<div class="btns_centrado">
 			<button id="cerrarventana" class="clsboton" onclick="cerrarventana()">Cerrar</button>
+		</div>
+	</div>
+	<div id="div11" style="border: solid thin lightgray; padding: 0 0 0.5em 0;">
+		<h4 style="text-align: center; width: auto; padding: 0.5em; margin: auto; border: solid thin gray; background: gray;">
+			<u>Últimos 10 consumos</u><br/>
+		</h4>
+		<div id="transaccionestarjeta" style="margin: 0 0 0 0;">
+			<div id="f-t" class="fila titulo">
+				<div id="" class="columna1">
+					Fecha
+				</div>
+				<div id="" class="columna2">
+					Referencia
+				</div>
+				<div id="" class="columna3">
+					Recarga
+				</div>
+				<div id="" class="columna3">
+					Consumo
+				</div>
+			</div>
 		</div>
 	</div>
 	<div id="modal_area" class="area_modal">
