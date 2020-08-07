@@ -21,6 +21,7 @@ if ($instrumento<>"") {
 	$saldo = 0.00;
 	$saldoentransito = 0.00;
 	if ($instrumento=='prepago') {
+		$tpcard = "prepago_transacciones";
 		$query = "select * from prepago where card='".trim($_POST["tarjeta"])."'";
 		$result = mysqli_query($link, $query);
 		if ($row = mysqli_fetch_array($result)) {
@@ -31,6 +32,7 @@ if ($instrumento<>"") {
 			$cardMoneda    = $row["moneda"];
 		}
 	} else {
+		$tpcard = "giftcards_transacciones";
 		$query = "select * from giftcards where card='".trim($_POST["tarjeta"])."'";
 		$result = mysqli_query($link, $query);
 		if ($row = mysqli_fetch_array($result)) {
@@ -51,11 +53,32 @@ if ($instrumento<>"") {
 	$id_instrumento = $_POST["tarjeta"];
 	$documento = generatransaccion_pdv($link);
 	$status = 'Por confirmar'; // Estatus pendiente por confirmación
+	$tipotransaccion = '51'; // Consumo
+	switch ($moneda) {
+		case 'bs':
+			$montobs = $monto; $montodolares = 0.00; $montocripto = 0.00; 
+			break;
+		case 'dolar':
+			$montobs = 0.00; $montodolares = $monto; $montocripto = 0.00; 
+			break;
+		case 'cripto':
+			$montobs = 0.00; $montodolares = 0.00; $montocripto = $monto; 
+			break;
+		default:
+			$montobs = $monto; $montodolares = 0.00; $montocripto = 0.00; 
+			break;
+	}
+	$tasadolarbs = 1.00;
+	$tasadolarcripto = 1.00;
 
 	if ($id_proveedor==$cardProveedor && $moneda==$cardMoneda) {
 		// Calcular disponibilidad
 		$disponible = $saldo - $saldoentransito;
 		if ($disponible - $monto > 0.00) {
+			/////////////////////////////////////////////////////////////////////////////////////
+			$query = "INSERT INTO ".$tpcard." (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card) VALUES (".$id_socio.",".$id_proveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$documento."','','".$status."','".$id_instrumento."')";
+			$result = mysqli_query($link, $query);
+			/////////////////////////////////////////////////////////////////////////////////////
 			// Insertar transacción para confirmar
 			$query  = 'INSERT INTO pdv_transacciones (fecha, id_proveedor, id_socio, tipo, moneda, monto, ';
 			$query .= 'instrumento, id_instrumento, documento, status, origen, token) ';

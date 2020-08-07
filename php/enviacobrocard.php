@@ -52,6 +52,23 @@ if ($instrumento<>"") {
 	$id_instrumento = $_POST["tarjeta"];
 	$documento = generatransaccion_pdv($link);
 	$status = 'Confirmada'; // Status pendiente por confirmación
+	$tipotransaccion = '51'; // Consumo
+	switch ($moneda) {
+		case 'bs':
+			$montobs = $monto; $montodolares = 0.00; $montocripto = 0.00; 
+			break;
+		case 'dolar':
+			$montobs = 0.00; $montodolares = $monto; $montocripto = 0.00; 
+			break;
+		case 'cripto':
+			$montobs = 0.00; $montodolares = 0.00; $montocripto = $monto; 
+			break;
+		default:
+			$montobs = $monto; $montodolares = 0.00; $montocripto = 0.00; 
+			break;
+	}
+	$tasadolarbs = 1.00;
+	$tasadolarcripto = 1.00;
 
 	if ($id_proveedor==$cardProveedor) {
 		// Calcular disponibilidad
@@ -64,6 +81,10 @@ if ($instrumento<>"") {
 			} else {
 				$pdv_id = 0;
 			}
+			/////////////////////////////////////////////////////////////////////////////////////
+			$query = "INSERT INTO ".$tpcard." (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card) VALUES (".$id_socio.",".$id_proveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$documento."','','".$status."','".$id_instrumento."')";
+			$result = mysqli_query($link, $query);
+			/////////////////////////////////////////////////////////////////////////////////////
 			// Insertar transacción para confirmar
 			$query  = "INSERT INTO pdv_transacciones (fecha, id_proveedor, id_socio, tipo, moneda, monto, ";
 			$query .= "instrumento, id_instrumento, documento, status, origen, token) ";
