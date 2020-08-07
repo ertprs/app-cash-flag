@@ -50,7 +50,7 @@ if ($instrumento<>"") {
 	$tipo = '01'; // Cobro
 	$monto = $_POST["monto"];
 	$id_instrumento = $_POST["tarjeta"];
-	$documento = generatransaccion_pdv($link);
+	$documento = generatransaccion_pdv($link, $database);
 	$status = 'Confirmada'; // Status pendiente por confirmación
 	$tipotransaccion = '51'; // Consumo
 	switch ($moneda) {
