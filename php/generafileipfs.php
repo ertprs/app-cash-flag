@@ -2,6 +2,7 @@
 header('Content-Type: application/json');
 include_once("../_config/conexion.php");
 include_once("funciones.php");
+require("generapdf.php");
 
 $file = 'CONTRATO DE ADHESIÓN PARA EL USO DE LA PLATAFORMA CASH-FLAG versión 1.0
 
@@ -132,7 +133,7 @@ $file .= $_POST["firmacliente"].'
 
 XII. Anexo - Acuerdo de nivel de servicio (A continuación)
 
-==============================================================================================================
+==============================================================================================
 
 ANEXO
 
@@ -233,15 +234,117 @@ $a = fopen('../contrato/ultimocontrato.contrato','w+');
 fwrite($a,$file);
 fclose($a);
 
-$respuesta = '{"exito":"SI","archivo":"ultimocontrato.contrato","contenido":'.json_encode($file).',';
-$respuesta .= '"razonsocial":"'.$_POST["razonsocial"].'",';
-$respuesta .= '"nombre":"'.$_POST["nombre"].'",';
-$respuesta .= '"rif":"'.$_POST["rif"].'",';
-$respuesta .= '"direccion":"'.$_POST["direccion"].'",';
-$respuesta .= '"email":"'.$_POST["email"].'",';
-$respuesta .= '"firmasgc":"'.$_POST["firmasgc"].'",';
-$respuesta .= '"firmacliente":"'.$_POST["firmacliente"].'",';
-$respuesta .= '"fecha":"'.$_POST["fecha"].'"}';
+// $p1 = '
+// CASH-FLAG: Plataforma tecnológica sobre la cual se ejecutan los productos y/o servicios objeto de este contrato.
+// PROVEEDOR: La empresa encargada de la producción, entrega y mantenimiento de los productos y/o servicios objeto de este contrato, es la empresa propietaria de CASH-FLAG.
+// ALIADO: Persona Natural o Jurídica que utiliza CASH-FLAG generando beneficios a sus clientes y aprovechando los servicios para mejorar su negocio.
+// CLIENTE: Persona Natural o Jurídica que consume en el ALIADO y obtiene beneficios de CASH-FLAG.
+// TOKEN: Unidad de Valor que puede usarse dentro de CASH-FLAG para realizar transacciones.
+// TRANSACCIÓN: Cualquier interacción que ocurra dentro de CASH-FLAG, puede ser de valor (monto en dinero o tokens) o de datos (registro, mensaje, notificación, etc.).
+// CONSUMO: Canje de un TOKEN por productos y/o servicios en un ALIADO.
+// BENEFICIO: Producto, servicio o monto que de manera estratégica entrega un ALIADO a un CLIENTE.
+// CUPÓN: TOKEN de un sólo uso que un ALIADO entrega a un CLIENTE como BENEFICIO por medio de CASH-FLAG, estos se generan al registrar en la plataforma la factura de una compra en el ALIADO.
+// TARJETA: TOKEN que un cliente puede obtener de manera voluntaria para realizar CONSUMOS en un ALIADO.
+// TARJETA PREPAGADA: TOKEN recargable personalizado para realizar CONSUMOS en un ALIADO.
+// TARJETA DE REGALO: TOKEN de un solo uso que un CLIENTE puede regalar a un tercero para que realice CONSUMOS en un ALIADO.
+// ';
+
+// $p2 = '
+// El PROVEEDOR ofrece al ALIADO una plataforma para ejecutar productos y/o servicios digitales orientados a generar la fidelidad de sus CLIENTES denominada CASH-FLAG, esta plataforma permitirá al ALIADO usar los productos de CASH-FLAG a su entera libertad, siempre que sea lícito y cumpla con sus responsabilidades listadas más adelante, en la versión 1.0 el PROVEEDOR ofrece los siguientes productos:
+// 	A) CUPONES de BENEFICIOS
+// 	B) TARJETAS PREPAGADAS
+// 	C) TARJETAS DE REGALO
+// ';
+
+$hash = hash("sha256",$file);
+$hoy = date("Y-m-d");
+
+$query  = 'INSERT INTO contratos (razonsocial, nombre, rif, direccion, ';
+$query .= 'email, firmasgc, firmacliente, fecha, fecharegistro, hash) VALUES (';
+$query .= '"'.$_POST["razonsocial"].'", "'.$_POST["nombre"].'", "'.$_POST["rif"].'", ';
+$query .= '"'.$_POST["direccion"].'", "'.$_POST["email"].'", "'.$_POST["firmasgc"].'", ';
+$query .= '"'.$_POST["firmacliente"].'", "'.$_POST["fecha"].'","'.$hoy.'", "'.$hash.'")';
+if($result = mysqli_query($link, $query)) {
+	$respuesta = '{"exito":"SI",';
+    $respuesta .= '"mensaje":"Registro exitoso"}';
+} else {
+	// echo mysqli_error($link);
+	$respuesta = '{"exito":"NO"}';
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+$pdf = new PDF();
+$title = utf8_decode('CASH-FLAG - Contrato de Adhesión');
+$pdf->SetTitle($title);
+$pdf->SetAuthor('SGC Consultores C.A.');
+$pdf->PrintChapter(1,utf8_decode('Definición de términos'),'../contrato/ultimocontrato.contrato');
+// $pdf->PrintChapter(1,'Definición de términos',utf8_decode($p1));
+// $pdf->PrintChapter(2,'Alcance',$p2);
+$pdf->Output('F','../contrato/documentos/'.$_POST["firmacliente"].'.pdf',true);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+$cabeceras  = "MIME-version: 1.0\n";
+
+$file2attach = '../contrato/documentos/'.$_POST["firmacliente"].'.pdf';
+
+// $fileTmpPath = $vAdjunto['tmp_name'];
+$fileName = $file2attach;
+$fileSize = filesize($file2attach);
+$fileType = filetype($file2attach);
+$fileNameCmps = explode(".", $fileName);
+$fileExtension = strtolower(end($fileNameCmps));
+
+$cabeceras .= "Content-type: multipart/mixed;";
+$cabeceras .= "boundary=\"--_Separador-de-mensajes_--\"\n";
+
+$sCabeceraTexto = "----_Separador-de-mensajes_--\n";
+$sCabeceraTexto .= "Content-type: text/html;charset=iso-8859-1\n";
+$sCabeceraTexto .= "Content-transfer-encoding: 7BIT\n";
+$mensaje = $sCabeceraTexto;
+
+
+$sAdjuntos  = "\n\n----_Separador-de-mensajes_--\n";
+$sAdjuntos .= "Content-type: ".$fileType.";name=\"".$_POST["firmacliente"].'.pdf'."\"\n";
+$sAdjuntos .= "Content-Transfer-Encoding: BASE64\n";
+$sAdjuntos .= "Content-disposition: attachment;filename=\"".$_POST["firmacliente"].'.pdf'."\"\n\n";
+
+$oFichero = fopen($file2attach, 'r');
+$sContenido = fread($oFichero, filesize($file2attach));
+$sAdjuntos .= chunk_split(base64_encode($sContenido));
+fclose($oFichero);
+
+
+$correo = $_POST["email"];
+
+$mensaje .= utf8_decode('<div style="width: 10em; height: auto"><a href="app.cash-flag.com"><img src="https://app.cash-flag.com/img/logoclub.png" title="ingrese al portal haciendo click en el logo" /></a></div>');
+$mensaje .= utf8_decode('Hola '.trim($_POST["razonsocial"]).',<br/><br/>');
+$mensaje .= utf8_decode('¡Gracias por querer formar parte de nuestra comunidad!<br/><br/>');
+$mensaje .= utf8_decode('Adjunto encontrarás una copia del contrato de adhesión para tus archivos.<br/><br/>');
+$mensaje .= utf8_decode('<b>Te garantizamos que tu información será guardada celosamente y nunca será compartida con ningún tercero sin tu consentimiento y te aseguramos que siempre cumpliremos con las Leyes vigentes en lo relacionado al tratamiento de tus datos personales.</b><br/><br/>');
+$mensaje .= utf8_decode('Nuestra comunidad está en permanente evolución y tú como un miembro muy importante puedes aportarnos ideas o sugerencias que la harán crecer, ten la certeza que serás escuchado(a) y tus sugerencias o comentarios serán repondidos en un lapso de tiempo razonable con mucho entusiasmo por resolver tus inquietudes, para nosotros será un placer atenderte por medio del email: <a href="mailto:info@cash-flag.com">info@cash-flag.com</a>.<br/><br/>');
+$mensaje .= utf8_decode('Bienvenido!!!'.'<br/><br/>');
+$mensaje .= utf8_decode('Equipo de Cash-Flag'.'<br/><a href="https://www.cash-flag.com">www.cash-flag.com</a><br/><br/>');
+$mensaje .= utf8_decode('<b>Nota:</b> Esta cuenta no es monitoreada, por favor no respondas este email, si deseas comunicarte con tu club escribe a: <b><a href="mailto:info@cash-flag.com">info@cash-flag.com</a></b>'.'<br/><br/>');
+
+$mensaje .= $sAdjuntos."\n\n----_Separador-de-mensajes_----\n";
+
+$asunto = utf8_decode(trim($_POST["razonsocial"]).', bienvenido a Cash-Flag, puente digital entre comercio y consumidores!!!');
+
+// $cabeceras = 'Content-type: text/html;';
+
+if ($_SERVER["HTTP_HOST"]!='localhost') {
+	mail($correo,$asunto,$mensaje,$cabeceras);
+}
+
+// $respuesta = '{"exito":"SI","archivo":"ultimocontrato.contrato","contenido":'.json_encode($file).',';
+// $respuesta .= '"razonsocial":"'.$_POST["razonsocial"].'",';
+// $respuesta .= '"nombre":"'.$_POST["nombre"].'",';
+// $respuesta .= '"rif":"'.$_POST["rif"].'",';
+// $respuesta .= '"direccion":"'.$_POST["direccion"].'",';
+// $respuesta .= '"email":"'.$_POST["email"].'",';
+// $respuesta .= '"firmasgc":"'.$_POST["firmasgc"].'",';
+// $respuesta .= '"firmacliente":"'.$_POST["firmacliente"].'",';
+// $respuesta .= '"fecha":"'.$_POST["fecha"].'"}';
 
 echo $respuesta;
 ?>

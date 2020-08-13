@@ -70,7 +70,7 @@ define ('K_PATH_IMAGES', dirname(__FILE__).'/');
  * Please set here your own logo or an empty string to disable it.
  */
 //define ('PDF_HEADER_LOGO', $_SESSION['emp_logo']);
-define ('PDF_HEADER_LOGO', 'fondocertificado.jpg');
+define ('PDF_HEADER_LOGO', '../img/logoclub.png');
 /**
  * Header logo image width in user units.
  */
@@ -99,22 +99,22 @@ define ('PDF_PAGE_ORIENTATION', 'P');
 /**
  * Document creator.
  */
-define ('PDF_CREATOR', 'Corporación Manna C.A.');
+define ('PDF_CREATOR', 'SGC COnsultores C.A.');
 
 /**
  * Document author.
  */
-define ('PDF_AUTHOR', 'Corporación Manna C.A.');
+define ('PDF_AUTHOR', 'SGC Consultores C.A.');
 
 /**
  * Header title.
  */
-define ('PDF_HEADER_TITLE', 'LA PROVISIÓN QUE CAMBIARÁ TU FUTURO');
+define ('PDF_HEADER_TITLE', 'CASH-FLAG - Contrato de Adhesión');
 
 /**
  * Header description string.
  */
-define ('PDF_HEADER_STRING', '               '.'CERTIFICADO DE AFILIACIÓN');
+define ('PDF_HEADER_STRING', '               '.'CASH-FLAG - Contrato de Adhesión');
 
 /**
  * Document unit of measure [pt=point, mm=millimeter, cm=centimeter, in=inch].

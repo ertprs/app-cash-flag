@@ -1,5 +1,5 @@
 <?php
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+// if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 	require_once dirname(__FILE__) . '/tcpdf/tcpdf_include.php';
 	require_once dirname(__FILE__) . '/tcpdf/tcpdf.php';
 

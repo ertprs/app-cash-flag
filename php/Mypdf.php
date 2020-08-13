@@ -1,7 +1,7 @@
 <?php
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-	require_once dirname(__FILE__) . '/tcpdf/tcpdf.php';
 	require_once dirname(__FILE__) . '/tcpdf/tcpdf_include.php';
+	require_once dirname(__FILE__) . '/tcpdf/tcpdf.php';
 
 class MYPDF extends TCPDF {
 
@@ -25,7 +25,7 @@ class MYPDF extends TCPDF {
         // disable auto-page-break
         $this->SetAutoPageBreak(false, 0);
         // set bacground image
-        $img_file = K_PATH_IMAGES.'fondocertificado.jpg';
+        $img_file = K_PATH_IMAGES.'../img/logoclub.png';
         $this->Image($img_file, 0, 0, 210, 297, '', '', '', false, 300, '', false, false, 0);
         // restore auto-page-break status
         $this->SetAutoPageBreak($auto_page_break, $bMargin);
@@ -35,7 +35,7 @@ class MYPDF extends TCPDF {
         // Set font
         $this->SetFont('helvetica', 'B', 20);
         // Title
-        $this->Cell(0, 15, '"CORPORACIÓN MANNA\nCertificado de afiliación"', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        // $this->Cell(0, 15, '"CORPORACIÓN MANNA\nCertificado de afiliación"', 0, false, 'C', 0, '', 0, false, 'M', 'M');
 
     }
 

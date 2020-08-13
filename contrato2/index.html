@@ -7,45 +7,26 @@
 		<title>Cash-Flag</title>
 		<link rel="stylesheet" href="./contrato.css">
 		<script type="text/javascript" src="../js/funciones.js"></script>
-		<!-- <script src="https://cdn.jsdelivr.net/npm/ipfs/dist/index.min.js"></script> -->
-		<!-- <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script> -->
+		<script src="https://cdn.jsdelivr.net/npm/ipfs/dist/index.min.js"></script>
 		<script type="text/javascript">
-			// document.addEventListener('DOMContentLoaded', async () => {
-			// 	const node = await Ipfs.create({ repo: 'ipfs-' + Math.random() })
-			// 	window.node = node
+			document.addEventListener('DOMContentLoaded', async () => {
+				const node = await Ipfs.create({ repo: 'ipfs-' + Math.random() })
+				window.node = node
 
-			// 	const status = node.isOnline() ? 'online' : 'offline'
+				const status = node.isOnline() ? 'online' : 'offline'
 
-			// 	console.log(`Node status: ${status}`)
-			// 	// You can write more code here to use it. Use methods like
-			// 	// node.add, node.get. See the API docs here:
-			// 	// https://github.com/ipfs/js-ipfs/tree/master/packages/interface-ipfs-core
-			// 	console.log(node);
-		   //  });
+				console.log(`Node status: ${status}`)
+				// You can write more code here to use it. Use methods like
+				// node.add, node.get. See the API docs here:
+				// https://github.com/ipfs/js-ipfs/tree/master/packages/interface-ipfs-core
+		    });
 
-		   //  async function addFile(registro) {
-			// 	archivo = registro.contenido;
-		   // 	await node.add(archivo).then((cid) => {
-			// 		console.log(cid);
-			// 		console.log('successfully stored', cid.path);
-			// 		if (node.isOnline()) {
-			// 			if (confirm("Contrato registrado exitosamente. El documento está diponible y público en la siguiente url:\n\n"+"https://ipfs.io/ipfs/"+cid.path+"\n\n¿Desea abrirlo?")) {
-			// 				limpiar();
-			// 				window.open("https://ipfs.io/ipfs/"+cid.path,"_blank");
-			// 			}
-			// 			console.log(registro);
-			// 			guardahash(cid.path,registro);
-			// 		} else {
-			// 			alert("El contrato se generó en la dirección\n\nhttps://ipfs.io/ipfs/"+cid.path+"\n\nPero no se puede mostrar por una falla en la red\nInténtalo más tarde o comunicate con soporte técnico al +584244071820.");
-			// 		}
-		   //    })
-		   //  }
-		   //  async function addFile(archivo) {
-		   //    for await (const { cid } of node.add(archivo)) {
-		   //      console.log('successfully stored', cid)
-		   //      return cid.string;
-		   //    }
-		   //  }
+		    async function addFile (archivo) {
+		      for await (const { cid } of node.add(archivo)) {
+		        console.log('successfully stored', cid)
+		        return cid.string;
+		      }
+		    }
 
 		</script>
 	</head>
@@ -218,6 +199,7 @@
 					};
 					xmlhttp.open("POST", "../php/firma.php", false);
 					xmlhttp.send(datos);
+
 				}
 			}
 
@@ -244,34 +226,28 @@
 					if (this.readyState == 4 && this.status == 200) {
 						respuesta = JSON.parse(this.responseText);
 						if (respuesta.exito == 'SI') {
-							window.open("./RecordSent.html","_self");
-						} else {
-							alert("Ocurrió un error en el registro, intente de nuevo");
-						}
-							// console.log(respuesta.archivo);
+							console.log(respuesta.archivo);
+							// console.log(respuesta.contenido);
 							// var file = new File(['string'], respuesta.archivo);
 							// console.log(file);
 							// window.open(file.name,"_blank");
-							// alert("El contrato se generó pero no se generó por un error en la red\ncomuniquese con soporte técnico al +584244071820.");
-							// addFile(respuesta);
-							// .then((hash) => {
-							// 	console.log(hash);
-								// if(confirm("Contrato registrado exitosamente. El documento está diponible y público en la siguiente url:\n\n"+"https://ipfs.io/ipfs/"+hash+"\n\n¿Desea abrirlo?")) {
-									// alert('Contrato registrado exitosamente, se enviará una copia a su correo electrónico.');
-									// limpiar();
-									// window.open("https://ipfs.io/ipfs/"+hash,"_blank");
-									// guardahash(hash,respuesta);
-								// }
-							// });
-						// } else {
-						// 	alert("Ocurrió un error en al firma, intente de nuevo");
-						// }
+
+							addFile(respuesta.contenido).then(hash => {
+								if(confirm("Contrato registrado exitosamente. El documento está diponible y público en la siguiente url:\n\n"+"https://ipfs.io/ipfs/"+hash+"\n\n¿Desea abrirlo?")) {
+									limpiar();
+									window.open("https://ipfs.io/ipfs/"+hash,"_blank");
+									guardahash(hash,respuesta);
+								}
+							});
+						} else {
+							alert("Ocurrió un error en al firma, intente de nuevo");
+						}
 					}
 				};
 				xmlhttp.open("POST", "../php/generafileipfs.php", false);
 				xmlhttp.send(datos);
 			}
-			/*
+
 			function guardahash(hash,registro) {
 				var datos = new FormData();
 				datos.append("razonsocial",  registro.razonsocial);
@@ -297,7 +273,6 @@
 				xmlhttp.open("POST", "../php/registracontrato.php", false);
 				xmlhttp.send(datos);
 			}
-			*/
 		</script>
 	</body>
 </html>
