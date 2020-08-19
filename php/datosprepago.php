@@ -93,6 +93,7 @@ $validez = substr($fechavencimiento,5,2)."/".substr($fechavencimiento,0,4);
 
 // Status, si es en efectivo queda lista para usar de inmediato, si no queda por conciliar
 $status = ( $tipopago == 'efectivo') ? 'Lista para usar' : 'Por confirmar pago' ;
+$fechaconfirmacion = ( $tipopago == 'efectivo') ? $fecha : '0000-00-00' ;
 
 // Encripta la giftcard
 $hash = hash("sha256",$card.$nombres.$apellidos.$telefono.$email.$monto.$idproveedor.$moneda);
@@ -102,6 +103,16 @@ if ($result = mysqli_query($link,$query)) {
 	if ($tarjetaexiste) {
 		$query = "UPDATE prepago SET saldo=".$saldo." WHERE card='".trim($card)."'";
 		if ($result = mysqli_query($link,$query)) {
+			// Punto de venta
+			$tipo2 = '51'; 
+			// Insertar transacción para confirmar
+			$quer2  = 'INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, ';
+			$quer2 .= 'instrumento, id_instrumento, documento, status, origen, token) ';
+			$quer2 .= 'VALUES ("'.$fecha.'","'.$fechaconfirmacion.'",'.$idproveedor.','.$idsocio.',"'.$tipo2.'","'.$moneda.'",';
+			$quer2 .= $monto.',"prepago","'.$card.'","'.$referencia.'","'.$status;
+			$quer2 .= '","","")';
+			$resul2 = mysqli_query($link,$quer2);
+
 			$txtcard = substr($card,0,4).'-'.substr($card,4,4).'-'.substr($card,8,4).'-'.substr($card,12,4);
 			if ($tipopago == 'efectivo') {
 				$mensaje = '["Tarjeta prepagada recargada exitosamente:","",';
@@ -150,6 +161,16 @@ if ($result = mysqli_query($link,$query)) {
 		if ($resul0 = mysqli_query($link,$quer0)) {
 			$query = "INSERT INTO prepago (card, nombres, apellidos, telefono, email, saldo, saldoentransito, moneda, fechacompra, fechavencimiento, validez, status, id_socio, id_proveedor, hash, premium) VALUES ('".$card."','".$nombres."','".$apellidos."','".$telefono."','".$email."',".$monto.",0.00,'".$moneda."','".$fecha."','".$fechavencimiento."','".$validez."','".$status."',".$idsocio.",".$idproveedor.",'".$hash."',0)";
 			if ($result = mysqli_query($link,$query)) {
+				// Punto de venta
+				$tipo2 = '51'; 
+				// Insertar transacción para confirmar
+				$quer2  = 'INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, ';
+				$quer2 .= 'instrumento, id_instrumento, documento, status, origen, token) ';
+				$quer2 .= 'VALUES ("'.$fecha.'","0000-00-00",'.$idproveedor.','.$idsocio.',"'.$tipo2.'","'.$moneda.'",';
+				$quer2 .= $monto.',"prepago","'.$card.'","'.$referencia.'","'.$status;
+				$quer2 .= '","","")';
+				$resul2 = mysqli_query($link,$quer2);
+
 				$txtcard = substr($card,0,4).'-'.substr($card,4,4).'-'.substr($card,8,4).'-'.substr($card,12,4);
 				if ($tipopago == 'efectivo') {
 					$mensaje = '["Tarjeta prepagada generada exitosamente:","",';

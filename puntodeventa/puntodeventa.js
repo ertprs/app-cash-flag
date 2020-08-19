@@ -2,20 +2,20 @@ let monto="", idproveedor=localStorage.getItem("idproveedor"), moneda='bs', tarj
 let beep = '../lector/audio/beep.mp3';
 let scanner = "";
 
-var socket = io('https://ws.sgc-consultores.com.ve:3000', { transports: ['websocket']});
+// var socket = io('https://ws.sgc-consultores.com.ve:3000', { transports: ['websocket']});
 
-socket.on('manual', function(msg){
-	datos = JSON.parse(msg);
-	document.getElementById("status-"+datos.pdv_id).innerHTML = "Confirmada";
-	document.getElementById("status-"+datos.pdv_id).classList.remove("rojo");
-	document.getElementById("status-"+datos.pdv_id).classList.add("negro");
-});
+// socket.on('manual', function(msg){
+// 	datos = JSON.parse(msg);
+// 	document.getElementById("status-"+datos.pdv_id).innerHTML = "Confirmada";
+// 	document.getElementById("status-"+datos.pdv_id).classList.remove("rojo");
+// 	document.getElementById("status-"+datos.pdv_id).classList.add("negro");
+// });
 
-socket.on('card', function(msg){
-	datos = JSON.parse(msg);
-	console.log(msg);
-	console.log('card '+datos);
-});
+// socket.on('card', function(msg){
+// 	datos = JSON.parse(msg);
+// 	console.log(msg);
+// 	console.log('card '+datos);
+// });
 
 idproveedor = (idproveedor==undefined) ? 2 : idproveedor;
 

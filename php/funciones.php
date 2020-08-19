@@ -225,11 +225,10 @@ function generacodigo($letra,$link) {
 // Generar el próximo número de transacción en el pdv
 function generatransaccion_pdv($link, $database) {
     // Busca el próximo número correlativo (único)
-    $query = "select auto_increment from information_schema.tables ";
-    $query .= "where table_schema='".$database."' and table_name='pdv_transacciones'";
+    $query = "select count(id) as increment from pdv_transacciones";
     $result = mysqli_query($link,$query);
     if($row = mysqli_fetch_array($result)) {
-            $numero = $row["auto_increment"];
+            $numero = $row["increment"];
     } else {
             $numero = 0;
     }

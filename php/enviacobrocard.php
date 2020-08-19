@@ -74,21 +74,28 @@ if ($instrumento<>"") {
 		// Calcular disponibilidad
 		$disponible = $saldo - $saldoentransito;
 		if ($disponible - $monto > 0.00) {
-			$querx = "select auto_increment from information_schema.tables where table_schema='clubdeconsumidores' and table_name='pdv_transacciones'";
-			$resulx = mysqli_query($link,$querx);
-			if($rox = mysqli_fetch_array($resulx)) {
-				$pdv_id = $rox["auto_increment"];
+			$query = "select count(id) as increment from pdv_transacciones";
+			$result = mysqli_query($link,$query);
+			if($row = mysqli_fetch_array($result)) {
+					  $pdv_id = $row["increment"];
 			} else {
-				$pdv_id = 0;
+					  $pdv_id = 0;
 			}
+			// $querx = "select auto_increment from information_schema.tables where table_schema='clubdeconsumidores' and table_name='pdv_transacciones'";
+			// $resulx = mysqli_query($link,$querx);
+			// if($rox = mysqli_fetch_array($resulx)) {
+			// 	$pdv_id = $rox["auto_increment"];
+			// } else {
+			// 	$pdv_id = 0;
+			// }
 			/////////////////////////////////////////////////////////////////////////////////////
 			$query = "INSERT INTO ".$tpcard." (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card) VALUES (".$id_socio.",".$id_proveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$documento."','','".$status."','".$id_instrumento."')";
 			$result = mysqli_query($link, $query);
 			/////////////////////////////////////////////////////////////////////////////////////
 			// Insertar transacción para confirmar
-			$query  = "INSERT INTO pdv_transacciones (fecha, id_proveedor, id_socio, tipo, moneda, monto, ";
+			$query  = "INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, ";
 			$query .= "instrumento, id_instrumento, documento, status, origen, token) ";
-			$query .= "VALUES ('".$fecha."',".$id_proveedor.",".$id_socio.",'".$tipo."','".$cardmoneda."',".$monto;
+			$query .= "VALUES ('".$fecha."','".$fecha."',".$id_proveedor.",".$id_socio.",'".$tipo."','".$cardmoneda."',".$monto;
 			$query .= ",'".$instrumento."','".$id_instrumento."','".$documento."','".$status."','".$origen."','".$token."')";
 			if ($result = mysqli_query($link, $query)) {
 				$saldo -= $monto;

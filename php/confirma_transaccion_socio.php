@@ -39,30 +39,50 @@ $respuesta .= '}';
 
 switch ($_POST["accion"]) {
   case 'confirmar':
-    $query = 'UPDATE pdv_transacciones SET status="Confirmada" WHERE id='.$_POST["transaccion"];
+    $fechaconfirmacion = date("Y-m-d");
+    $query = 'UPDATE pdv_transacciones SET status="Confirmada", fechaconfirmacion="'.$fechaconfirmacion.'" WHERE id='.$_POST["transaccion"];
     $saldo -= $monto;
     $saldoentransito -= $monto;
     break;
   case 'rechazar':
-    $query = 'UPDATE pdv_transacciones SET status="Rechazada" WHERE id='.$_POST["transaccion"];
+    $fechaconfirmacion = date("Y-m-d");
+    $query = 'UPDATE pdv_transacciones SET status="Rechazada", fechaconfirmacion="'.$fechaconfirmacion.'" WHERE id='.$_POST["transaccion"];
     $saldoentransito -= $monto;
     break;
 }
 if ($result = mysqli_query($link, $query)) {
-  if ($instrumento=='prepago') {
-    $query = 'UPDATE prepago SET saldo='.$saldo.', saldoentransito='.$saldoentransito.' WHERE card="'.trim($card).'"';
-    $quer2 = 'UPDATE prepago_transacciones SET status="Confirmada" WHERE id='.$idcardtransaccion;
-  } else {
-    $query = 'UPDATE giftcards SET saldo='.$saldo.', saldoentransito='.$saldoentransito.' WHERE card="'.trim($card).'"';
-    $quer2 = 'UPDATE giftcards_transacciones SET status="Rechazada" WHERE id='.$idcardtransaccion;
-  }
-  $resul2 = mysqli_query($link, $quer2);
-  if ($result = mysqli_query($link, $query)) {
-    $respuesta = '{';
-    $respuesta .= '"exito":"SI",';
-    $respuesta .= '"mensaje":"' . utf8_encode('Proceso exitoso.') . '",';
-    $respuesta .= '"pdv_id":' . $_POST["transaccion"];
-    $respuesta .= '}';
+  switch ($_POST["accion"]) {
+    case 'confirmar':
+      if ($instrumento=='prepago') {
+        $query = 'UPDATE prepago SET saldo='.$saldo.', saldoentransito='.$saldoentransito.' WHERE card="'.trim($card).'"';
+        $quer2 = 'UPDATE prepago_transacciones SET status="Confirmada" WHERE id='.$idcardtransaccion;
+      } else {
+        $query = 'UPDATE giftcards SET saldo='.$saldo.', saldoentransito='.$saldoentransito.' WHERE card="'.trim($card).'"';
+        $quer2 = 'UPDATE giftcards_transacciones SET status="Confirmada" WHERE id='.$idcardtransaccion;
+      }
+      $resul2 = mysqli_query($link, $quer2);
+      if ($result = mysqli_query($link, $query)) {
+        $respuesta = '{';
+        $respuesta .= '"exito":"SI",';
+        $respuesta .= '"mensaje":"' . utf8_encode('Proceso exitoso.') . '",';
+        $respuesta .= '"pdv_id":' . $_POST["transaccion"];
+        $respuesta .= '}';
+      }
+      break;
+    case 'rechazar':
+      if ($instrumento=='prepago') {
+        $query = 'UPDATE prepago_transacciones SET status="Rechazada" WHERE id='.$idcardtransaccion;
+      } else {
+        $query = 'UPDATE giftcards_transacciones SET status="Rechazada" WHERE id='.$idcardtransaccion;
+      }
+      if ($result = mysqli_query($link, $query)) {
+        $respuesta = '{';
+        $respuesta .= '"exito":"SI",';
+        $respuesta .= '"mensaje":"' . utf8_encode('Proceso exitoso.') . '",';
+        $respuesta .= '"pdv_id":' . $_POST["transaccion"];
+        $respuesta .= '}';
+      }
+      break;
   }
 }
 echo $respuesta;

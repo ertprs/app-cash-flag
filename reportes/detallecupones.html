@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>Cash-Flag</title>
+		<link rel="stylesheet" href="./reportes3.css">
+		<script type="text/javascript" src="../js/funciones.js"></script>
+	</head>
+	<body onload="inicio()">
+		<div id="container">
+			<div class="logo" align="center">
+				<img class="img-logo" id="logo" src="../img/logoclub.png" alt="">
+			</div>
+			<h3 align="center">Detalle de operaciones por fecha<br/>Cupones</h3>
+			<div id="div1" align="center">
+				<div>
+					<!-- Moneda -->
+               <!--
+               <div id="div2" class="cmps" style="margin: 0.5em auto;">
+						<span class="etiq">Moneda:</span>
+						<select id="divisa" class="campo" onchange="cambiadivisa(this.value)">
+							<option value="bs">Bolívares (Bs.)</option>
+                     <option value="dolar">Dólares (US$)</option>
+                     -->
+                     <!-- <option value="cripto">Criptomonedas (BTC, ETH, DASH, LTC, BNB, USDT)</option> -->
+                     <!--
+						</select>
+               </div>
+               -->
+					<!-- fecha -->
+					<div id="div2" class="cmps" style="margin: 0.5em auto;">
+						<span class="etiq">Desde:</span>
+						<input id="fechadesde" class="campo" type="date" size="50" maxlength="100" onchange="cambiafechadesde(this.value)" />
+						<span class="etiq">hasta:</span>
+						<input id="fechahasta" class="campo" type="date" size="50" maxlength="100" onchange="cambiafechahasta(this.value)" />
+					</div>
+				</div>
+				<div id="detalles" class="tabla">
+					<div id="f-t" class="fila titulo">
+						<div id="" class="columna5">
+							Cupón
+						</div>
+						<div id="" class="columna2">
+							Premio
+						</div>
+						<div id="" class="columna3">
+							Fecha<br/>cupón
+						</div>
+						<div id="" class="columna3">
+							Fecha<br/>canje/vencimiento
+						</div>
+						<div id="" class="columna5" style="text-align: center;">
+							Detalles
+						</div>
+					</div>
+				</div>
+				<!-- Linea de botones -->
+				<div class="btns">
+					<button id="btnvolver" style="width: 7em; margin: 0.5em 0 0 0;">Volver</button>
+				</div>
+			</div>
+		</div>
+		<div align="right" style="width: 100%; position: fixed; padding-bottom: 0.25em; bottom: 0">
+			<pie style="font-size: 90%; margin-right: 1em;">
+				Desarrollado por <a href="https://www.sgc-consultores.com.ve"><b>SGC Consultores C.A.</b><img src="../img/sgc_icon.png" style="width: 1.5em;" alt="SGC Consultores C.A." title="SGC Consultores C.A." /></a>
+			</pie>
+		</div>
+		<script>
+			var idproveedor = localStorage.getItem("idproveedor");
+			var fechadesde="", fechahasta="", divisa="bs", totalfilas = 0;
+			var fch = new Date(), year, month, day, tmonth, tday, hoy;
+			year = fch.getFullYear();
+			month = fch.getMonth()+1;
+			day = fch.getDate();
+			tmonth = (month<10) ? "0"+month : month ;
+			tday = (day<10) ? "0"+day : day ;
+			hoy = year+"-"+tmonth+"-"+tday;
+
+			function inicio() {
+				document.getElementById("logo").src = '../img/'+localStorage.getItem("logoprov");
+				document.getElementById("fechadesde").value = hoy;
+				document.getElementById("fechahasta").value = hoy;
+				document.getElementById("btnvolver").addEventListener('click', function(){
+					window.open(localStorage.getItem("url_bck2"), "_self") });
+			}
+
+
+			function buscar() {
+				let respuesta, xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						respuesta = JSON.parse(this.responseText);
+						console.log(respuesta);
+						if (respuesta.exito == 'SI') {
+							limpiar();
+							pintarcupones(respuesta.cupones);
+						}
+					}
+				};
+				xmlhttp.open("GET", "../php/detalle.php?idproveedor="+idproveedor+"&fechadesde="+fechadesde+"&fechahasta="+fechahasta+"&moneda="+divisa, true);
+				xmlhttp.send();
+			}
+
+			function cambiafechadesde(fecha) {
+				fechadesde = fecha;
+				fechahasta = document.getElementById("fechahasta").value;
+				buscar();
+			}
+
+			function cambiafechahasta(fecha) {
+				fechadesde = document.getElementById("fechadesde").value;
+				fechahasta = fecha;
+				buscar();
+			}
+
+			// function cambiadivisa(moneda) {
+			// 	divisa = moneda;
+			// 	fechadesde = document.getElementById("fechadesde").value;
+			// 	fechahasta = document.getElementById("fechahasta").value;
+			// 	buscar();
+			// }
+
+			function limpiar() {
+				if(totalfilas>0) {
+					console.log(totalfilas);
+					for (var i = totalfilas; i > 0; i--) {
+						console.log(document.getElementById("detalles"));
+						document.getElementById("detalles").removeChild(document.getElementById(i));
+					}
+					totalfilas = 0;
+				}
+			}
+
+
+			function pintarcupones(cupones) {
+				if (cupones.length>0) {
+					var paroimpar, par = true;
+					subtitulo = "";
+					subtotal = 0;
+					// total = 0;
+					first = true;
+					for (var i = 0; i < cupones.length; i++) {
+						if (cupones[i].status!=subtitulo) {
+							console.log(subtotal);
+							if (!first) {
+								// subtotal
+								txtsubtotal = document.createTextNode('Total status "'+subtitulo+'":');
+								cly = document.createElement("div");
+								cly.classList.add("subtotal");
+								cly.appendChild(txtsubtotal);
+								// monto
+								txtsubtotal = document.createTextNode(subtotal);
+								clz = document.createElement("div");
+								clz.classList.add("columna5");
+								clz.style.textAlign = 'right';
+								clz.style.fontWeight = 'bold';
+                        clz.style.width = '5%';
+								clz.appendChild(txtsubtotal);
+								// Crear la seccion de la fila donde se mostrará la información
+								fila = document.createElement("div");
+								totalfilas++;
+								fila.id = totalfilas;
+								fila.classList.add("fila");
+								// Agregar la clase para definir el comportamiento del css
+								if (par) {
+									fila.classList.add("par");
+									paroimpar = "par";
+									par = false;
+								} else {
+									fila.classList.add("impar");								
+									paroimpar = "impar";
+									par = true;
+								}
+								// Agregar las columnas a la fila
+								fila.appendChild(cly);
+								fila.appendChild(clz);
+								// Agregar la fila a la tabla
+								document.getElementById("detalles").appendChild(fila);
+
+								subtotal = 0;
+							} else {
+								first = false;
+							}
+							// fecha
+							txtsubtitulo = document.createTextNode('Status "'+cupones[i].status+'"');
+							subr = document.createElement("u");
+							subr.appendChild(txtsubtitulo);
+
+							clx = document.createElement("div");
+							clx.classList.add("subtitulo");
+							clx.appendChild(subr);
+
+							// Crear la seccion de la fila donde se mostrará la información
+							fila = document.createElement("div");
+							totalfilas++;
+							fila.id = totalfilas;
+							fila.classList.add("fila");
+							// Agregar la clase para definir el comportamiento del css
+							if (par) {
+								fila.classList.add("par");
+								paroimpar = "par";
+								par = false;
+							} else {
+								fila.classList.add("impar");								
+								paroimpar = "impar";
+								par = true;
+							}
+							// Agregar las columnas a la fila
+							fila.appendChild(clx);
+							// Agregar la fila a la tabla
+							document.getElementById("detalles").appendChild(fila);
+
+							subtitulo = cupones[i].status;
+						}
+						// cupon
+						txtcuponlargo = document.createTextNode(cupones[i].cuponlargo);
+						cl1 = document.createElement("div");
+						cl1.classList.add("columna5");
+						cl1.appendChild(txtcuponlargo);
+						// premio
+						txtpremio = document.createTextNode(cupones[i].premio);
+						cl2 = document.createElement("div");
+						cl2.classList.add("columna2");
+						cl2.appendChild(txtpremio);
+						// fecha cupon
+						fch = cupones[i].fechacupon.substr(8,2)+'/'+cupones[i].fechacupon.substr(5,2)+'/'+cupones[i].fechacupon.substr(0,4);
+						txtfechacupon = document.createTextNode(fch);
+						cl3 = document.createElement("div");
+						cl3.classList.add("columna3");
+						cl3.appendChild(txtfechacupon);
+						// fecha vencimiento o canje
+						fch = cupones[i].fechacanje.substr(8,2)+'/'+cupones[i].fechacanje.substr(5,2)+'/'+cupones[i].fechacanje.substr(0,4);
+						txtfechacanje = document.createTextNode(fch);
+						cl4 = document.createElement("div");
+						cl4.classList.add("columna3");
+						cl4.appendChild(txtfechacanje);
+                  // detalles
+                  txtdetalle1 = document.createTextNode('Factura compra: '+cupones[i].facturacupon.trim()+', monto: '+formatNumber.new(cupones[i].montocupon));
+                  cl5 = document.createElement("div");
+                  cl5.classList.add("columna6");
+                  cl5.style.textAlign = 'left';
+                  // cl5.style.fontSize = '90%';
+                  cl5.appendChild(txtdetalle1);
+                  if (cupones[i].status=="Usado") {
+                     txtdetalle2 = document.createTextNode('Factura canje: '+cupones[i].facturacanje.trim()+', monto: '+formatNumber.new(cupones[i].montocanje));
+                     br = document.createElement("br");
+                     cl5.appendChild(br);
+                     cl5.appendChild(txtdetalle2);
+                  }
+						// Crear la seccion de la fila donde se mostrará la información
+						fila = document.createElement("div");
+						totalfilas++;
+						fila.id = totalfilas;
+						fila.classList.add("fila");
+						// Agregar la clase para definir el comportamiento del css
+						if (par) {
+							fila.classList.add("par");
+							paroimpar = "par";
+							par = false;
+						} else {
+							fila.classList.add("impar");								
+							paroimpar = "impar";
+							par = true;
+						}
+						// Agregar las columnas a la fila
+						fila.appendChild(cl1);
+						fila.appendChild(cl2);
+						fila.appendChild(cl3);
+						fila.appendChild(cl4);
+						fila.appendChild(cl5);
+						// Agregar la fila a la tabla
+                  document.getElementById("detalles").appendChild(fila);
+                  subtotal++;
+					}
+					// subtotal
+               txtsubtotal = document.createTextNode('Total status "'+subtitulo+'":');
+					cly = document.createElement("div");
+					cly.classList.add("subtotal");
+					cly.appendChild(txtsubtotal);
+					// monto
+					txtsubtotal = document.createTextNode(subtotal);
+					clz = document.createElement("div");
+					clz.classList.add("columna5");
+					clz.style.textAlign = 'right';
+					clz.style.fontWeight = 'bold';
+					clz.style.width = '5%';
+					clz.appendChild(txtsubtotal);
+					// Crear la seccion de la fila donde se mostrará la información
+					fila = document.createElement("div");
+					totalfilas++;
+					fila.id = totalfilas;
+					fila.classList.add("fila");
+					// Agregar la clase para definir el comportamiento del css
+					if (par) {
+						fila.classList.add("par");
+						paroimpar = "par";
+						par = false;
+					} else {
+						fila.classList.add("impar");								
+						paroimpar = "impar";
+						par = true;
+					}
+					// Agregar las columnas a la fila
+					fila.appendChild(cly);
+					fila.appendChild(clz);
+					// Agregar la fila a la tabla
+					document.getElementById("detalles").appendChild(fila);
+					/*
+					// total
+					txttotal = document.createTextNode("TOTAL GENERAL:");
+					cly = document.createElement("div");
+					cly.classList.add("subtotal");
+					cly.appendChild(txttotal);
+					// monto
+					txttotal = document.createTextNode(formatNumber.new(total));
+					clz = document.createElement("div");
+					clz.classList.add("columna5");
+					clz.style.textAlign = 'right';
+					clz.style.fontWeight = 'bold';
+					clz.appendChild(txttotal);
+					// Crear la seccion de la fila donde se mostrará la información
+					fila = document.createElement("div");
+					fila.classList.add("fila");
+					// Agregar la clase para definir el comportamiento del css
+					if (par) {
+						fila.classList.add("par");
+						paroimpar = "par";
+						par = false;
+					} else {
+						fila.classList.add("impar");								
+						paroimpar = "impar";
+						par = true;
+					}
+					// Agregar las columnas a la fila
+					fila.appendChild(cly);
+					fila.appendChild(clz);
+					// Agregar la fila a la tabla
+					document.getElementById("detalles").appendChild(fila);
+					totalfilas++;
+					*/
+				}
+			}
+		</script>
+	</body>
+</html>

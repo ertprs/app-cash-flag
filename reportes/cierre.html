@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>Cash-Flag</title>
+		<link rel="stylesheet" href="./reportes.css">
+		<script type="text/javascript" src="../js/funciones.js"></script>
+	</head>
+	<body onload="inicio()">
+		<div id="container">
+			<div class="logo" align="center">
+				<img class="img-logo" id="logo" src="../img/logoclub.png" alt="">
+			</div>
+			<h3 align="center">Resumen de operaciones por fecha</h3>
+			<div id="div1" align="center">
+				<div style="width: 70%;">
+					<!-- Moneda -->
+					<div id="div2" class="cmps" style="width: 70%; margin: 0.5em auto;">
+						<span class="etiq">Moneda:</span>
+						<select id="divisa" class="campo" onchange="cambiadivisa(this.value)">
+							<option value="bs">Bolívares (Bs.)</option>
+							<option value="dolar">Dólares (US$)</option>
+							<!-- <option value="cripto">Criptomonedas (BTC, ETH, DASH, LTC, BNB, USDT)</option> -->
+						</select>
+					</div>
+					<!-- fechadesde -->
+					<div id="div2" class="cmps" style="width: 70%; margin: 0.5em auto 0;">
+						<span class="etiq">Fecha desde:</span>
+						<input id="fechadesde" class="campo" type="date" size="50" maxlength="100" onchange="cambiafechadesde(this.value)" />
+					</div>
+					<!-- fechahasta -->
+					<div id="div2" class="cmps" style="width: 70%; margin: 0 auto 0.5em;">
+						<span class="etiq">Fecha hasta:</span>
+						<input id="fechahasta" class="campo" type="date" size="50" maxlength="100" onchange="cambiafechahasta(this.value)" />
+					</div>
+					<!-- cupones -->
+					<div style="border: thin gray solid; padding: 0.5em 0; width: 80%;">
+						<h4 style="padding-left: 0.5em; text-align: left;">Cupones: </h4>
+						<div class="cmps">
+							<span class="etiq" style="padding-left: 4em;">Generados en el día:</span>
+							<input id="generadosdia" class="campo" type="text" size="20" maxlength="30" style="width: 4em; background: yellow; text-align: right; padding-right: 0.5em; margin-right: 0.5em;" />
+						</div>					
+						<div class="cmps">
+							<span class="etiq" style="padding-left: 4em;">Canjeados en el día:</span>
+							<input id="canjeadosdia" class="campo" type="text" size="20" maxlength="30" style="width: 4em; background: yellow; text-align: right; padding-right: 0.5em; margin-right: 0.5em;" />
+						</div>					
+						<div class="cmps">
+							<span class="etiq" style="padding-left: 4em;">Vencidos en el día:</span>
+							<input id="vencidosdia" class="campo" type="text" size="20" maxlength="30" style="width: 4em; background: yellow; text-align: right; padding-right: 0.5em; margin-right: 0.5em;" />
+						</div>
+					</div>
+					<!-- Recargas y venta de gistcards -->
+					<div style="border: thin gray solid; padding: 0.5em 0; width: 80%;">
+						<h4 style="padding-left: 0.5em; text-align: left;">Recarga y venta de tarjetas: </h4>
+						<div class="cmps">
+							<span class="etiq">Prepago:</span>
+							<input id="cantrecaprep" class="campo" type="text" size="20" maxlength="30" style="width: 4em; background: yellow; text-align: right; padding-right: 0.5em; margin-right: 0.5em;" />
+							<span class="etiq" style="width: 40%;">Monto:</span>
+							<input id="montrecaprep" class="campo" type="text" size="20" maxlength="30" style="width: 7em; background: yellow; text-align: right; padding-right: 0.5em; margin-right: 0.5em;" />
+						</div>
+						<div class="cmps">
+							<span class="etiq">Giftcards:</span>
+							<input id="cantrecagift" class="campo" type="text" size="20" maxlength="30" style="width: 4em; background: yellow; text-align: right; padding-right: 0.5em; margin-right: 0.5em;" />
+							<span class="etiq" style="width: 40%;">Monto:</span>
+							<input id="montrecagift" class="campo" type="text" size="20" maxlength="30" style="width: 7em; background: yellow; text-align: right; padding-right: 0.5em; margin-right: 0.5em;" />
+						</div>
+						<div class="cmps">
+							<span class="etiq"><b>Total:</b></span>
+							<input id="tcantrecarga" class="campo" type="text" size="20" maxlength="30" style="width: 4em; background: orange; text-align: right; padding-right: 0.5em; margin-right: 0.5em;" />
+							<span class="etiq" style="width: 40%;"><b>Monto:</b></span>
+							<input id="tmontrecarga" class="campo" type="text" size="20" maxlength="30" style="width: 7em; background: orange; text-align: right; padding-right: 0.5em; margin-right: 0.5em;" />
+						</div>
+					</div>
+					<!-- tarjetas de regalo -->
+					<div style="border: thin gray solid; padding: 0.5em 0; width: 80%;">
+						<h4 style="padding-left: 0.5em; text-align: left;">Consumos: </h4>
+						<div class="cmps">
+							<span class="etiq">Prepago:</span>
+							<input id="cantconsprep" class="campo" type="text" size="20" maxlength="30" style="width: 4em; background: yellow; text-align: right; padding-right: 0.5em; margin-right: 0.5em;" />
+							<span class="etiq" style="width: 40%;">Monto:</span>
+							<input id="montconsprep" class="campo" type="text" size="20" maxlength="30" style="width: 7em; background: yellow; text-align: right; padding-right: 0.5em; margin-right: 0.5em;" />
+						</div>
+						<div class="cmps">
+							<span class="etiq">Giftcards:</span>
+							<input id="cantconsgift" class="campo" type="text" size="20" maxlength="30" style="width: 4em; background: yellow; text-align: right; padding-right: 0.5em; margin-right: 0.5em;" />
+							<span class="etiq" style="width: 40%;">Monto:</span>
+							<input id="montconsgift" class="campo" type="text" size="20" maxlength="30" style="width: 7em; background: yellow; text-align: right; padding-right: 0.5em; margin-right: 0.5em;" />
+						</div>
+						<div class="cmps">
+							<span class="etiq"><b>Total:</b></span>
+							<input id="tcantconsumo" class="campo" type="text" size="20" maxlength="30" style="width: 4em; background: orange; text-align: right; padding-right: 0.5em; margin-right: 0.5em;" />
+							<span class="etiq" style="width: 40%;"><b>Monto:</b></span>
+							<input id="tmontconsumo" class="campo" type="text" size="20" maxlength="30" style="width: 7em; background: orange; text-align: right; padding-right: 0.5em; margin-right: 0.5em;" />
+						</div>
+					</div>
+				</div>
+				<!-- Linea de botones -->
+				<div class="btns">
+					<button id="btnvolver" style="width: 7em; margin: 0.5em 0 0 0;">Volver</button>
+				</div>
+			</div>
+		</div>
+		<div align="right" style="width: 100%; position: fixed; padding-bottom: 0.25em; bottom: 0">
+			<pie style="font-size: 90%; margin-right: 1em;">
+				Desarrollado por <a href="https://www.sgc-consultores.com.ve"><b>SGC Consultores C.A.</b><img src="../img/sgc_icon.png" style="width: 1.5em;" alt="SGC Consultores C.A." title="SGC Consultores C.A." /></a>
+			</pie>
+		</div>
+		<script>
+			var idproveedor = localStorage.getItem("idproveedor");
+			var fechadesde="", fechahasta="", divisa="bs";
+			var fch = new Date(), year, month, day, tmonth, tday, hoy;
+			year = fch.getFullYear();
+			month = fch.getMonth()+1;
+			day = fch.getDate();
+			tmonth = (month<10) ? "0"+month : month ;
+			tday = (day<10) ? "0"+day : day ;
+			hoy = year+"-"+tmonth+"-"+tday;
+
+			function inicio() {
+				document.getElementById("logo").src = '../img/'+localStorage.getItem("logoprov");
+				document.getElementById("fechadesde").value = hoy;
+				document.getElementById("fechahasta").value = hoy;
+				document.getElementById("divisa").value = "bs";
+				document.getElementById("btnvolver").addEventListener('click', function(){
+				window.open(localStorage.getItem("url_bck2"), "_self") });
+			}
+
+
+			function buscar() {
+				let respuesta, xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						respuesta = JSON.parse(this.responseText);
+						console.log(respuesta);
+						if (respuesta.exito == 'SI') {
+							document.getElementById("generadosdia").value = respuesta.cupones.generadosdia;
+							document.getElementById("canjeadosdia").value = respuesta.cupones.canjeadosdia;
+							document.getElementById("vencidosdia").value = respuesta.cupones.vencidosdia;
+
+							document.getElementById("cantrecaprep").value = respuesta.recargas.cantrecaprep;
+							document.getElementById("montrecaprep").value = formatNumber.new(respuesta.recargas.montrecaprep);
+							document.getElementById("cantrecagift").value = respuesta.recargas.cantrecagift;
+							document.getElementById("montrecagift").value = formatNumber.new(respuesta.recargas.montrecagift);
+							document.getElementById("tcantrecarga").value = respuesta.recargas.cantrecaprep+respuesta.recargas.cantrecagift;
+							document.getElementById("tmontrecarga").value = formatNumber.new(respuesta.recargas.montrecaprep+respuesta.recargas.montrecagift);
+
+							document.getElementById("cantconsprep").value = respuesta.consumos.cantconsprep;
+							document.getElementById("montconsprep").value = formatNumber.new(respuesta.consumos.montconsprep);
+							document.getElementById("cantconsgift").value = respuesta.consumos.cantconsgift;
+							document.getElementById("montconsgift").value = formatNumber.new(respuesta.consumos.montconsgift);
+							document.getElementById("tcantconsumo").value = respuesta.consumos.cantconsprep+respuesta.consumos.cantconsgift;
+							document.getElementById("tmontconsumo").value = formatNumber.new(respuesta.consumos.montconsprep+respuesta.consumos.montconsgift);
+						} else {
+							document.getElementById("generadosdia").value = 0;
+							document.getElementById("canjeadosdia").value = 0;
+							document.getElementById("vencidosdia").value = 0;
+
+							document.getElementById("cantrecaprep").value = 0;
+							document.getElementById("montrecaprep").value = 0.00;
+							document.getElementById("cantrecagift").value = 0;
+							document.getElementById("montrecagift").value = 0.00;
+							document.getElementById("tcantrecarga").value = 0;
+							document.getElementById("tmontrecarga").value = 0.00;
+
+							document.getElementById("cantconsprep").value = 0;
+							document.getElementById("montconsprep").value = 0.00;
+							document.getElementById("cantconsgift").value = 0;
+							document.getElementById("montconsgift").value = 0.00;
+							document.getElementById("tcantconsumo").value = 0;
+							document.getElementById("tmontconsumo").value = 0.00;
+						}
+					}
+				};
+				xmlhttp.open("GET", "../php/cierre.php?idproveedor="+idproveedor+"&fechadesde="+fechadesde+"&fechahasta="+fechahasta+"&moneda="+divisa, true);
+				xmlhttp.send();
+			}
+
+			function cambiafechadesde(fecha) {
+				fechadesde = fecha;
+				fechahasta = document.getElementById("fechahasta").value;
+				buscar();
+			}
+
+			function cambiafechahasta(fecha) {
+				fechadesde = document.getElementById("fechadesde").value;
+				fechahasta = fecha;
+				buscar();
+			}
+
+			function cambiadivisa(moneda) {
+				divisa = moneda;
+				fechadesde = document.getElementById("fechadesde").value;
+				fechahasta = document.getElementById("fechahasta").value;
+				buscar();
+			}
+		</script>
+	</body>
+</html>

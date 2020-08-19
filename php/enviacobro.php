@@ -80,9 +80,9 @@ if ($instrumento<>"") {
 			$result = mysqli_query($link, $query);
 			/////////////////////////////////////////////////////////////////////////////////////
 			// Insertar transacción para confirmar
-			$query  = 'INSERT INTO pdv_transacciones (fecha, id_proveedor, id_socio, tipo, moneda, monto, ';
+			$query  = 'INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, ';
 			$query .= 'instrumento, id_instrumento, documento, status, origen, token) ';
-			$query .= 'VALUES ("'.$fecha.'",'.$id_proveedor.','.$id_socio.',"'.$tipo.'","'.$moneda.'",';
+			$query .= 'VALUES ("'.$fecha.'","0000-00-00",'.$id_proveedor.','.$id_socio.',"'.$tipo.'","'.$moneda.'",';
 			$query .= $monto.',"'.$instrumento.'","'.$id_instrumento.'","'.$documento.'","'.$status;
 			$query .= '","","")';
 			if ($result = mysqli_query($link, $query)) {
