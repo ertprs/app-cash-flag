@@ -50,7 +50,10 @@
 							Fecha<br/>cupón
 						</div>
 						<div id="" class="columna3">
-							Fecha<br/>canje/vencimiento
+							Fecha<br/>canje
+						</div>
+						<div id="" class="columna3">
+							Fecha<br/>vencimiento
 						</div>
 						<div id="" class="columna5" style="text-align: center;">
 							Detalles
@@ -231,24 +234,34 @@
 						cl3 = document.createElement("div");
 						cl3.classList.add("columna3");
 						cl3.appendChild(txtfechacupon);
-						// fecha vencimiento o canje
-						fch = cupones[i].fechacanje.substr(8,2)+'/'+cupones[i].fechacanje.substr(5,2)+'/'+cupones[i].fechacanje.substr(0,4);
-						txtfechacanje = document.createTextNode(fch);
+						// fecha canje
+						if (cupones[i].status=="Usado") {
+							fch = cupones[i].fechacanje.substr(8,2)+'/'+cupones[i].fechacanje.substr(5,2)+'/'+cupones[i].fechacanje.substr(0,4);
+							txtfechacanje = document.createTextNode(fch);
+						} else {
+							txtfechacanje = document.createTextNode("");
+						}
 						cl4 = document.createElement("div");
 						cl4.classList.add("columna3");
 						cl4.appendChild(txtfechacanje);
+						// fecha vencimiento
+						fch = cupones[i].fechavencimiento.substr(8,2)+'/'+cupones[i].fechavencimiento.substr(5,2)+'/'+cupones[i].fechavencimiento.substr(0,4);
+						txtfechavencimiento = document.createTextNode(fch);
+						cl5 = document.createElement("div");
+						cl5.classList.add("columna3");
+						cl5.appendChild(txtfechavencimiento);
                   // detalles
                   txtdetalle1 = document.createTextNode('Factura compra: '+cupones[i].facturacupon.trim()+', monto: '+formatNumber.new(cupones[i].montocupon));
-                  cl5 = document.createElement("div");
-                  cl5.classList.add("columna6");
-                  cl5.style.textAlign = 'left';
+                  cl6 = document.createElement("div");
+                  cl6.classList.add("columna6");
+                  cl6.style.textAlign = 'left';
                   // cl5.style.fontSize = '90%';
-                  cl5.appendChild(txtdetalle1);
+                  cl6.appendChild(txtdetalle1);
                   if (cupones[i].status=="Usado") {
                      txtdetalle2 = document.createTextNode('Factura canje: '+cupones[i].facturacanje.trim()+', monto: '+formatNumber.new(cupones[i].montocanje));
                      br = document.createElement("br");
-                     cl5.appendChild(br);
-                     cl5.appendChild(txtdetalle2);
+                     cl6.appendChild(br);
+                     cl6.appendChild(txtdetalle2);
                   }
 						// Crear la seccion de la fila donde se mostrará la información
 						fila = document.createElement("div");
@@ -271,6 +284,7 @@
 						fila.appendChild(cl3);
 						fila.appendChild(cl4);
 						fila.appendChild(cl5);
+						fila.appendChild(cl6);
 						// Agregar la fila a la tabla
                   document.getElementById("detalles").appendChild(fila);
                   subtotal++;

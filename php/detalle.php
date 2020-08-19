@@ -40,17 +40,12 @@ if ($result = mysqli_query($link, $query)) {
             break;
    
       }
-      $fechacanje = $row["fechacupon"];
-      switch ($row["status"]) {
-         case 'Generado': $fechacanje = $row["fechavencimiento"]; break;
-         case 'Usado':    $fechacanje = $row["fechacanje"]; break;
-         case 'Vencido':  $fechacanje = $row["fechavencimiento"]; break;
-      }
       $respuesta .= '"premio":"'.$premio.'",';
       $respuesta .= '"fechacupon":"'.$row["fechacupon"].'",';
       $respuesta .= '"facturacupon":"'.$row["factura"].'",';
       $respuesta .= '"montocupon":'.$row["monto"].',';
-      $respuesta .= '"fechacanje":"'.$fechacanje.'",';
+      $respuesta .= '"fechacanje":"'.$row["fechacanje"].'",';
+      $respuesta .= '"fechavencimiento":"'.$row["fechavencimiento"].'",';
       $respuesta .= '"facturacanje":"'.$row["facturacanje"].'",';
       $respuesta .= '"montocanje":'.$row["montocanje"];
       $respuesta .= '}';
