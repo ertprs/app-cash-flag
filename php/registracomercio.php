@@ -3,9 +3,12 @@ header('Content-Type: application/json');
 include_once("../_config/conexion.php");
 
 if ($_POST["id"]=="New") {
-    $query  = 'INSERT INTO proveedores (nombre, email, direccion, rif, contacto, telefono, categoria, status)';
-    $query .= ' VALUES ("'.$_POST["nombre"].'","'.$_POST["email"].'","'.$_POST["direccion"].'",';
-    $query .= '"'.$_POST["rif"].'","'.$_POST["contacto"].'","'.$_POST["telefono"].'","'.$_POST["categoria"].'",'.$_POST["status"].')';
+
+    $query  = 'INSERT INTO proveedores (nombre, email, logo, logoprepago, logogiftcard, ';
+    $query .= 'direccion, rif, contacto, telefono, categoria, claveadmin, clavecanje, color, status) ';
+    $query .= 'VALUES ("'.$_POST["nombre"].'","'.$_POST["email"].'","","","","'.$_POST["direccion"].'",';
+    $query .= '"'.$_POST["rif"].'","'.$_POST["contacto"].'","'.$_POST["telefono"].'",';
+    $query .= '"'.$_POST["categoria"].'","","","",'.$_POST["status"].')';
 } else {
     $query  = 'UPDATE proveedores SET nombre="'.$_POST["nombre"].'", email="'.$_POST["email"].'", ';
     $query .= 'direccion="'.$_POST["direccion"].'", rif="'.$_POST["rif"].'", ';

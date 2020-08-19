@@ -20,7 +20,20 @@
 			<div id="div1" align="center">
 				<h3>Menú principal</h3>
 				<br/>
-				<div id="comercios" class="catalogo">
+				<!-- <div id="comercios" class="catalogo"> -->
+				<div class="catalogo">
+					<!--
+					<a id="menu" href="./seleccion.html" onclick="">
+						<div class="item" align="center">
+							<div class="imagen" align="center">
+								-->
+								<!-- <img class="img_opcion" src="" title="Cuponera" /> -->
+								<!--
+								Seleccionar el comercio
+							</div>
+						</div>
+					</a>
+					-->
 					<a id="comercios" href="./comercio.html" onclick="">
 						<div class="item" align="center">
 							<div class="imagen" align="center">
@@ -37,22 +50,24 @@
 							</div>
 						</div>
 					</a>
-					<a id="password" href="./canjepass.html" onclick="">
-						<div class="item" align="center">
-							<div class="imagen" align="center">
-								<!-- <img class="img_opcion" src="" title="Cuponera" /> -->
-								Cambio de contraseña de canje
-							</div>
-						</div>
-					</a>
 					<a id="salir" href="" onclick="">
 						<div class="item" align="center">
 							<div class="imagen" align="center">
 								<!-- <img class="img_opcion" src="" title="Cuponera" /> -->
-								Regresar a selección de comercios
+								Salir de la aplicación
 							</div>
 						</div>
 					</a>
+					<!-- <a id="password" href="./canjepass.html" onclick="">
+						<div class="item" align="center">
+							<div class="imagen" align="center">
+								-->
+								<!-- <img class="img_opcion" src="" title="Cuponera" /> -->
+								<!--
+								Cambio de contraseña de canje
+							</div>
+						</div>
+					</a> -->
 				</div>
 			</div>
 		</div>
@@ -64,27 +79,26 @@
 				// document.getElementById("cupon").href = "./cupones/cupon.html?id="+idp+"&btn=1";
 				// document.getElementById("prepago").href = "./prepago/compra.html?id="+idp;
 				// document.getElementById("giftcard").href = "./giftcards/compra.html?id="+idp;
-				document.getElementById("salir").href = "./seleccion.html";
-				// cargar parámetros de la tabla
-				var xmlhttp = new XMLHttpRequest();
-				xmlhttp.onreadystatechange = function () {
-					if (this.readyState == 4 && this.status == 200) {
-						respuesta = JSON.parse(this.responseText);
-						if (respuesta.exito == 'SI') {
-							// document.title = 'Menú principal';
-							logo = respuesta.proveedor.logo;
-							if (logo!="") {
-								document.getElementById("logo").src = "../img/" + logo;
-							} else {
-								document.getElementById("logo").src = "../img/" + 'sin_imagen.jpg';
-							}
-							document.getElementById("logo").title = respuesta.proveedor.nombre;
-						}
-					}
-				};
-				xmlhttp.open("GET", "../php/proveedores.php?prov=" + idp, false);
-				xmlhttp.send();
-				// window.location.replace("./cupones/cupon.html?id="+idp);
+				document.getElementById("salir").href = "./index.html";
+
+				// // cargar parámetros de la tabla
+				// var xmlhttp = new XMLHttpRequest();
+				// xmlhttp.onreadystatechange = function () {
+				// 	if (this.readyState == 4 && this.status == 200) {
+				// 		respuesta = JSON.parse(this.responseText);
+				// 		if (respuesta.exito == 'SI') {
+				// 			logo = respuesta.proveedor.logo;
+				// 			if (logo!="") {
+				// 				document.getElementById("logo").src = "../img/" + logo;
+				// 			} else {
+				// 				document.getElementById("logo").src = "../img/" + 'sin_imagen.jpg';
+				// 			}
+				// 			document.getElementById("logo").title = respuesta.proveedor.nombre;
+				// 		}
+				// 	}
+				// };
+				// xmlhttp.open("GET", "../php/proveedores.php?prov=" + idp, false);
+				// xmlhttp.send();
 			}
 		</script>
 	</body>

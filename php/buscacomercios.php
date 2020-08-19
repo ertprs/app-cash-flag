@@ -38,7 +38,7 @@ if ($resul0 = mysqli_query($link,$quer0)) {
         } else {
             $coma = ',';
         }
-        $respuesta .= $coma . '{"id":'. $ro0["id"] .',"nombre":"' . utf8_encode(trim($ro0["nombre"])) . '","imagen":"' . trim($ro0["logo"]) . '","categoria":"' . utf8_encode(trim($ro0["categoria"])) . '"}';
+        $respuesta .= $coma . '{"id":'. $ro0["id"] .',"nombre":"' . trim($ro0["nombre"]) . '","imagen":"' . trim($ro0["logo"]) . '","categoria":"' . trim($ro0["categoria"]) . '"}';
     }
     $respuesta .= ($cierre) ? ']' : '';
     $respuesta .= '}';

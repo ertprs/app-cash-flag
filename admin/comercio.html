@@ -5,7 +5,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
-		<title>POP CLIK</title>
+		<title>Cash-Flag</title>
 		<link rel="stylesheet" href="./comercio.css">
 		<script type="text/javascript" src="../js/funciones.js"></script>
 	</head>
@@ -108,7 +108,7 @@
 					<span class="etiq">Status</span>
 					<div  class="campo" style="text-align: left; height: 1em;">
 						<input id="status" type="checkbox" onchange="cambiamsg(this.checked)" />
-						<span id="txtstatus">Inactivo</span>
+						<span id="txtstatus">Activar</span>
 					</div>
 				</div>
 				<!-- nombre -->
@@ -471,9 +471,9 @@
 
 			function cambiamsg(valor) {
 				if (valor) {
-					txtstatus.innerHTML = 'Activo';
+					txtstatus.innerHTML = 'Inactivar';
 				} else {
-					txtstatus.innerHTML = 'Inactivo';
+					txtstatus.innerHTML = 'Activar';
 				}
 				grabar();
 			}

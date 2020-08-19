@@ -12,11 +12,20 @@
 	<body onload="inicio()">
 		<div id="container">
 			<div class="logo" align="center">
-				<img class="img-logo" id="logo" src="" alt="">
+				<img class="img-logo" id="logo" src="../img/logoclub.png" alt="">
 			</div>
 			<h2 style="text-align: center; color: black;">Módulo administrativo</h2>
 			<h3 align="center">Premios</h3>
 			<div id="div1" align="center">
+				<!-- Comercio -->
+				<div class="cmps">
+					<span class="etiq">Clase de premio:</span>
+					<select id="cmpcomercio" class="campo" onchange="seleccionacomercio(this.value)">
+						<option value="0" selected>Seleccione un comercio</option>
+						<!-- <option value="encuesta">Premios por llenar encuestas</option>
+						<option value="promocion">Premios para Promoción</option> -->
+					</select>
+				</div>
 				<!-- Clase de premio -->
 				<div class="cmps">
 					<span class="etiq">Clase de premio:</span>
@@ -24,9 +33,9 @@
 						<option value="ninguno" selected>Seleccione una clase de premio</option>
 						<option value="bienvenida">Premios de Bienvenida</option>
 						<option value="consumo">Premios por Consumo</option>
-						<option value="encuesta">Premios por llenar encuestas</option>
-						<option value="promocion">Premios para Promoción</option>
 						<option value="especial">Premios especiales</option>
+						<!-- <option value="encuesta">Premios por llenar encuestas</option>
+						<option value="promocion">Premios para Promoción</option> -->
 					</select>
 				</div>
 				<!-- Tipo de premio -->
@@ -78,7 +87,7 @@
 		<script>
 			let clasepremio = "", tipopremio = "", cantidad="", descripcion="", validez=30, activo=true;
 			let datos = new FormData();
-			let idp = localStorage.getItem("id_proveedor");
+			let idp = "0";
 
 			function inicio() {
 				limpiar();
@@ -86,28 +95,32 @@
 					window.open(localStorage.getItem("url_back"), "_self");
 				});
 
-				let xmlhttp = new XMLHttpRequest();
+				var xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function () {
 					if (this.readyState == 4 && this.status == 200) {
 						respuesta = JSON.parse(this.responseText);
 						if (respuesta.exito == 'SI') {
-							document.title = "Cash-Flag - Módulo administrativo";
-							logo = respuesta.proveedor.logo;
-							if (logo!="") {
-								document.getElementById("logo").src = "../img/" + logo;
-							} else {
-								document.getElementById("logo").src = "../img/" + 'sin_imagen.jpg';
-							}
-							document.getElementById("logo").title = respuesta.proveedor.nombre;
+							comercios = respuesta.comercios;
+							comercios.forEach( function(element, index) {
+								if (element.status==true) {
+									txtcomercio = document.createTextNode(element.nombre);
+  	      	               item = document.createElement("option");
+            	            item.value = element.id;
+               	         item.id = element.id;
+  	               	      item.appendChild(txtcomercio);
+     	               	   cmpcomercio.appendChild(item);
+								}
+							});
 						}
 					}
 				};
-				xmlhttp.open("GET", "../php/proveedores.php?prov=" + idp, false);
+				xmlhttp.open("GET", "../php/buscacomercios2.php", true);
 				xmlhttp.send();
 			}
-
+	
 			// limpia el formulario
 			function limpiar() {
+				// idp = "0";
 				clasepremio = "ninguno";
 				tipopremio = "ninguno";
 				cantidad="";
@@ -116,6 +129,7 @@
 				activo=true;
 				datos = new FormData()
 
+				cmpcomercio.value = idp;
 				cmpclasepremio.value = clasepremio;
 				cmptipopremio.value = tipopremio;
 				cmpcantidad.value = cantidad;
@@ -130,7 +144,13 @@
 				botones.style.display = 'none';
 			}
 
+			function seleccionacomercio(valor) {
+				idp = cmpcomercio.value;
+				limpiar();
+			}
+
 			function buscar(clase) {
+				idp = cmpcomercio.value
 				tipopremio = "ninguno";
 				cantidad="";
 				descripcion="";
@@ -221,6 +241,7 @@
 						}
 					}
 				};
+				console.log("../php/premios.php?prov="+idp+"&clase="+clase);
 				xmlhttp.open("GET", "../php/premios.php?prov="+idp+"&clase="+clase, true);
 				xmlhttp.send();
 			}
@@ -314,6 +335,7 @@
 							respuesta = JSON.parse(this.responseText);
 							if (respuesta.exito == 'SI') {
 								alert(respuesta.mensaje);
+								idp = "0";
 								limpiar();
 							} else {
 								alert(respuesta.mensaje);

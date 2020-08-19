@@ -16,7 +16,7 @@ if ($resul0 = mysqli_query($link,$quer0)) {
         } else {
             $coma = ',';
         }
-        $respuesta .= $coma . '{"id":'. $ro0["id"] .',"nombre":"' . utf8_encode(trim($ro0["nombre"])) . '","logo":"' . trim($ro0["logo"]) . '","contacto":"' . trim($ro0["contacto"]) . '","telefono":"' . trim($ro0["telefono"]) . '","email":"' . utf8_encode(trim($ro0["email"])) . '","status":' . $ro0["status"] . ',"categoria":"' . $ro0["categoria"] . '"}';
+        $respuesta .= $coma . '{"id":'. $ro0["id"] .',"nombre":"' . trim($ro0["nombre"]) . '","logo":"' . trim($ro0["logo"]) . '","contacto":"' . trim($ro0["contacto"]) . '","telefono":"' . trim($ro0["telefono"]) . '","email":"' . utf8_encode(trim($ro0["email"])) . '","status":' . $ro0["status"] . ',"categoria":"' . $ro0["categoria"] . '"}';
     }
     $respuesta .= ($cierre) ? ']' : '';
     $respuesta .= '}';
