@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>Cash-Flag</title>
+		<link rel="stylesheet" href="cambialogo.css">
+		<script type="text/javascript" src="../js/funciones.js"></script>
+	</head>
+	<body onload="inicio()">
+		<div id="container">
+			<div class="logo" align="center">
+				<img id="logo" src="../img/logoclub.png" width="100" height="auto" alt="" />
+			</div>
+			<h3 align="center">Cambiar Logo de tarjeta prepago</h3>
+			<div id="div1" align="center">
+				<form action="../php/cambialogoprepago.php" method="POST" enctype="multipart/form-data">
+					<img id="logocomercio" src="" style="width: 40%; height: auto;" alt="" />
+					<p id="mensaje"></p>
+					<input id="tam" type="hidden" name="MAX_FILE_SIZE" value="20000000" />
+					<input id="comercio" type="hidden" name="comercio" value="" />
+					<input id="ruta" type="hidden" name="ruta" value="" />
+					<!-- 
+					<input id="producto" type="hidden" name="producto" value="" />
+					<input id="credito" type="hidden" name="credito" value="" />
+					-->
+					<input id="idFileLogo" name="fileLogo" class="campo" type="file" size="50" maxlength="100" title="" />
+					<br/><br/>
+					<!-- Linea de botones -->
+					<div class="btns">
+						<!-- <button id="btnenviar" onclick="enviar()" style="width: 7em;">Enviar</button> -->
+						<input id="btnenviar" type="submit" value="Enviar" style="width: 7em;" />
+					</div>
+				</form>
+			</div>
+			<br/>
+		</div>
+		<script>
+			function inicio() {
+				params = fparamurl(window.location.search.substr(1));
+				if (params.exito=="S") {
+					window.opener.document.getElementById("imgLogoPrepago").src = params.logo;
+					idFileLogo.style.display = "none";
+					btnenviar.style.display = "none";
+				}
+				mensaje.innerHTML = 'Buscando datos...';
+				ruta.value = window.location;
+
+				let respuesta, descripcion = "", xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						respuesta = JSON.parse(this.responseText);
+						console.log(respuesta);
+						if (respuesta.exito == 'SI') {
+							mensaje.innerHTML = "";
+							if (params.exito=="S") {
+								mensaje.innerHTML = 'Logo cambiado exitosamente,<br/>Puede cerrar esta ventana.';
+							}
+							logocomercio.src = '../img/'+respuesta.logo;
+							comercio.value = params.id;
+						} else {
+							alert("Ha ocurrido un error, por favor comuniquese con soporte técnico.");
+						}
+					}
+				};
+				xmlhttp.open("GET", "../php/buscalogoprepago.php?id="+params.id, true);
+				xmlhttp.send();
+			}
+		</script>
+	</body>
+</html>

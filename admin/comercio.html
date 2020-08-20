@@ -111,11 +111,31 @@
 						<span id="txtstatus">Activar</span>
 					</div>
 				</div>
-				<!-- nombre -->
-				<div class="cmps">
-					<span class="etiq">Logo:</span>
-					<div id="arealogocomercio" style="width: 40%;">
+				<!-- logo comercio -->
+				<div class="cmps" style="margin: auto;">
+					<span class="etiq">Logo comercio:</span>
+					<div id="arealogocomercio" style="width: 40%; height: auto;">
 						<img id="imgLogo" src="../img/sin_imagen.jpg" alt="" title="Doble click para cambiar" style="width: 50%; height: auto;" ondblclick="cambialogo()" />
+						<br/>
+						<!-- <button id="btncambialogo" style="width: 7em; margin-top: 0.5em;" onclick="cambialogo()">Cambiar</button> -->
+						<!-- <input id="archivoLogo" name="logoComercio" class="campo" type="file" size="50" maxlength="100" title="" style="width: 80%;" onclick="alert('x')" /> -->
+					</div>
+				</div>
+				<!-- logo prepago -->
+				<div class="cmps" style="margin: auto;">
+					<span class="etiq">Logo prepago:</span>
+					<div id="arealogoprepago" style="width: 40%; height: auto;">
+						<img id="imgLogoPrepago" src="../img/sin_imagen.jpg" alt="" title="Doble click para cambiar" style="width: 50%; height: auto;" ondblclick="cambialogoprepago()" />
+						<br/>
+						<!-- <button id="btncambialogo" style="width: 7em; margin-top: 0.5em;" onclick="cambialogo()">Cambiar</button> -->
+						<!-- <input id="archivoLogo" name="logoComercio" class="campo" type="file" size="50" maxlength="100" title="" style="width: 80%;" onclick="alert('x')" /> -->
+					</div>
+				</div>
+				<!-- logo giftcard -->
+				<div class="cmps" style="margin: auto;">
+					<span class="etiq">Logo giftcard:</span>
+					<div id="arealogogiftcard" style="width: 40%; height: auto;">
+						<img id="imgLogoGiftcard" src="../img/sin_imagen.jpg" alt="" title="Doble click para cambiar" style="width: 50%; height: auto;" ondblclick="cambialogogiftcard()" />
 						<br/>
 						<!-- <button id="btncambialogo" style="width: 7em; margin-top: 0.5em;" onclick="cambialogo()">Cambiar</button> -->
 						<!-- <input id="archivoLogo" name="logoComercio" class="campo" type="file" size="50" maxlength="100" title="" style="width: 80%;" onclick="alert('x')" /> -->
@@ -303,14 +323,24 @@
 								// document.getElementById("status").value = respuesta.status;
 								document.getElementById("status").checked = respuesta.status;
 								if (respuesta.status) {
-									document.getElementById("txtstatus").innerHTML = "Activo";
+									document.getElementById("txtstatus").innerHTML = "Inactivar";
 								} else {
-									document.getElementById("txtstatus").innerHTML = "Inactivo";
+									document.getElementById("txtstatus").innerHTML = "Activar";
 								}
 								if (respuesta.logo=="") {
-									document.getElementById("imgLogo").src       = '../img/sin_imagen.jpg';
+									document.getElementById("imgLogo").src         = '../img/sin_imagen.jpg';
 								} else {
-									document.getElementById("imgLogo").src       = '../img/'+respuesta.logo;
+									document.getElementById("imgLogo").src         = '../img/'+respuesta.logo;
+								}
+								if (respuesta.logoprepago=="") {
+									document.getElementById("imgLogoPrepago").src  = '../img/sin_imagen.jpg';
+								} else {
+									document.getElementById("imgLogoPrepago").src  = '../img/'+respuesta.logoprepago;
+								}
+								if (respuesta.logogiftcard=="") {
+									document.getElementById("imgLogoGiftcard").src = '../img/sin_imagen.jpg';
+								} else {
+									document.getElementById("imgLogoGiftcard").src = '../img/'+respuesta.logogiftcard;
 								}
 							} else {
 								alert("No hay comercios registrados.");
@@ -332,8 +362,10 @@
 					// document.getElementById("clavecanje2").value   = "";
 					document.getElementById("categoria").value     = 'ninguna';
 					document.getElementById("status").checked      = false;
-					document.getElementById("txtstatus").innerHTML = "Inactivo";
+					document.getElementById("txtstatus").innerHTML = "Activar";
 					document.getElementById("imgLogo").src         = '../img/sin_imagen.jpg';
+					document.getElementById("imgLogoPrepago").src  = '../img/sin_imagen.jpg';
+					document.getElementById("imgLogoGiftcard").src = '../img/sin_imagen.jpg';
 				}
 				ventana_modal.style.display = 'block';
 			}
@@ -485,6 +517,26 @@
 					alert('Antes de cambiar el logo debe registrar el comercio.');
 				} else {
 					window.open('./cambialogo.html?id='+id, "_blank")
+				}
+			}
+
+			function cambialogoprepago() {
+				id = document.getElementById("id").value;
+				console.log(id);
+				if (id=='New') {
+					alert('Antes de cambiar el logo debe registrar el comercio.');
+				} else {
+					window.open('./cambialogoprepago.html?id='+id, "_blank")
+				}
+			}
+
+			function cambialogogiftcard() {
+				id = document.getElementById("id").value;
+				console.log(id);
+				if (id=='New') {
+					alert('Antes de cambiar el logo debe registrar el comercio.');
+				} else {
+					window.open('./cambialogogiftcard.html?id='+id, "_blank")
 				}
 			}
 		</script>

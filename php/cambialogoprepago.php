@@ -28,7 +28,7 @@ if(isset($_FILES)) {
             if (is_uploaded_file($fileTmpPath)) {
                 if(move_uploaded_file($fileTmpPath, $dest_path)) {
                     $respuesta ='File is successfully uploaded.';
-                    $query = 'update proveedores set logo="'.trim($newFileName).'" where id='.$_POST["comercio"];
+                    $query = 'update proveedores set logoprepago="'.trim($newFileName).'" where id='.$_POST["comercio"];
                     $result = mysqli_query($link, $query);
                 } else {
                     $respuesta = 'There was some error moving the file to upload directory. Please make sure the upload directory is writable by web server.';
