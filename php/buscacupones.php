@@ -30,6 +30,7 @@ $respuesta .= ']';
 $query = "SELECT * from cupones  where cupones.status='Generado' and cupones.id_socio=".$_GET["idsocio"]." order by tipopremio,montopremio,descpremio";
 $result = mysqli_query($link, $query);
 $respuesta .= ',"premios":[';
+$premios = array();
 while ($row = mysqli_fetch_array($result)) {
 	$premio = "";
 	switch ($row["tipopremio"]) {

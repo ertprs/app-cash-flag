@@ -56,8 +56,15 @@ $barras .= '&codetype=Code39';
 $barras .= '&print=true';
 $barras .= '&sizefactor=1';
 
+// var_dump($_SERVER);
 // código qr
-$ruta = 'https://app.cash-flag.com/php/';
+// $ruta = 'https://app.cash-flag.com/php/';
+if ($_SERVER["HTTP_ORIGIN"]=="http://localhost") {
+	$ruta = "http://localhost/app-cash-flag/php/";
+} else {
+	$ruta = $_SERVER["HTTP_ORIGIN"]."/php/";
+}
+
 $dir = 'qr/';
 if(!file_exists($dir)) mkdir($dir);
 
@@ -72,7 +79,7 @@ QRcode::png($contenido,$dir.$_POST['cupon'].'.png', $level, $tamanio, $frameSize
 $codigoqr = $ruta.$dir.$_POST['cupon'].'.png';
 // Hasta aqui
 
-$mensaje .= '<p style="text-align:center;">'.$hash.'</p>';
+// $mensaje .= '<p style="text-align:center;">'.$hash.'</p>';
 
 $respuesta = '{"exito":"SI","logo":"'.$logo.'","barras":"'.$barras.'","qr":"'.$codigoqr.'","hash":"'.$hash.'"}';
 echo $respuesta;

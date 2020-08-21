@@ -94,4 +94,8 @@ h5 {
         height: auto;
         object-fit: contain;
     }
+    .campo {
+        width: 90%;
+        margin: auto;
+    }
 }
