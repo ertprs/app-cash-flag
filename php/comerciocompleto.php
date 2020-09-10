@@ -17,7 +17,9 @@ if ($ro0 = mysqli_fetch_array($resul0)) {
     $respuesta .= '"status":'       . $ro0["status"]      . ',';
     $respuesta .= '"logo":"'        . $ro0["logo"]        . '",';
     $respuesta .= '"logoprepago":"' . $ro0["logoprepago"] . '",';
-    $respuesta .= '"logogiftcard":"'. $ro0["logogiftcard"]. '"';
+    $respuesta .= '"logogiftcard":"'. $ro0["logogiftcard"]. '",';
+    $respuesta .= '"secretkey":"'   . $ro0["secretkey"]   . '",';
+    $respuesta .= '"account":"'     . $ro0["account"]     . '"';
     $respuesta .= '}';
 } else {
     $respuesta = '{"exito":"NO"}';

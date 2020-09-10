@@ -13,7 +13,7 @@ class Card {
     // this.code_qr = code_qr;
     // this.code_qr = "./premium.png";
     this.code_qr = (tipocrd=='giftcard') ? "../img/negro_hori.png" : "../img/blanco_hori.png";
-    this.icongft = (tipocrd=='giftcard') ? "./gift-solid.svg" : "./monedas.png";
+    this.icongft = (tipocrd=='giftcard') ? "../img/gift-solid.svg" : "../img/monedas.png";
   }
 
   dibuja(padre) {
@@ -126,6 +126,9 @@ class Card {
                     codigo_qr.style.height = 'auto';
                     codigo_qr.src = this.code_qr;
                 area_qr.appendChild(codigo_qr);
+
+                // Si tuviera que colocar cash-flag arriba coordenadas serían width 70%, position absolute, top -175px, left 265px
+
                 // Ícono de giftcard
                 let area_ico = document.createElement("div");
                 area_ico.style.width = '15%';
@@ -224,7 +227,7 @@ class Campo {
 }
 
 class Card_cashflag {
-  constructor(idcard, imgprov, tipocrd, cnumber, nombres, validez, code_qr) {
+  constructor(idcard, imgprov, tipocrd, cnumber, nombres, validez, code_qr, dibujomoneda, dibujomonedablanco) {
     // Inicializa variables
     this.padre = '';
     this.idcard = idcard;
@@ -236,9 +239,10 @@ class Card_cashflag {
     this.nombres = nombres;
     this.validez = "Valida hasta: "+validez;
     // this.code_qr = code_qr;
-    this.code_qr = "./premium.png";
+    this.code_qr = "../img/premium.png";
+    this.dibujomoneda = (tipocrd=='giftcard') ? '../img/'+dibujomoneda : '../img/'+dibujomonedablanco;
     // this.code_qr = (tipocrd=='giftcard') ? "../img/negro_hori.png" : "../img/blanco_hori.png";
-    this.icongft = (tipocrd=='giftcard') ? "./gift-solid.svg" : "./monedas.png";
+    this.icongft = (tipocrd=='giftcard') ? "../img/gift-solid.svg" : "../img/monedas.png";
   }
 
   dibuja(padre) {
@@ -339,10 +343,27 @@ class Card_cashflag {
                 area_qr.style.position = 'relative';
                 area_qr.style.bottom = '0px';
                 area_qr.style.padding = '0 0 2% 7%';
+                    // moneda
+                    let dibujomoneda = document.createElement("img");
+                    dibujomoneda.style.width = '70%';
+                    dibujomoneda.style.height = 'auto';
+                    dibujomoneda.style.marginTop = '10px';
+                    dibujomoneda.style.marginLeft = '5px';
+                    dibujomoneda.src = this.dibujomoneda;
+                    // premium
                     let codigo_qr = document.createElement("img");
-                    codigo_qr.style.width = '95%';
+                    codigo_qr.style.width = '50%';
                     codigo_qr.style.height = 'auto';
+                    codigo_qr.style.position = 'absolute';
+                    codigo_qr.style.top = '-105px';
+                    codigo_qr.style.left = '265px';
                     codigo_qr.src = this.code_qr;
+                    // let codigo_qr = document.createElement("img");
+                    // codigo_qr.style.width = '95%';
+                    // codigo_qr.style.height = 'auto';
+                    // codigo_qr.src = this.code_qr;
+
+                area_qr.appendChild(dibujomoneda);
                 area_qr.appendChild(codigo_qr);
                 // Ícono de giftcard
                 let area_ico = document.createElement("div");

@@ -267,6 +267,7 @@ button {
     }
     .campo {
         width: 90%;
+        margin: auto;
     }
 /*     .campo-esp {
         width: 70%;
@@ -304,7 +305,7 @@ button {
     }
     .sel-radio {
         margin-top: 0.25em;
-        width: 90%;
+        width: 100%;
     }
     .valores {
         width: 5%;

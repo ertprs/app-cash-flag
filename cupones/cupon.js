@@ -1,5 +1,6 @@
 var busca1 = function () { buscasocio(this.value,1); }
 var busca2 = function () { buscasocio(document.getElementById("email").value,2); }
+var nuevoSocio = false, prKey = "", pbKey = "";
 
 // Cargar los datos iniciales de la forma y la etiquetas
 function cargaforma() {
@@ -93,7 +94,7 @@ function limpiar() {
 }
 
 // Enviar los datos del formulario para procesar en el servidor
-function enviar() {
+async function enviar() {
 	var id_proveedor = localStorage.getItem("id_proveedor");
 	document.getElementById("id_proveedor").value = id_proveedor;
 
@@ -105,6 +106,15 @@ function enviar() {
 			datos.append(document.getElementsByClassName("campo")[campo].id, document.getElementsByClassName("campo")[campo].value);
 		}
 	}
+	if(nuevoSocio) {
+		// Crear cuenta en Aeternity
+		let KeyPairObj = await crearCuenta();
+		// Se muestran las llaves
+		prKey = KeyPairObj.privateKey;
+		pbKey = KeyPairObj.publicKey;
+	}
+	datos.append("secretkey", prKey);
+	datos.append("account", pbKey);
 
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() {
@@ -159,6 +169,9 @@ function buscasocio(valor,opc) {
 
 					document.getElementById("socio").style.display = 'none';
 					localStorage.setItem("socio", true);
+					nuevoSocio = false;
+					prKey = respuesta.secretkey;
+					pbKey = respuesta.account;
 
 					document.getElementById("factura").focus();
 
@@ -169,6 +182,7 @@ function buscasocio(valor,opc) {
 				}
 				document.getElementById("socio").style.display = 'flex';
 				localStorage.setItem("socio", false);
+				nuevoSocio = true;
 				document.getElementById("nombres").focus();
 
 			}

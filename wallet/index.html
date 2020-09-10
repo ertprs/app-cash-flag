@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>Cash-Flag</title>
+		<link rel="stylesheet" href="./compra.css">
+		<script type="text/javascript" src="../js/funciones.js"></script>
+	</head>
+	<body onload="inicio()">
+		<div id="container">
+			<div class="logo" align="center">
+				<img class="img-logo" id="logo" src="../img/logoclub.png" alt="">
+			</div>
+			<h3 align="center">Recargar tarjetas premium (Aeternity)</h3>
+			<h3 id="socio" align="center"></h3>
+			<!-- <br/> -->
+			<div id="div1" align="center">
+            <p>Aquí podrá recibir dinero desde cuentas externas a Cash-Flag y recargar la siguiente tarjeta:</p>
+            <p id="datostarjeta" style="width: 250px; text-align: left;">
+               <div>
+						<span style="width: 50px;">Número:</span><b id="numtarjeta"></b>
+						<!-- <span style="width: 50px;">, valida hasta:</span><b id="vencimiento"></b> -->
+						<span style="width: 50px;">, saldo:</span><b id="saldoactual"></b></div>
+            </p>
+            <p>Escanee este código desde su wallet Aeternity:</p>
+            <div id="qraddress">
+               <img id="codigoqr" src="" alt="">
+            </div>
+            <p>O si lo desea puede copiar esta dirección e ingresarla manualmente:</p>
+            <p><b id="address"></b></p>
+            <p>
+               Esta recarga será procesada en la blockhain de Aeternity y se aplicará cuando sea verificada, luego de escanear este código puede volver al menú de la aplicación.
+            </p>
+				<!-- Linea de botones -->
+				<div class="btns">
+					<button id="btnvolver" style="width: 10em; margin: 0.5em 0 0 0;">Volver</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			function inicio() {
+            console.log(localStorage);
+				document.getElementById("btnvolver").addEventListener('click', function(){
+               window.open(localStorage.getItem("url_bck2"), "_self")
+            });
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function () {
+					if (this.readyState == 4 && this.status == 200) {
+						respuesta = JSON.parse(this.responseText);
+						console.log(respuesta);
+                  document.getElementById("socio").innerHTML = respuesta.nombre
+                  numcard = respuesta.tarjeta.substr(0,4)+"-"+respuesta.tarjeta.substr(4,4)+"-"+respuesta.tarjeta.substr(8,4)+"-"+respuesta.tarjeta.substr(12,4);
+                  document.getElementById("numtarjeta").innerHTML = numcard;
+                  // document.getElementById("vencimiento").innerHTML = respuesta.validez;
+                  document.getElementById("saldoactual").innerHTML = formatNumber.new(respuesta.saldo)+' AE';
+                  document.getElementById("codigoqr").src = respuesta.rutaqr;
+                  document.getElementById("address").innerHTML = respuesta.account;
+               }
+				};
+				xmlhttp.open("GET", "../php/buscatarjetaae.php?email="+localStorage.getItem("email"), true);
+				xmlhttp.send();
+			}
+		</script>
+	</body>
+</html>

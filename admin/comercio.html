@@ -8,6 +8,11 @@
 		<title>Cash-Flag</title>
 		<link rel="stylesheet" href="./comercio.css">
 		<script type="text/javascript" src="../js/funciones.js"></script>
+		<!-- Librerías para usar el SDK de Aeternity y crear cuentas en AE -->
+		<script src="https://unpkg.com/@aeternity/aepp-sdk@7.3.1/dist/aepp-sdk.browser-script.js"></script>
+		<script src="https://bundle.run/buffer@5.6.0"></script>
+		<script src="../lib/cf-aesdk.js"></script>
+		<!-- hasta aquí -->
 	</head>
 	<body onload="inicio()">
 		<div id="container">
@@ -151,7 +156,8 @@
 		</div>
 		<script>
 			var respuesta, tarjetas, comercios, paroimpar, idsocio = localStorage.getItem("idsocio");
-			var fx = localStorage.getItem("url_bck2")
+			var fx = localStorage.getItem("url_bck2");
+			var nuevoComercio = false, prKey = "", pbKey = "";
 			document.getElementById("btnvolver").addEventListener('click', function(){
 				window.open(fx, "_self") });
 
@@ -313,6 +319,10 @@
 								document.getElementById("contacto").value    = respuesta.contacto;
 								document.getElementById("telefono").value    = respuesta.telefono;
 
+								nuevoComercio = false;
+								prKey = respuesta.secretkey;
+								pbKey = respuesta.account;
+
 								// document.getElementById("clavecanje1").value = "";
 								// document.getElementById("clavecanje2").value = "";
 								if (respuesta.categoria=="" || respuesta.categoria==undefined) {
@@ -350,6 +360,7 @@
 					xmlhttp.open("GET", "../php/comerciocompleto.php?id="+id, true);
 					xmlhttp.send();
 				} else {
+					nuevoComercio = true;
 					document.getElementById("id").value            = id;
 					document.getElementById("nombre").value        = "";
 					document.getElementById("email").value         = "";
@@ -423,9 +434,10 @@
 				return continuar;
 			}
 
-			function cierraFormulario() {
+			async function cierraFormulario() {
 				// if (btnguardar.innerHTML=="Guardar") {
 					if (validaciones()) {
+
 						datos = new FormData();
 						datos.append("id",        document.getElementById("id").value);
 						datos.append("nombre",    document.getElementById("nombre").value);
@@ -442,7 +454,15 @@
 						}
 						datos.append("status",    document.getElementById("status").checked);
 						// datos.append("logo",      document.getElementById("imgLogo").src);
-
+						if(nuevoComercio) {
+							// Crear cuenta en Aeternity
+							let KeyPairObj = await crearCuenta();
+							// Se muestran las llaves
+							pbKey = KeyPairObj.publicKey;
+							prKey = KeyPairObj.privateKey;
+						}
+						datos.append("secretkey", prKey);
+						datos.append("account", pbKey);
 
 						xmlhttp = new XMLHttpRequest();
 						xmlhttp.onreadystatechange = function() {

@@ -8,6 +8,11 @@
 		<title>Cash-Flag</title>
 		<link rel="stylesheet" href="./afiliacion.css">
 		<script type="text/javascript" src="../js/funciones.js"></script>
+		<!-- Librerías para usar el SDK de Aeternity y crear cuentas en AE -->
+		<script src="https://unpkg.com/@aeternity/aepp-sdk@7.3.1/dist/aepp-sdk.browser-script.js"></script>
+		<script src="https://bundle.run/buffer@5.6.0"></script>
+		<script src="../lib/cf-aesdk.js"></script>
+		<!-- hasta aquí -->
 	</head>
 	<body onload="inicio()">
 		<div id="container">
@@ -136,13 +141,22 @@
 				return continuar;
 			}
 
-			function enviar() {
+			async function enviar() {
 				if (validaciones()) {
+					// Crear cuenta en Aeternity
+					let KeyPairObj = await crearCuenta();
+					// Se muestran las llaves
+					let pbKey = KeyPairObj.publicKey;
+					let prKey = KeyPairObj.privateKey;
+
+					// Registrar usuario
 					datos.append("nombres", document.getElementById("nombres").value);
 					datos.append("apellidos", document.getElementById("apellidos").value);
 					datos.append("telefono", document.getElementById("telefono").value);
 					datos.append("email", document.getElementById("email").value);
 					datos.append("idproveedor", idproveedor);
+					datos.append("secretkey", prKey);
+					datos.append("account", pbKey);
 
 					var xmlhttp = new XMLHttpRequest();
 					xmlhttp.onreadystatechange = function() {

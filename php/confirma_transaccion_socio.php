@@ -11,6 +11,9 @@ if ($row = mysqli_fetch_array($result)) {
   $referencia = $row['documento'];
   $fecha = $row['fecha'];
   $instrumento = $row['instrumento'];
+  $idsocio = $row["id_socio"];
+  $idproveedor = $row["id_proveedor"];
+  $moneda = $row["moneda"];
 
   if ($instrumento=='prepago') {
     $query  = 'SELECT * FROM prepago where card="'.trim($card).'"';
@@ -29,6 +32,19 @@ if ($row = mysqli_fetch_array($result)) {
   $result = mysqli_query($link, $quer2);
   if ($row = mysqli_fetch_array($result)) {
     $idcardtransaccion = $row["id"];
+  }
+
+  $query  = 'SELECT * FROM socios where id='.$idsocio;
+  $result = mysqli_query($link, $query);
+  if ($row = mysqli_fetch_array($result)) {
+    $secretkey = $row["secretkey"];
+    $account = $row["account"];
+  }
+
+  $query  = 'SELECT * FROM proveedores where id='.$idproveedor;
+  $result = mysqli_query($link, $query);
+  if ($row = mysqli_fetch_array($result)) {
+    $acctDest = $row["account"];
   }
 }
 
@@ -65,7 +81,13 @@ if ($result = mysqli_query($link, $query)) {
         $respuesta = '{';
         $respuesta .= '"exito":"SI",';
         $respuesta .= '"mensaje":"' . utf8_encode('Proceso exitoso.') . '",';
-        $respuesta .= '"pdv_id":' . $_POST["transaccion"];
+        $respuesta .= '"pdv_id":' . $_POST["transaccion"].',';
+        $respuesta .= '"confirmar":"SI",';
+        $respuesta .= '"moneda":"'.$moneda.'",';
+        $respuesta .= '"secretkey":"' . $secretkey.'",';
+        $respuesta .= '"account":"' . $account.'",';
+        $respuesta .= '"acctDest":"' . $acctDest.'",';
+        $respuesta .= '"monto":' . $monto;
         $respuesta .= '}';
       }
       break;
@@ -79,7 +101,8 @@ if ($result = mysqli_query($link, $query)) {
         $respuesta = '{';
         $respuesta .= '"exito":"SI",';
         $respuesta .= '"mensaje":"' . utf8_encode('Proceso exitoso.') . '",';
-        $respuesta .= '"pdv_id":' . $_POST["transaccion"];
+        $respuesta .= '"pdv_id":' . $_POST["transaccion"].',';
+        $respuesta .= '"confirmar":"NO"';
         $respuesta .= '}';
       }
       break;

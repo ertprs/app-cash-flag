@@ -1,4 +1,4 @@
-let monto="", idproveedor=localStorage.getItem("idproveedor"), moneda='bs', tarjeta='';
+let monto="", idproveedor=localStorage.getItem("idproveedor"), moneda='dolar', tarjeta='', acctDest='';
 let beep = '../lector/audio/beep.mp3';
 let scanner = "";
 
@@ -39,6 +39,7 @@ function inicio() {
 			if (respuesta.exito == 'SI') {
 				// document.title = 'Menú principal';
 				logo = respuesta.proveedor.logo;
+				acctDest = respuesta.proveedor.account;
 				if (logo!="") {
 					document.getElementById("logo").src = "../img/" + logo;
 				} else {
@@ -76,10 +77,10 @@ function inicio() {
 
 // limpia el formulario
 function limpiar() {
-	moneda = 'bs';
+	moneda = 'dolar';
 	monto = "";
 	tarjeta = '';
-	document.getElementById("divisa").value = "bs";
+	document.getElementById("divisa").value = "dolar";
 	document.getElementById("monto").value = "";
 
 	document.getElementById("tarjeta").value = "";
@@ -175,7 +176,12 @@ function enviar() {
 							document.getElementById("transaccionespendientes").removeChild(document.getElementById('fila-'+transacciones[i].id));
 						}
 						transacciones = respuesta.transacciones;
+						sKey = respuesta.secretkey;
+						pKey = respuesta.account;
 						rellenatransacciones(transacciones);
+						// if(document.getElementById("divisa").value=="ae") {
+						// 	transaccionae(sKey, pKey, acctDest, document.getElementById("monto").value);
+						// }
 					} else {
 						alert(respuesta.mensaje);
 					}
@@ -359,7 +365,14 @@ function cerrar_lector() {
 	modal_area.style.display = 'none';
 	console.log('cerrarlector');
 }
+/*
+async function transaccionae(sKey, pKey, acctDest, monto) {
+	// se crea la instancia del Sdk necesaria para consultar balance y hacer transacciones 
+	Client = await instanciaSdk( sKey, pKey );    
 
+	tx = await enviarTransaccion( acctDest, monto, Client );
+}
+*/
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 

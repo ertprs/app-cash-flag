@@ -10,6 +10,13 @@
 	    <script src="../lib/socket.io.js"></script>
 		<script type="text/javascript" src="../js/classes.js"></script>
 		<script type="text/javascript" src="../js/funciones.js"></script>
+		<!-- -->
+			<!-- Librerías para usar el SDK de Aeternity y crear cuentas en AE -->
+			<!-- <script src="https://unpkg.com/@aeternity/aepp-sdk@7.3.1/dist/aepp-sdk.browser-script.js"></script> -->
+			<!-- <script src="https://bundle.run/buffer@5.6.0"></script> -->
+			<!-- <script src="../lib/cf-aesdk.js"></script> -->
+			<!-- hasta aquí -->
+		<!--  -->
 		<script type="text/javascript" src="./puntodeventa.js"></script>
 		<script type="text/javascript" src="../lector/instascan.min.js"></script>
 	</head>
@@ -47,8 +54,9 @@
 				<div id="div0" class="cmps">
 					<span class="etiq">Moneda:</span>
 					<select id="divisa" class="campo">
-						<option value="bs">Bolívares (Bs.)</option>
 						<option value="dolar">Dólares (US$)</option>
+						<option value="bs">Bolívares (Bs.)</option>
+						<option value="ae">Aeternity (AE)</option>
 						<!-- <option value="cripto">Criptomonedas (BTC, ETH, DASH, LTC, BNB, USDT)</option> -->
 					</select>
 				</div>

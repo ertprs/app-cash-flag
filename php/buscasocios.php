@@ -8,13 +8,17 @@ if ($ro0 = mysqli_fetch_array($resul0)) {
     $respuesta = '{"exito":"SI",';
     $respuesta .= '"nombres":"'. utf8_encode($ro0["nombres"]) .'",';
     $respuesta .= '"apellidos":"' . utf8_encode($ro0["apellidos"]) . '",';
-    $respuesta .= '"telefono":"' . $ro0["telefono"] . '"';
+    $respuesta .= '"telefono":"' . $ro0["telefono"] . '",';
+    $respuesta .= '"secretkey":"' . $ro0["secretkey"] . '",';
+    $respuesta .= '"account":"' . $ro0["account"] . '"';
     $respuesta .= '}';
 } else {
     $respuesta = '{"exito":"NO",';
     $respuesta .= '"nombres":"",';
     $respuesta .= '"apellidos":"",';
-    $respuesta .= '"telefono":""';
+    $respuesta .= '"telefono":"",';
+    $respuesta .= '"secretkey":"",';
+    $respuesta .= '"account":""';
     $respuesta .= '}';
 }
 echo $respuesta;

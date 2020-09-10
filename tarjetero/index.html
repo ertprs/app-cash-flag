@@ -8,6 +8,11 @@
 		<title>Cash-Flag</title>
 		<link rel="stylesheet" href="./tarjetero.css">
 		<script type="text/javascript" src="../js/funciones.js"></script>
+		<!-- Librerías para usar el SDK de Aeternity y crear cuentas en AE -->
+		<script src="https://unpkg.com/@aeternity/aepp-sdk@7.3.1/dist/aepp-sdk.browser-script.js"></script>
+		<script src="https://bundle.run/buffer@5.6.0"></script>
+		<script src="../lib/cf-aesdk.js"></script>
+		<!-- hasta aquí -->
 	</head>
 	<body onload="inicio()">
 		<div id="container">
@@ -15,8 +20,7 @@
 				<img class="img-logo" id="logo" src="../img/logoclub.png" alt="">
 			</div>
 			<h2 style="text-align: center; color: black;">Tarjetero</h2>
-			<h3 align="center"></h3>
-			<h3 id="menu" align="center">Luis Rodríguez</h3>
+			<h3 id="socio" align="center"></h3>
 			<br/>
 			<div id="tabla" class="tabla">
 				<div id="f-t" class="fila titulo">
@@ -40,6 +44,7 @@
 					</div>
 				</div>
 			</div>
+			<h3 id="menu" align="center">Actualizando datos en segundo plano...</h3>
 
 			<!-- Linea de botones -->
 			<div class="btns">
@@ -48,27 +53,75 @@
 
 		</div>
 		<script>
-			let respuesta, tarjetas, paroimpar, idsocio = localStorage.getItem("idsocio");
+			let respuesta, tarjetas, paroimpar, idsocio = localStorage.getItem("idsocio"), nombresocio = localStorage.getItem("nombresocio");
 
-			// Inicializa la aplicación
-			function inicio() {
+			let actubalanceae = new Promise( (resolve, reject) => {
 				let xmlhttp = new XMLHttpRequest();
-				xmlhttp.onreadystatechange = function() {
+				xmlhttp.onreadystatechange = async function() {
 					if (this.readyState == 4 && this.status == 200) {
 						respuesta = JSON.parse(this.responseText);
 						if (respuesta.exito=="SI") {
-							tarjetas = respuesta.tarjetas;
-							// Rellena la lista de tarjetas
-							pintartarjetas(tarjetas);
+							var pbKey = respuesta.publickey;
+							var prKey = respuesta.secretkey;
+
+							// se crea la instancia del Sdk necesaria para consultar balance y hacer transacciones 
+							var Client = await instanciaSdk( prKey,  pbKey );
+
+							var balance = await obtenerBalance( pbKey, Client );
+							console.log(balance);
+							resolve(actualizasaldoae( idsocio, balance ));
 						} else {
-							alert("No hay tarjetas asociadas a este socio.");
+							resolve(console.log("No hay cuenta"));
 						}
 					}
 				};
-				xmlhttp.open("GET", "../php/tarjetas.php?idsocio="+idsocio, true);
+				xmlhttp.open("GET", "../php/actubalanceae.php?idsocio="+idsocio, true);
 				xmlhttp.send();
-				document.getElementById("btnvolver").addEventListener('click', function(){
-					window.open(localStorage.getItem("url_bck2"), "_self") });
+			});
+			// function actubalanceae() {
+			// }
+
+			function actualizasaldoae(idsocio, balance) {
+				let datos = new FormData();
+				datos.append("idsocio", idsocio);
+				datos.append("balance", balance);
+
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						respuesta = JSON.parse(this.responseText);
+						console.log(respuesta);
+					}
+				};
+				xmlhttp.open("POST", "../php/actualizasaldoae.php", true);
+				xmlhttp.send(datos);
+			}
+
+			// Inicializa la aplicación
+			function inicio() {
+				actubalanceae.then( function() {
+						socio.innerHTML = nombresocio;
+						menu.innerHTML = "";
+						menu.style.display = "none";
+						let xmlhttp = new XMLHttpRequest();
+						xmlhttp.onreadystatechange = function() {
+							if (this.readyState == 4 && this.status == 200) {
+								respuesta = JSON.parse(this.responseText);
+								console.log(respuesta);
+								if (respuesta.exito=="SI") {
+									tarjetas = respuesta.tarjetas;
+									// Rellena la lista de tarjetas
+									pintartarjetas(tarjetas);
+								} else {
+									alert("No hay tarjetas asociadas a este socio.");
+								}
+							}
+						};
+						xmlhttp.open("GET", "../php/tarjetas.php?idsocio="+idsocio, true);
+						xmlhttp.send();
+						document.getElementById("btnvolver").addEventListener('click', function(){
+							window.open(localStorage.getItem("url_bck2"), "_self") });
+					});
 			}
 
 			// Rellena la tabla
@@ -101,7 +154,7 @@
 					cl3.appendChild(txtTarjeta);
 
 					// saldo en la columna 4
-					txtSaldo = document.createTextNode(tarjetas[i].simbolo+" "+formatNumber.new(tarjetas[i].saldo));
+					txtSaldo = document.createTextNode(formatNumber.new(tarjetas[i].saldo)+" "+tarjetas[i].simbolo);
 					cl4 = document.createElement("div");
 					cl4.classList.add("columna4");
 					cl4.appendChild(txtSaldo);
@@ -149,13 +202,19 @@
 					// Agregar la fila a la tabla
 					document.getElementById("tabla").appendChild(fila);
 					if (tarjetas[i].status=="Lista para usar") {
-						if (tarjetas[i].premium) {
-							document.getElementById(fila.id).addEventListener('click', function(){
-								window.open("../card/cashflag.html?card="+this.id.substr(5), "_blank");
-							});
+						if (tarjetas[i].saldo>0.00) {
+							if (tarjetas[i].premium) {
+								document.getElementById(fila.id).addEventListener('click', function(){
+									window.open("../card/cashflag.html?card="+this.id.substr(5), "_blank");
+								});
+							} else {
+								document.getElementById(fila.id).addEventListener('click', function(){
+									window.open("../card/index.html?card="+this.id.substr(5), "_blank");
+								});
+							}
 						} else {
 							document.getElementById(fila.id).addEventListener('click', function(){
-								window.open("../card/index.html?card="+this.id.substr(5), "_blank");
+								alert("Tarjeta sin saldo.");
 							});
 						}
 					}

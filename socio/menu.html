@@ -66,25 +66,25 @@
 					</a>
 
 					<!-- <a id="prepagocf" href="../prepago/compracashflag.html" onclick=""> -->
-					<a id="prepagocf" href="" onclick="alert('Próximamente')">
+					<a id="prepagoae" href="../wallet" onclick="">
 						<div class="item" align="center">
 							<div class="imagen" align="center"> 
 								<!-- <img class="img_opcion" src="" title="Referidos" /> -->
-								Recarga de tarjeta prepagada PREMIUM
+								Recarga de tarjeta PREMIUM (Aeternity)
 							</div>
 						</div>
 					</a>
-
-					<!-- <a id="giftcardscf" href="../giftcards/compracashflag.html" onclick=""> -->
+					<!--
+					--><!-- <a id="giftcardscf" href="../giftcards/compracashflag.html" onclick=""> --><!--
 					<a id="giftcardscf" href="" onclick="alert('Próximamente')">
 							<div class="item" align="center">
 							<div class="imagen" align="center"> 
-								<!-- <img class="img_opcion" src="" title="Referidos" /> -->
+								--><!-- <img class="img_opcion" src="" title="Referidos" /> --><!--
 								Compra de tarjeta de regalo PREMIUM
 							</div>
 						</div>
 					</a>
-
+					-->
 					<a id="lector" href="../lector/index.html?menu=socio" onclick="">
 						<div class="item" align="center">
 							<div class="imagen" align="center">
@@ -128,6 +128,7 @@
 						respuesta = JSON.parse(this.responseText);
 						if (respuesta.exito == 'SI') {
 							socio.innerHTML = respuesta.nombres+" "+respuesta.apellidos;
+							localStorage.setItem("nombresocio",respuesta.nombres+" "+respuesta.apellidos);
 						}
 					}
 				};

@@ -18,7 +18,7 @@ if ($row = mysqli_fetch_array($result)) {
 	$result = mysqli_query($link, $query);
 	while ($row = mysqli_fetch_array($result)) {
 		$monto = $row["saldo"]-$row["saldoentransito"];
-		if($monto>0) {
+		if($monto>0 || $row["premium"]) {
 			if ($inicio) {
 				$coma = '';
 				$inicio = false;

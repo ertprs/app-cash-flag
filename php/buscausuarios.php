@@ -85,12 +85,12 @@ if ($_GET["tipo"]=='comercio') {
     $query = 'SELECT * FROM socios where email="'.$_GET["email"].'"';
     $result = mysqli_query($link, $query);
     if ($row = mysqli_fetch_array($result)) {
-        if ($row["status"]=="Activo") {
+        // if ($row["status"]=="Activo") {
             $valido = true;
             $id = $row['id'];
-        } else {
-            $valido = false;
-        }
+        // } else {
+        //     $valido = false;
+        // }
         if ($valido) {
             $quer2 = 'SELECT * FROM usuarios where email="'.$_GET["email"].'"';
             $resul2 = mysqli_query($link, $quer2);

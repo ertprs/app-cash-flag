@@ -216,7 +216,6 @@
 			// 	'./0000000021.png'
 			// );
 
-
 			// cargar transacciones de la tarjeta
 			var xmlhttp = new XMLHttpRequest();
 			xmlhttp.onreadystatechange = function () {
@@ -230,9 +229,7 @@
 			};
 			xmlhttp.open("GET", "../php/ult10transacciones.php?card="+tarjeta, true);
 			xmlhttp.send();
-
 		}
-
 
 		function rellenatransacciones(transacciones) {
 			par = true;	

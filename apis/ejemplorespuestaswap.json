@@ -1,0 +1,44 @@
+{
+    "id": "mwkwGFXmnJC",
+    "type": "floating",
+    "timestamp": "2020-09-03T17:23:35.756Z",
+    "updated_at": "2020-09-03T17:23:35.759Z",
+    "currency_from": "ae",
+    "currency_to": "btc",
+    "amount_from": "464",
+    "expected_amount": "464",
+    "amount_to": "0.00630344",
+    "address_from": "ak_2dKH7FpWYVg8kvBtK9WpQDspZPgBuRNrNhEMmMp6Qp4ogdGQiX",
+    "address_to": "17A77ePNMoofDncP22C5p7sUo6VrJnDfJx",
+    "extra_id_from": "",
+    "extra_id_to": null,
+    "tx_from": "",
+    "tx_to": "",
+    "status": "waiting",
+    "currencies": {
+        "ae": {
+            "symbol": "ae",
+            "has_extra_id": false,
+            "extra_id": "",
+            "name": "Aeternity",
+            "warnings_from": [],
+            "warnings_to": [],
+            "validation_address": null,
+            "validation_extra": null,
+            "address_explorer": null,
+            "tx_explorer": null
+        },
+        "btc": {
+            "symbol": "btc",
+            "has_extra_id": false,
+            "extra_id": "",
+            "name": "Bitcoin",
+            "warnings_from": [],
+            "warnings_to": [],
+            "validation_address": "^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$|^(bc1)[0-9A-Za-z]{39}$",
+            "validation_extra": null,
+            "address_explorer": "https://blockchair.com/bitcoin/address/{}?from=simpleswap",
+            "tx_explorer": "https://blockchair.com/bitcoin/transaction/{}?from=simpleswap"
+        }
+    }
+}

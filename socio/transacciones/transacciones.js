@@ -84,6 +84,15 @@ function accion(id) {
 				}
 				inicio();
 				limpiar();
+				if(respuesta.confirmar=="SI") {
+					if (respuesta.moneda=="ae") {
+						sKey = respuesta.secretkey;
+						pKey = respuesta.account;
+						Dest = respuesta.acctDest;
+						Mont = respuesta.monto;
+						transaccionae(sKey, pKey, Dest, Mont);
+					}
+				}
 			}
 		}
 	};
@@ -168,3 +177,12 @@ function pintartransacciones() {
 		document.getElementById("tabla").appendChild(fila);
 	}
 }
+
+// Registra transacción en AE
+async function transaccionae(sKey, pKey, acctDest, monto) {
+	// se crea la instancia del Sdk necesaria para consultar balance y hacer transacciones 
+	Client = await instanciaSdk( sKey, pKey );    
+
+	tx = await enviarTransaccion( acctDest, monto, Client );
+}
+

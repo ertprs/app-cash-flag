@@ -6,7 +6,7 @@ include_once("../_config/conexion.php");
 $query = "SELECT * from proveedores where id = " . $_GET["prov"];
 $result = mysqli_query($link, $query);
 if ($row = mysqli_fetch_array($result)) {
-	$respuesta = '{"exito":"SI","proveedor":{"nombre":"'.utf8_encode($row["nombre"]).'","logo":"'.$row["logo"].'"}';
+	$respuesta = '{"exito":"SI","proveedor":{"nombre":"'.utf8_encode($row["nombre"]).'","logo":"'.$row["logo"].'", "account":"'.$row["account"].'"}';
 
 	$query   = "SELECT * from pdv_transacciones where id_proveedor=".$_GET["prov"];
 	$query  .= " and (status='Por confirmar' or status='Confirmada')";
