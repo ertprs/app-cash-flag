@@ -35,13 +35,6 @@
 				<td id="eur_eth" style="text-align: right;"></td>
 				<td id="eur_dash" style="text-align: right;"></td>
 			</tr>
-			<tr>
-				<td><b>Pesos colombianos</b></td>
-				<td id="cop_ptr" style="text-align: right;"></td>
-				<td id="cop_btc" style="text-align: right;"></td>
-				<td id="cop_eth" style="text-align: right;"></td>
-				<td id="cop_dash" style="text-align: right;"></td>
-			</tr>
 		</tbody>
 	</table>
 	<script type="text/javascript">
@@ -64,11 +57,6 @@
 					eur_btc.innerHTML  = formatNumber.new(respuesta.data.BTC.EUR);
 					eur_eth.innerHTML  = formatNumber.new(respuesta.data.ETH.EUR);
 					eur_dash.innerHTML = formatNumber.new(respuesta.data.DASH.EUR);
-
-					cop_ptr.innerHTML  = formatNumber.new(respuesta.data.PTR.COP);
-					cop_btc.innerHTML  = formatNumber.new(respuesta.data.BTC.COP);
-					cop_eth.innerHTML  = formatNumber.new(respuesta.data.ETH.COP);
-					cop_dash.innerHTML = formatNumber.new(respuesta.data.DASH.COP);
 				}
 			};
 			xmlhttp.open("GET", "./getpetro.php", true);

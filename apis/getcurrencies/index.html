@@ -28,10 +28,6 @@
 				<td id="ves" style="text-align: right;"></td>
 			</tr>
 			<tr>
-				<td><b>COP</b></td>
-				<td id="cop" style="text-align: right;"></td>
-			</tr>
-			<tr>
 				<td><b>EUR</b></td>
 				<td id="eur" style="text-align: right;"></td>
 			</tr>
@@ -69,7 +65,6 @@
 					*/
 					vef_blkmkt.innerHTML = formatNumber.new(Math.round(respuesta.rates.VEF_BLKMKT*100)/100);
 					ves.innerHTML        = formatNumber.new(Math.round(respuesta.rates.VES*100)/100);
-					cop.innerHTML        = formatNumber.new(Math.round(respuesta.rates.COP*100)/100);
 					eur.innerHTML        = formatNumber.new(Math.round(respuesta.rates.EUR*100)/100);
 					// btc.innerHTML        = respuesta.rates.BTC;
 					// eth.innerHTML        = respuesta.rates.ETH;
