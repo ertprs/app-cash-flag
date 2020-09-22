@@ -99,7 +99,8 @@
 							respuesta = JSON.parse(this.responseText);
 							if (respuesta.exito == 'SI') {
 								alert(respuesta.mensaje);
-								window.location.replace("../../comercio");
+								// window.location.replace("../../comercio");
+								window.location.replace(localStorage.getItem("url_bck2"));
 							} else {
 								alert("Falló el proceso, comuniquese al +584244071820.");
 								document.getElementById("clave").value = "";
