@@ -10,7 +10,7 @@ if ($row = mysqli_fetch_array($result)) {
 
 	$query   = "SELECT * from pdv_transacciones where id_proveedor=".$_GET["prov"];
 	$query  .= " and (status='Por confirmar' or status='Confirmada')";
-	$query  .= " order by status desc,id_instrumento";
+	$query  .= " order by status desc, id_instrumento, documento desc";
 	$result = mysqli_query($link, $query);
 	$respuesta .= ',"transacciones":';
 	$respuesta .= '[';

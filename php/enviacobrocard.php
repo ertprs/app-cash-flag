@@ -23,16 +23,18 @@ if ($instrumento<>"") {
 	$saldo = 0.00;
 	$saldoentransito = 0.00;
 	if ($instrumento=='prepago') {
+		$tpcard = "prepago_transacciones";
 		$query = "select * from prepago where card='".trim($_POST["tarjeta"])."'";
 		$result = mysqli_query($link, $query);
 		if ($row = mysqli_fetch_array($result)) {
 			$id_socio = $row["id_socio"];
-		    $saldo = $row["saldo"];
+			$saldo = $row["saldo"];
 	    	$saldoentransito = $row["saldoentransito"];
 			$cardProveedor = $row["id_proveedor"];
 			$cardMoneda    = $row["moneda"];
 		}
 	} else {
+		$tpcard = "giftcards_transacciones";
 		$query = "select * from giftcards where card='".trim($_POST["tarjeta"])."'";
 		$result = mysqli_query($link, $query);
 		if ($row = mysqli_fetch_array($result)) {
@@ -53,6 +55,7 @@ if ($instrumento<>"") {
 	$documento = generatransaccion_pdv($link, $database);
 	$status = 'Confirmada'; // Status pendiente por confirmación
 	$tipotransaccion = '51'; // Consumo
+	$moneda = $cardMoneda;
 	switch ($moneda) {
 		case 'bs':
 			$montobs = $monto; $montodolares = 0.00; $montocripto = 0.00; 
@@ -95,7 +98,7 @@ if ($instrumento<>"") {
 			// Insertar transacción para confirmar
 			$query  = "INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, ";
 			$query .= "instrumento, id_instrumento, documento, status, origen, token) ";
-			$query .= "VALUES ('".$fecha."','".$fecha."',".$id_proveedor.",".$id_socio.",'".$tipo."','".$cardmoneda."',".$monto;
+			$query .= "VALUES ('".$fecha."','".$fecha."',".$id_proveedor.",".$id_socio.",'".$tipo."','".$moneda."',".$monto;
 			$query .= ",'".$instrumento."','".$id_instrumento."','".$documento."','".$status."','".$origen."','".$token."')";
 			if ($result = mysqli_query($link, $query)) {
 				$saldo -= $monto;
