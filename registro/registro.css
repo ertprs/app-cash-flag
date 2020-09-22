@@ -75,7 +75,7 @@ img {
 @media only screen and (max-width: 960px) {
     * {
         width: 100%;
-        font-size: 110%;
+        /* font-size: 110%; */
     }
     #container {
         width: 80%;
