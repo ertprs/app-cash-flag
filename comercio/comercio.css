@@ -59,6 +59,10 @@ img {
         width: 100%;
         /* font-size: 105%; */
     }
+    .logo {
+        padding-bottom: 0.5em;
+        width: 8em;
+    }
     img {
         width: 80%;
     }
@@ -67,15 +71,17 @@ img {
 	}
 	h3 {
 		color: blue;
+        padding-bottom: 0.5em;
 	}
     h5 {
         text-align: center;
     }
     #container {
-        width: 90%;
+        width: 80%;
     }
     .cmps {
         flex-direction: column;
+        padding: 0 0 2.25em 0;
     }
     .etiq {
         width: 100%;
@@ -92,7 +98,7 @@ img {
         margin-top: 0.5em;        
     }
 }
-
+/*
 @media only screen and (max-width: 1260px) {
     .logo {
         padding-bottom: 0.5em;
@@ -108,4 +114,4 @@ img {
         padding: 0 0 2.25em 0;
     }
 }
-
+*/

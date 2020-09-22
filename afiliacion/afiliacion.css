@@ -97,6 +97,7 @@ img {
     }
     .cmps {
         flex-direction: column;
+        margin: auto;
     }
     .etiq {
         width: 100%;
@@ -106,6 +107,7 @@ img {
     }
     .campo {
         width: 90%;
+        margin: auto;
     }
     .btns {
         text-align: center;
@@ -125,6 +127,7 @@ img {
     }
     .cmps {
         padding: 0 0 2.25em 0;
+        margin: auto;
     }
 }
 

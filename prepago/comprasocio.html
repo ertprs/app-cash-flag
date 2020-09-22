@@ -226,6 +226,7 @@
 				limpiaforma();
 				document.getElementById("btnvolver").addEventListener('click', function(){
 					window.open(localStorage.getItem("url_bck2"), "_self") });
+				console.log(localStorage);
 				// cargar parámetros de la tabla
 				var xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function () {

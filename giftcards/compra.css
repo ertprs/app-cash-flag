@@ -111,6 +111,7 @@ img {
     }
     .campo {
         width: 90%;
+        margin: auto;
     }
     .btns {
         text-align: center;

@@ -93,6 +93,7 @@ img {
 	}
 	h3 {
 		color: blue;
+        padding-bottom: 0.5em;
 	}
     h5 {
         text-align: center;
@@ -102,6 +103,7 @@ img {
     }
     .cmps {
         flex-direction: column;
+        padding: 0 0 2.25em 0;
     }
     .etiq {
         width: 100%;
@@ -111,6 +113,7 @@ img {
     }
     .campo {
         width: 90%;
+        margin: auto;
     }
     .btns {
         text-align: center;
@@ -122,12 +125,12 @@ img {
         margin: 1em 5em 0em;
     }
 }
-
+/*
 @media only screen and (max-width: 1260px) {
     /* .logo { */
         /* padding-bottom: 0.5em; */
         /* width: 8em; */
-    /* } */
+    /* } *//*
     h3 {
         padding-bottom: 0.5em;
     }
@@ -135,4 +138,4 @@ img {
         padding: 0 0 2.25em 0;
     }
 }
-
+*/
