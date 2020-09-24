@@ -30,13 +30,13 @@
 		}
 
 		.parrafo_centrado {
-		    padding: 1em 0 0;
+		   padding: 1em 0 0;
 			text-align: center;
 			width: var(--ancho);
 		}
 
 		.parrafo_justificado {
-		    margin: 0.5em 0 0;
+		   margin: 0.5em 0 0;
 			text-align: justify;
 			width: var(--ancho);
 		}
@@ -314,18 +314,24 @@
 			}
 		}
 
-		function scanearQR(){
+		function scanearQR() {
 			if (validaciones()) {
 				// window.location.replace('../lector/index.html?menu=socio');
 				modal_lector();
 			}
 		}
 
-		function scanearQR2(){
+		function scanearQR2() {
 			if (validaciones()) {
 				// window.location.replace('../lector/index.html?menu=socio');
-				modal_lector2();
+				// modal_lector2();
+				modal_address();
 			}
+		}
+
+		function scanearQR3() { 
+			cerrar_addorqr();
+			modal_lector2();
 		}
 
 		function cerrarventana() {
@@ -372,6 +378,7 @@
 
 		function limpiar() {
 			document.getElementById("monto").value = "";
+			document.getElementById("address").value = "";
 			txmonto = document.getElementById("monto").value;
 			document.getElementById("monto").focus();
 		}
@@ -414,7 +421,10 @@
 			var balance = await obtenerBalance( publicKey, Client );
 
 			if (balance >= txmonto) {
+				// alert("idproveedor "+idproveedor+" monto "+txmonto+" tarjeta "+tarjeta+" origen "+"externo");
+
 				tx = await enviarTransaccion( destAddress, txmonto, Client );
+
 
 				// mysocket.send(document.getElementById("tarjeta").value+' monto: '+document.getElementById("monto").value);
 				datos.append("idproveedor", idproveedor);
@@ -533,6 +543,11 @@
 			modal_area2.style.display = 'block';
 		}
 
+		function modal_address() {
+			// cuerpo.style.overflow = "hidden";
+			adorqr.style.display = 'block';
+		}
+
 		function modal_lector2() {
 		   beep = '../lector/audio/beep.mp3';
 			scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
@@ -577,7 +592,26 @@
 			scanner.stop();
 			cuerpo.style.overflow = "auto";
 			modal_area2.style.display = 'none';
-			console.log('cerrarlector');
+		}
+
+		function cerrar_addorqr() {
+			cuerpo.style.overflow = "auto";
+			adorqr.style.display = 'none';
+		}
+
+		function enviatx() {
+			var addrDest = document.getElementById("address").value, txmonto = document.getElementById("monto").value;
+
+			if (addrDest.substr(0,2) == "ak") {
+				cerrar_addorqr();
+				enviar2(addrDest);
+			} else {
+				if (addrDest == "") {
+					alert("La Dirección no puede estar vacía.");
+				} else {
+					alert("Dirección inválida, corrígela e intenta de nuevo.");
+				}
+			}
 		}
 	</script>
 </head>
@@ -659,6 +693,23 @@
 			<br/>
 			<button id="volver_lector" style="width: 60px; height: 30px; margin: auto;" onclick="cerrar_lector()">Cerrar</button>
 			<audio id="beep" src="" />
+		</div>
+	</div>
+	<div id="adorqr" class="area_modal3" style="display: none;">
+		<p align="center" style="margin: 0.5em 0.5em 1.5em;">
+			Puede introducir la dirección o clave pública del destinatario o escanear el código QR.
+		</p>
+		<div style="width: 100%; text-align: center;">
+			<div class="parrafo_centrado" style="margin: auto; width: 90%; margin-bottom: 1.5em;">
+				<span class="etiq">Dirección destinatario:</span>
+				<div class="cmps" style="width: 100%;">
+					<input id="address" class="campo" type="text" maxlength="100" style="width: 75%;"/>
+					<button id="enviaraddress" style="width: 20%; height: 30px; margin: auto;" onclick="enviatx()">Enviar</button>
+				</div>
+			</div>
+			<br/>
+			<button id="scanaddress" style="width: 120px; height: 30px; margin: auto;" onclick="scanearQR3()">Escanear QR</button>
+			<button id="volver_addorqr" style="width: 120px; height: 30px; margin: auto;" onclick="cerrar_addorqr()">Volver</button>
 		</div>
 	</div>
 </body>

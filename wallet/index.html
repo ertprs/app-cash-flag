@@ -23,7 +23,7 @@
                <div>
 						<span style="width: 50px;">Número:</span><b id="numtarjeta"></b>
 						<!-- <span style="width: 50px;">, valida hasta:</span><b id="vencimiento"></b> -->
-						<span style="width: 50px;">, saldo:</span><b id="saldoactual"></b></div>
+						<span style="width: 50px;">- saldo:</span><b id="saldoactual"></b></div>
             </p>
             <p>Escanee este código desde su wallet Aeternity:</p>
             <div id="qraddress">
@@ -32,7 +32,7 @@
             <p>O si lo desea puede copiar esta dirección e ingresarla manualmente:</p>
             <p><b id="address"></b></p>
             <p>
-               Esta recarga será procesada en la blockhain de Aeternity y se aplicará cuando sea verificada, luego de escanear este código puede volver al menú de la aplicación.
+               Esta recarga será procesada en la blockchain de Aeternity y se aplicará cuando sea verificada, luego de escanear este código puede volver al menú de la aplicación.
             </p>
 				<!-- Linea de botones -->
 				<div class="btns">
@@ -53,7 +53,7 @@
 						console.log(respuesta);
                   document.getElementById("socio").innerHTML = respuesta.nombre
                   numcard = respuesta.tarjeta.substr(0,4)+"-"+respuesta.tarjeta.substr(4,4)+"-"+respuesta.tarjeta.substr(8,4)+"-"+respuesta.tarjeta.substr(12,4);
-                  document.getElementById("numtarjeta").innerHTML = numcard;
+                  document.getElementById("numtarjeta").innerHTML = numcard.trim();
                   // document.getElementById("vencimiento").innerHTML = respuesta.validez;
                   document.getElementById("saldoactual").innerHTML = formatNumber.new(respuesta.saldo)+' AE';
                   document.getElementById("codigoqr").src = respuesta.rutaqr;

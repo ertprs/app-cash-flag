@@ -28,15 +28,23 @@ img {
     object-fit: contain;
 }
 
-#div1 {
+#div1, #div2 {
     padding: 0.5em 0 0.5em 0;
     background: lightgray;
+}
+
+#address {
+    font-size: 75%;
 }
 
 #codigoqr {
     width: 30%;
     height: auto;
     margin: 10px auto 0;
+}
+
+.seleccion {
+    width: auto;
 }
 
 .cmps {
@@ -120,6 +128,9 @@ p {
     }
     #address {
         font-size: 55%;
+    }
+    .seleccion {
+        width: 95%;
     }
     .cmps {
         flex-direction: column;

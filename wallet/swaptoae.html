@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>Cash-Flag</title>
+		<link rel="stylesheet" href="./compra.css">
+      <script type="text/javascript" src="../js/funciones.js"></script>
+      <style>
+         .popupmsg {
+            /* width: auto; */
+            position: absolute;
+            background: white;
+            padding: 10px;
+            border: solid black thin;
+         }
+         
+         .blink_me {
+            animation: blinker 1s linear infinite;
+         }
+
+         @keyframes blinker {
+            50% {
+               opacity: 0;
+            }
+         }
+      </style>
+	</head>
+	<body onload="inicio()">
+		<div id="container">
+			<div class="logo" align="center">
+				<img class="img-logo" id="logo" src="../img/logoclub.png" alt="">
+			</div>
+			<h3 align="center">Recargar tarjetas premium (Aeternity)<br/>Desde otras monedas (swap)</h3>
+			<h3 id="socio" align="center"></h3>
+			<!-- <br/> -->
+			<div id="div1" align="center">
+            <p>Aquí podrá recibir dinero desde cuentas externas a Cash-Flag y recargar la siguiente tarjeta:</p>
+            <p id="datostarjeta" style="width: 250px; text-align: left;">
+               <div>
+						<span style="width: 50px;">Número:</span><b id="numtarjeta"></b>
+						<!-- <span style="width: 50px;">, valida hasta:</span><b id="vencimiento"></b> -->
+						<span style="width: 50px;">- saldo:</span><b id="saldoactual"></b></div>
+            </p>
+            <p>Seleccione de la siguiente lista la moneda origen de los fondos:</p>
+            <br/>
+            <select id="selmonedas" class="seleccion" onchange="buscaminimo(this.value)">
+               <option id="opciondefault" value="no">Moneda de origen</option>
+            </select>
+            <p id="etqminswap" style="width: 100%; margin: auto; text-align: center;"></p>
+            <div align="center" style="margin: 1em 0;">
+               <div class="cmps" style="padding: 0; width: 50%;">
+                  <span class="etiq">Monto a recargar:</span>
+                  <input id="monto" class="campo" type="text" maxlength="15" style="text-align: right;" />
+               </div>
+            </div>
+
+            <p style="text-align: justify; margin: 0.5em; width: auto;">
+               Para realizar esta recarga se hará la conversión de la moneda de origen a Aeternity que es la moneda base de Cash-Flag, el monto se aplicará cuando la transacción sea verificada.
+            </p>
+
+				<!-- Linea de botones -->
+				<div class="btns">
+					<button id="btnenviar" style="width: 10em; margin: 0.5em 0 0 0;" onclick="enviar()">Enviar</button>
+					<button id="btnvolver" style="width: 10em; margin: 0.5em 0 0 0;">Volver</button>
+				</div>
+			</div>
+
+			<div id="div2" align="center" style="display: none;">
+            <p><b><u>Intercambio creado.</u></b></p>
+            <p id="datostarjeta" style="width: 250px; text-align: left;">
+               <div>
+						<span style="width: 50px;">Id para el seguimiento:</span><b id="numexchange"></b>
+               </div>
+            </p>
+            <p>Escanee este código desde su wallet para enviar los fondos:</p>
+            <div id="qraddress">
+               <img id="codigoqr" src="" alt="">
+            </div>
+            <p>O si lo desea puede copiar esta dirección e ingresarla manualmente:</p>
+            <p><b id="address"></b></p>
+            <p>
+               Puede hacer seguimiento de esta transacción <a id="swaplink" href="" target="_blank">aqui.</a>
+            </p>
+				<!-- Linea de botones -->
+				<div class="btns">
+					<button id="btnvolver2" style="width: 10em; margin: 0.5em 0 0 0;">Volver</button>
+				</div>
+			</div>
+      </div>
+      <div id="mensaje" class="popupmsg" style="display: none;">
+      <!-- <div id="mensaje" class="popupmsg"> -->
+         <span class="blink_me">
+            Enviando transacción...
+         </span>
+      </div>
+		<script>
+         var minswap = 0.00;
+
+			function inicio() {
+            console.log(localStorage);
+				document.getElementById("btnvolver").addEventListener('click', function(){
+               window.open(localStorage.getItem("url_bck2"), "_self")
+            });
+				document.getElementById("btnvolver2").addEventListener('click', function(){
+               window.open(localStorage.getItem("url_bck2"), "_self")
+            });
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function () {
+					if (this.readyState == 4 && this.status == 200) {
+						respuesta = JSON.parse(this.responseText);
+						console.log(respuesta);
+                  document.getElementById("socio").innerHTML = respuesta.nombre
+                  numcard = respuesta.tarjeta.substr(0,4)+"-"+respuesta.tarjeta.substr(4,4)+"-"+respuesta.tarjeta.substr(8,4)+"-"+respuesta.tarjeta.substr(12,4);
+                  document.getElementById("numtarjeta").innerHTML = numcard.trim();
+                  // document.getElementById("vencimiento").innerHTML = respuesta.validez;
+                  document.getElementById("saldoactual").innerHTML = respuesta.saldo+' AE';
+                  rellenamonedas();
+                  // document.getElementById("codigoqr").src = respuesta.rutaqr;
+                  // document.getElementById("address").innerHTML = respuesta.account;
+               }
+				};
+				xmlhttp.open("GET", "../php/buscatarjetaae.php?email="+localStorage.getItem("email"), true);
+				xmlhttp.send();
+         }
+         
+         function rellenamonedas() {
+            document.getElementById("opciondefault").innerHTML = 'Rellenando lista...';
+            document.getElementById("etqminswap").classList.add("blink_me");
+            document.getElementById("etqminswap").innerHTML = 'Por favor espera...';
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function () {
+					if (this.readyState == 4 && this.status == 200) {
+                  respuesta = JSON.parse(this.responseText);
+                  if (respuesta.exito == 'SI') {
+                     monedas = respuesta.monedas;
+                     for (var i = 0; i < monedas.length; i++) {
+								// txtmoneda = document.createTextNode(monedas[i].name+'('+monedas[i].symbol+') - Mínimo a enviar '+monedas[i].min);
+								txtmoneda = document.createTextNode(monedas[i].name+'('+monedas[i].symbol+')');
+								opt = document.createElement("option");
+								opt.value = monedas[i].symbol;
+								opt.appendChild(txtmoneda);
+                        document.getElementById("selmonedas").appendChild(opt);
+                     }
+                     document.getElementById("opciondefault").innerHTML = 'Seleccione moneda de origen';
+                     document.getElementById("etqminswap").classList.remove("blink_me");
+                     document.getElementById("etqminswap").innerHTML = '';
+                  }
+               }
+				};
+				xmlhttp.open("GET", "../php/buscamonedaswap.php", true);
+				xmlhttp.send();
+         }
+
+         function enviar() {
+            if (validaciones()) {
+               // document.getElementById("mensaje").style.borderStyle = "solid";
+               // document.getElementById("mensaje").style.borderColor = "black";
+               // document.getElementById("mensaje").style.borderWidth = "2px";
+               document.getElementById("mensaje").style.display = 'block';
+               document.getElementById("mensaje").style.left = (window.innerWidth-document.getElementById("mensaje").clientWidth-2)/2+"px";
+               document.getElementById("mensaje").style.top = (window.innerHeight-document.getElementById("mensaje").clientHeight-2)/2+"px";
+
+               let datos = new FormData();
+               datos.append("from",  document.getElementById("selmonedas").value);
+               datos.append("monto", document.getElementById("monto").value);
+               datos.append("socio", localStorage.getItem("idsocio"));
+
+               var xmlhttp = new XMLHttpRequest();
+               xmlhttp.onreadystatechange = function() {
+                  if (this.readyState == 4 && this.status == 200) {
+                     respuesta = JSON.parse(this.responseText);
+                     if (respuesta.exito == 'SI') {
+                        document.getElementById("mensaje").style.display = 'none';
+                        mostrarqr();
+                     } else {
+                        alert(respuesta.mensaje);
+                     }
+                  }
+               };
+               xmlhttp.open("POST", "../php/creaexchangeae.php", true);
+               xmlhttp.send(datos);
+            }
+         }
+
+         function mostrarqr() {
+            document.getElementById("div1").style.display = 'none';
+            document.getElementById("div2").style.display = 'block';
+            document.getElementById("numexchange").innerHTML = respuesta.idexchange;
+            document.getElementById("codigoqr").src = respuesta.rutaqr;
+            document.getElementById("address").innerHTML = respuesta.account;
+            document.getElementById("swaplink").href = "https://simpleswap.io/exchange?id="+respuesta.idexchange;
+         }
+
+         function validaciones() {
+            valido = true;
+            if (document.getElementById("selmonedas").value == "") {
+               alert('El campo moneda no se puede dejar en blanco');
+               valido = false;
+            } else {
+               if (document.getElementById("selmonedas").value == "no") {
+                  alert('Debe seleccionar una moneda para enviar.');
+                  valido = false;
+               }
+            }
+
+            if (document.getElementById("monto").value == "") {
+               alert('El campo monto no se puede dejar en blanco');
+               valido = false;
+            } else {
+               if (document.getElementById("monto").value <= 0) {
+                  alert('El monto no puede ser menor a '+minswap);
+                  valido = false;
+               } else {
+                  if (document.getElementById("monto").value < minswap) {
+                     alert('El monto no puede ser menor a '+minswap);
+                     valido = false;
+                  }
+               }
+            }
+
+            return valido;
+         }
+
+         function buscaminimo(symbol) {
+            document.getElementById("etqminswap").classList.add("blink_me");
+            document.getElementById("etqminswap").innerHTML = 'Buscando mínimo por favor espera...';
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+               if (this.readyState == 4 && this.status == 200) {
+                  respuesta = JSON.parse(this.responseText);
+                  if (respuesta.exito == 'SI') {
+                     minswap = respuesta.min;
+                     document.getElementById("etqminswap").classList.remove("blink_me");
+                     document.getElementById("etqminswap").innerHTML = 'Monto mínimo '+minswap+'.';
+                  }
+               }
+            };
+            xmlhttp.open("GET", "../php/buscaminimoswap.php?symbol="+symbol, true);
+            xmlhttp.send();
+         }
+      </script>
+	</body>
+</html>
