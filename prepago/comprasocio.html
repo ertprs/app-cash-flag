@@ -205,7 +205,6 @@
 				document.getElementById("pagomercantil").style.display = 'none';
 
 				document.getElementById("btnenviardatos").style.display = 'none';
-				console.log(document.getElementById("btnenviardatos").style.display);
 				document.getElementById("btnpagoenlinea").style.display = 'inline-block';
 				document.getElementById("btnreporte").style.display = 'inline-block';
 
@@ -226,7 +225,6 @@
 				limpiaforma();
 				document.getElementById("btnvolver").addEventListener('click', function(){
 					window.open(localStorage.getItem("url_bck2"), "_self") });
-				console.log(localStorage);
 				// cargar parámetros de la tabla
 				var xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function () {

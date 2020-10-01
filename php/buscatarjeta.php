@@ -50,6 +50,9 @@ $result = mysqli_query($link, $query);
 if ($row = mysqli_fetch_array($result)) {
 	$secretkey = $row["secretkey"];
 	$account = $row["account"];
+} else {
+	$secretkey = "";
+	$account = "";
 }
 
 // Buscar moneda

@@ -12,16 +12,16 @@ $moneda = (isset($_POST['moneda'])) ? $_POST['moneda'] : "bs" ;
 $monto = (isset($_POST['monto'])) ? $_POST['monto'] : 0 ;
 switch ($moneda) {
 	case 'bs':
-		$montobs = $monto; $montodolares = 0.00; $montocripto = 0.00; 
+		$montobs = $monto; $montodolares = 0.00; $montocripto = 0.00; $simbolo = 'Bs.'; 
 		break;
 	case 'dolar':
-		$montobs = 0.00; $montodolares = $monto; $montocripto = 0.00; 
+		$montobs = 0.00; $montodolares = $monto; $montocripto = 0.00; $simbolo = '$'; 
 		break;
 	case 'cripto':
-		$montobs = 0.00; $montodolares = 0.00; $montocripto = $monto; 
+		$montobs = 0.00; $montodolares = 0.00; $montocripto = $monto; $simbolo = 'Criptos'; 
 		break;
 	default:
-		$montobs = $monto; $montodolares = 0.00; $montocripto = 0.00; 
+		$montobs = $monto; $montodolares = 0.00; $montocripto = 0.00; $simbolo = 'Bs.'; 
 		break;
 }
 $tipotransaccion = '01';
@@ -97,6 +97,8 @@ $fechaconfirmacion = ( $tipopago == 'efectivo') ? $fecha : '0000-00-00' ;
 
 // Encripta la giftcard
 $hash = hash("sha256",$card.$nombres.$apellidos.$telefono.$email.$monto.$idproveedor.$moneda);
+$aux  =  rand(10000, 99999);
+$pwd  = hash("sha256",$card.$aux);
 
 $query = "INSERT INTO giftcards_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card) VALUES (".$idsocio.",".$idproveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','".$status."','".$card."')";
 if ($result = mysqli_query($link,$query)) {
@@ -159,7 +161,7 @@ if ($result = mysqli_query($link,$query)) {
 	} else {
 		$quer0 = "INSERT INTO cards (card, tipo) VALUES ('".$card."','giftcard')";
 		if ($resul0 = mysqli_query($link,$quer0)) {
-			$query = "INSERT INTO giftcards (card, remitente, nombres, apellidos, telefono, email, saldo, saldoentransito, moneda, fechacompra, fechavencimiento, validez, status, id_socio, id_proveedor, hash, tipopago, origen, referencia, premium) VALUES ('".$card."','".$remitente."','".$nombres."','".$apellidos."','".$telefono."','".$email."',".$monto.",0,'".$moneda."','".$fecha."','".$fechavencimiento."','".$validez."','".$status."',".$idsocio.",".$idproveedor.",'".$hash."','".$tipopago."','".$origen."','".$referencia."',0)";
+			$query = "INSERT INTO giftcards (card, remitente, nombres, apellidos, telefono, email, saldo, saldoentransito, moneda, fechacompra, fechavencimiento, validez, status, id_socio, id_proveedor, hash, tipopago, origen, referencia, premium, pwd) VALUES ('".$card."','".$remitente."','".$nombres."','".$apellidos."','".$telefono."','".$email."',".$monto.",0,'".$moneda."','".$fecha."','".$fechavencimiento."','".$validez."','".$status."',".$idsocio.",".$idproveedor.",'".$hash."','".$tipopago."','".$origen."','".$referencia."',0, '".$pwd."')";
 			if ($result = mysqli_query($link,$query)) {
 				// Punto de venta
 				$tipo2 = '51'; 
@@ -201,6 +203,7 @@ if ($result = mysqli_query($link,$query)) {
 				}
 				$querx = 'UPDATE _parametros SET dcg='.$dcg;
 				$resulx = mysqli_query($link,$querx);
+				correogiftcard($card, $nombres, $remitente, $nombreproveedor, $monto, $simbolo, $validez, $aux);
 			   $respuesta = '{"exito":"SI","mensaje":'.$mensaje.',"card":"'.$card.'","hash":"'.$hash.'"}';	
 			} else {
 			   $respuesta = '{"exito":"NO","mensaje":"La tarjeta no pudo generarse por favor comuniquese con soporte técnico [1]","card":"'.$card.'","hash":"'.$hash.'"}';	
@@ -214,7 +217,79 @@ if ($result = mysqli_query($link,$query)) {
 }
 echo $respuesta;
 
+function correogiftcard($card, $nombres, $remitente, $comercio, $monto, $simbolo, $validez, $pwd) {
+	$mensaje = 
+	'<!DOCTYPE html>
+	<html>
+	<head>
+	  <meta charset="utf-8">
+	  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	  <title>Tarjeta de regalo</title>
+	  <link rel="stylesheet" href="">
+	  <script type="text/javascript" src="https://app.cash-flag.com/js/funciones.js"></script>
+	  <script type="text/javascript" src="https://app.cash-flag.com/card/classes.js"></script>
+     <script>
+		var xmlhttp = new XMLHttpRequest();
+	   xmlhttp.onreadystatechange = function() {
+		  if (this.readyState == 4 && this.status == 200) {
+			  respuesta = JSON.parse(this.responseText);
 
+			  card1 = new Card(
+				  "'.$card.'",
+				  respuesta.logocard,
+				  respuesta.tipo,
+				  "'.$card.'",
+				  respuesta.nombres,
+				  respuesta.vencimiento,
+				  respuesta.qr
+			  );
+
+			  saldo = respuesta.saldo;
+			  idproveedor = respuesta.idproveedor;
+
+			  card1.dibuja("tarjetero");
+			}
+	   };
+	   xmlhttp.open("GET", "https://app.cash-flag.com/php/buscatarjeta.php?t="+'.$card.', true);
+	   xmlhttp.send();
+	 </script>
+	</head>
+	<body>
+	 <div>
+		<p><img src="https://app.cash-flag.com/img/logoclub.png" width="120" height="auto" /></p>
+		<p>
+		  <span style="font-size: 150%; color: blue;">
+			 <b>¡Felicidades '.$nombres.', has recibido un regalo de '.$remitente.'!</b>
+		  </span>
+		</p>
+		<div id="tarjetero">
+		</div>			
+
+		<p>Has recibido una tarjeta de regalo para consumir en <b>'.$comercio.'</b> con un saldo prepagado de <b>'.$monto.' '.$simbolo.'</b> para ser usada hasta <b>'.$validez.'</b></p>
+
+		<p>Para usar esta tarjeta debes ingresar en <a href="https://app.cash-flag.com/giftcards/tarjeta.html", target="_blank">este enlace</a> e introducir el número de tarjeta y la siguiente contraseña: <span style="font-size: 110%;"><b>'.$pwd.'</b></span></p>
+
+		<br/>
+
+		<p><i>¡Disfruta de tu regalo y gana con Cash-Flag!</i></p>
+ 
+		<p style="font-size: 80%;"><b>Si tienes alguna pregunta o comentario, contáctanos a través de <a href="mailto:info@cash-flag.com">este enlace</a></b></p>
+	 </div>
+	 </body>
+	</html>';
+ 
+$asunto = '¡Felicidades '.$nombres.', has recibido un regalo de '.$remitente.'!';
+ 
+$cabeceras = 'Content-type: text/html; charset=utf-8'."\r\n";
+$cabeceras .= 'From: Cash-Flag <info@cash-flag.com>';
+ 
+$a = fopen('log.html','w+');
+fwrite($a,$asunto);
+fwrite($a,'-');
+fwrite($a,$mensaje);
+ 
+mail($correo,$asunto,$mensaje,$cabeceras);
+}
 
 
 

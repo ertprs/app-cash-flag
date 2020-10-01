@@ -28,6 +28,7 @@
 					</select>
 				</div>
 				-->
+				<input type="hidden" id="proveedor" value="3" />
 				<!-- Moneda -->
 				<div id="div6" class="cmps">
 					<span class="etiq">Moneda:</span>
@@ -177,7 +178,7 @@
 					<button id="btnenviardatos" onclick="enviardatos()" style="width: 8em;">Enviar datos</button>
 					<button id="btnpagoenlinea" onclick="botondepago('online')" style="width: 8em;">Pago en línea</button>
 					<button id="btnreporte" onclick="botondepago('reporte')" style="width: 8em;">Reporte de pago</button>
-					<button id="limpiar" onclick="limpiar()" style="width: 8em;">Limpiar</button>
+					<button id="limpiar" onclick="limpiaforma()" style="width: 8em;">Limpiar</button>
 				</div>
 				<div class="btns">
 					<button id="btnvolver" style="width: 10em; margin: 0.5em 0 0 0;">Volver</button>
@@ -187,6 +188,32 @@
 		<script>
 			var monto="", idproveedor="", idsocio=localStorage.getItem("idsocio"), moneda='bs', datos = new FormData(), formadepago = "", tipo = 'efectivo';
 			var nombres="", apellidos="", telefono="", email="";
+
+			// limpia el formulario
+			function limpiaforma() {
+				idproveedor = "3";
+				moneda = 'bs';
+				monto = "";
+				tipo = 'efectivo';
+				document.getElementById("proveedor").value = "3";
+				document.getElementById("divisa").value = "bs";
+				document.getElementById("monto").value = "";
+
+				document.getElementsByName("tipo")[0].click();
+				document.getElementById("origen").value = "";
+				document.getElementById("referencia").value = "";
+
+				document.getElementById("datospago").style.display = 'none';
+				document.getElementById("pagopaypal").style.display = 'none';
+				document.getElementById("pagomercantil").style.display = 'none';
+
+				document.getElementById("btnenviardatos").style.display = 'none';
+				console.log(document.getElementById("btnenviardatos").style.display);
+				document.getElementById("btnpagoenlinea").style.display = 'inline-block';
+				document.getElementById("btnreporte").style.display = 'inline-block';
+
+				document.getElementById("proveedor").focus();
+			}
 
 			function inicio() {
 				// Mostrar mensaje de éxito cuando se pague con tarjeta de crédito
@@ -199,7 +226,7 @@
 				}
 				// Hasta aquí
 
-				limpiar();
+				limpiaforma();
 				document.getElementById("btnvolver").addEventListener('click', function(){
 					window.open(localStorage.getItem("url_bck2"), "_self") });
 				// cargar parámetros de la tabla
@@ -233,42 +260,15 @@
 				xmlhttp.send();
 			}
 
-			// limpia el formulario
-			function limpiar() {
-				idproveedor = "";
-				moneda = 'bs';
-				monto = "";
-				tipo = 'efectivo';
-				// document.getElementById("proveedor").value = "";
-				document.getElementById("divisa").value = "bs";
-				document.getElementById("monto").value = "";
-
-				document.getElementsByName("tipo")[0].click();
-				document.getElementById("origen").value = "";
-				document.getElementById("referencia").value = "";
-
-				document.getElementById("datospago").style.display = 'none';
-				document.getElementById("pagopaypal").style.display = 'none';
-				document.getElementById("pagomercantil").style.display = 'none';
-
-				document.getElementById("btnenviardatos").style.display = 'none';
-				document.getElementById("btnpagoenlinea").style.display = 'inline-block';
-				document.getElementById("btnreporte").style.display = 'inline-block';
-
-				document.getElementById("proveedor").focus();
-			}
-
 			// valida la entrada en los campos
 			function validaciones() {
 				var continuar = true, vacios = 0, campo = "";
-				/*
 				if (document.getElementById("proveedor").value=="seleccione" || document.getElementById("proveedor").value==undefined) {
 					alert("El campo Comercio no puede quedar en blanco");
 					vacios++;
 					campo = "proveedor";
 					continuar = false;
 				}
-				*/
 				if (document.getElementById("divisa").value=="" || document.getElementById("divisa").value==undefined) {
 					alert("El campo moneda no puede quedar en blanco");
 					vacios++;
@@ -321,7 +321,7 @@
 						}
 					}
 				};
-				xmlhttp.open("POST", "../php/datosprepago2.php", false);
+				xmlhttp.open("POST", "../php/datosprepagopremium.php", false);
 				xmlhttp.send(datos);
 				return respuesta;
 			}
@@ -363,7 +363,9 @@
 						case 'online':
 							switch (moneda) {
 								case 'bs':
-									document.getElementById("pagomercantil").style.display = 'block';
+									// document.getElementById("pagomercantil").style.display = 'block';
+									alert('Temporalmente deshabilitado.');									
+									break;
 									// alert('Temporalmente deshabilitado.');
 									
 									// registro  = '{';
@@ -390,7 +392,7 @@
 									// De ahi llamar a registro giftcard
 									// Generar la tarjeta
 									
-									break;
+									// break;
 								case 'dolar':
 									document.getElementById("pagopaypal").style.display = 'block';
 
@@ -559,7 +561,6 @@
 		            respuesta = JSON.parse(this.responseText);
 		            if (respuesta.twofactor != "" && respuesta.twofactor == "clavetelefonica") {
 		              enviardatos();
-		              console.log("success");
 		            } else {
 		              alert(respuesta.message);
 		            }

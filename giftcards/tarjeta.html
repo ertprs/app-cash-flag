@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>Cash-Flag</title>
+		<link rel="stylesheet" href="./compra.css">
+		<script type="text/javascript" src="../js/funciones.js"></script>
+		<!-- Librerías para usar el SDK de Aeternity y crear cuentas en AE -->
+		<script src="https://unpkg.com/@aeternity/aepp-sdk@7.3.1/dist/aepp-sdk.browser-script.js"></script>
+		<script src="https://bundle.run/buffer@5.6.0"></script>
+		<script src="../lib/cf-aesdk.js"></script>
+		<!-- hasta aquí -->
+	</head>
+	<body onload="inicio()">
+		<div id="container">
+			<div class="logo" align="center">
+				<img class="img-logo" id="logo" src="../img/logoclub.png" alt="">
+			</div>
+			<!-- <h2 style="text-align: center; color: black;">Cash-Flag</h2> -->
+			
+			<h3 align="center">Datos de la tarjeta de regalo</h3>
+			<div id="div1" align="center">
+				<!-- Tarjeta -->
+				<div id="div2" class="cmps">
+					<span class="etiq">Número de tarjeta:</span>
+					<input id="numcard" class="campo" type="email" size="50" maxlength="100" title="Debe introducir un formato de email válido (incluir el @ y al menos un .)" />
+				</div>
+				<!-- Password -->
+				<div id="div3" class="cmps">
+					<span class="etiq">Password:</span>
+					<input id="clave" class="campo" type="password" size="50" maxlength="100" />
+				</div>
+            <p id="parrafo" style="text-align: justify; padding: 1em 0 0; width: 60%;"></p>
+            <p id="parrafo2" style="text-align: center; padding: 1em 0; width: 60%;"></p>
+				<div class="btns">
+					<button id="btnmostrar" onclick="mostrar()" style="width: 10em; display: none;">Usar tarjeta</button>
+					<button id="btnenviar" onclick="enviar()" style="width: 10em;">Enviar</button>
+					<button id="btnvolver" style="width: 10em; margin: 0.5em 0 0 0;">Volver</button>
+				</div>
+         </div>
+		</div>
+		<script>
+			var card="", pass="", premium = 0, datos = new FormData();
+
+			// limpia el formulario
+			function limpiar() {
+				card = "";
+				pass = "";
+
+				document.getElementById("numcard").value = "";
+				document.getElementById("clave").value = "";
+
+				document.getElementById("numcard").focus();
+			}
+
+			function inicio() {
+				limpiar();
+				document.getElementById("btnvolver").addEventListener('click', function(){
+					window.open(localStorage.getItem("url_bck2"), "_self") });
+			}
+
+			// valida la entrada en los campos
+			function validaciones() {
+				var continuar = true, vacios = 0, campo = "";
+				if ((document.getElementById("numcard").value=="" || document.getElementById("numcard").value==undefined) && vacios == 0) {
+					alert("El número de tarjeta no puede quedar en blanco");
+					vacios++;
+					campo = "numcard";
+					continuar = false;
+				}
+				if (document.getElementById("clave").value=="" || document.getElementById("clave").value==undefined) {
+					alert("El password no puede quedar en blanco");
+					vacios++;
+					campo = "clave";
+				}
+				if (vacios>0) { continuar = false; }
+				if (continuar) { 
+					card = document.getElementById("numcard").value;
+					pass = document.getElementById("clave").value;
+				} else {
+					document.getElementById(campo).focus();
+				}
+				return continuar;
+			}
+
+			async function enviar() {
+				if (validaciones()) {
+					// Registrar usuario
+					datos.append("card", document.getElementById("numcard").value);
+					datos.append("pass", document.getElementById("clave").value);
+
+					var xmlhttp = new XMLHttpRequest();
+					xmlhttp.onreadystatechange = function() {
+						if (this.readyState == 4 && this.status == 200) {
+							respuesta = JSON.parse(this.responseText);
+							if (respuesta.exito == 'SI') {
+                        numtarjeta = respuesta.tarjeta.substr(0,4)+"-"+respuesta.tarjeta.substr(4,4)+"-"+respuesta.tarjeta.substr(8,4)+"-"+respuesta.tarjeta.substr(12,4);
+
+                        if (respuesta.premium) {
+                           txtpremium = " PREMIUM ";
+                        } else {
+                           txtpremium = " ";
+                        }
+
+                        document.getElementById("parrafo").innerHTML = 'Tarjeta de regalo'+txtpremium+'número <b>'+numtarjeta+'</b> emitida por <b>'+respuesta.comercio+'</b> a nombre de <b>'+respuesta.nombre+'</b> con un saldo de <b>'+formatNumber.new(respuesta.saldo)+' '+respuesta.simbolo+'</b> vigente hasta <b>'+respuesta.validez+'</b>';
+
+                        document.getElementById("parrafo2").innerHTML = 'Status: <b>'+respuesta.status+'</b>';
+                        document.getElementById("btnmostrar").style.display = 'inline-block';
+                        document.getElementById("btnenviar").style.display = 'none';
+                        premium = respuesta.premium;
+                        console.log(respuesta);
+							} else {
+								alert(respuesta.mensaje);
+							}
+						}
+					};
+					xmlhttp.open("POST", "../php/datostarjeta.php", false);
+					xmlhttp.send(datos);
+				}
+         }
+         
+         function mostrar() {
+            if (premium) {
+               window.open("../card/cashflag.html?card="+card, "_blank");
+            } else {
+               window.open("../card/index.html?card="+card, "_blank");
+            }
+         }
+		</script>
+	</body>
+</html>
+<!-- 
+			function reportedepago() {
+				if (validaciones()) {
+					respuesta = datosgiftcards();
+					if (respuesta.exito=="SI") {
+						alert('Reporte de pago '+respuesta.hash);
+						// Abrir modal para pedir los datos del pago
+						// Enviar datos a registro de giftcard php con status 'Por conciliar'
+					}
+				}
+			}
+ -->
+
+
+ <!-- https://app.cash-flag.com/php/exitocompraprepago.php? -->
+ <!-- url=https://app.cash-flag.com/menu.html?id_proveedor=1& -->
+ <!-- registro={%22nombres%22:%22Jose%22,%22apellidos%22:%22Alfredo%22,%22telefono%22:%2204142752679%22,%22email%22:%22luisrodriguezestrada@hotmail.com%22,%22moneda%22:%22bs%22,%22monto%22:825,%22idproveedor%22:1,%22tipopago%22:%22online%22,%22origen%22:%22online%22,%22referencia%22:%220%22}& -->
+ <!-- tk=ROLK4E126Z& -->
+ <!-- callback=0 -->
