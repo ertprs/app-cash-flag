@@ -203,7 +203,7 @@ if ($result = mysqli_query($link,$query)) {
 				}
 				$querx = 'UPDATE _parametros SET dcg='.$dcg;
 				$resulx = mysqli_query($link,$querx);
-				correogiftcard($card, $nombres, $remitente, $nombreproveedor, $monto, $simbolo, $validez, $aux);
+				correogiftcard($card, $nombres, $remitente, $email, $nombreproveedor, $monto, $simbolo, $validez, $aux, $urlapp);
 			   $respuesta = '{"exito":"SI","mensaje":'.$mensaje.',"card":"'.$card.'","hash":"'.$hash.'"}';	
 			} else {
 			   $respuesta = '{"exito":"NO","mensaje":"La tarjeta no pudo generarse por favor comuniquese con soporte técnico [1]","card":"'.$card.'","hash":"'.$hash.'"}';	
@@ -217,7 +217,7 @@ if ($result = mysqli_query($link,$query)) {
 }
 echo $respuesta;
 
-function correogiftcard($card, $nombres, $remitente, $comercio, $monto, $simbolo, $validez, $pwd) {
+function correogiftcard($card, $nombres, $remitente, $correo, $comercio, $monto, $simbolo, $validez, $pwd, $ruta) {
 	$mensaje = 
 	'<!DOCTYPE html>
 	<html>
@@ -226,8 +226,8 @@ function correogiftcard($card, $nombres, $remitente, $comercio, $monto, $simbolo
 	  <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	  <title>Tarjeta de regalo</title>
 	  <link rel="stylesheet" href="">
-	  <script type="text/javascript" src="https://app.cash-flag.com/js/funciones.js"></script>
-	  <script type="text/javascript" src="https://app.cash-flag.com/card/classes.js"></script>
+	  <script type="text/javascript" src="'.$ruta.'/js/funciones.js"></script>
+	  <script type="text/javascript" src="'.$ruta.'/card/classes.js"></script>
      <script>
 		var xmlhttp = new XMLHttpRequest();
 	   xmlhttp.onreadystatechange = function() {
@@ -250,13 +250,13 @@ function correogiftcard($card, $nombres, $remitente, $comercio, $monto, $simbolo
 			  card1.dibuja("tarjetero");
 			}
 	   };
-	   xmlhttp.open("GET", "https://app.cash-flag.com/php/buscatarjeta.php?t="+'.$card.', true);
+	   xmlhttp.open("GET", "'.$ruta.'/php/buscatarjeta.php?t="+'.$card.', true);
 	   xmlhttp.send();
 	 </script>
 	</head>
 	<body>
 	 <div>
-		<p><img src="https://app.cash-flag.com/img/logoclub.png" width="120" height="auto" /></p>
+		<p><img src="'.$ruta.'/img/logoclub.png" width="120" height="auto" /></p>
 		<p>
 		  <span style="font-size: 150%; color: blue;">
 			 <b>¡Felicidades '.$nombres.', has recibido un regalo de '.$remitente.'!</b>
@@ -267,7 +267,7 @@ function correogiftcard($card, $nombres, $remitente, $comercio, $monto, $simbolo
 
 		<p>Has recibido una tarjeta de regalo para consumir en <b>'.$comercio.'</b> con un saldo prepagado de <b>'.$monto.' '.$simbolo.'</b> para ser usada hasta <b>'.$validez.'</b></p>
 
-		<p>Para usar esta tarjeta debes ingresar en <a href="https://app.cash-flag.com/giftcards/tarjeta.html", target="_blank">este enlace</a> e introducir el número de tarjeta y la siguiente contraseña: <span style="font-size: 110%;"><b>'.$pwd.'</b></span></p>
+		<p>Para usar esta tarjeta debes ingresar en <a href="'.$ruta.'/giftcards/tarjeta.html", target="_blank">este enlace</a> e introducir el número de tarjeta y la siguiente contraseña: <span style="font-size: 110%;"><b>'.$pwd.'</b></span></p>
 
 		<br/>
 
