@@ -176,8 +176,9 @@ class Card {
     // return this;
 
     // Coloca la tarjeta donde se llame
-    document.getElementById(this.padre).appendChild(card);
-    document.getElementById(this.padre).appendChild(pie);
+    console.log(document.getElementsByTagName(this.padre));
+    document.getElementsByTagName(this.padre)[0].appendChild(card);
+    document.getElementsByTagName(this.padre)[0].appendChild(pie);
   }
 
   pulsar(mensaje) {
@@ -412,8 +413,8 @@ class Card_cashflag {
     // return this;
 
     // Coloca la tarjeta donde se llame
-    document.getElementById(this.padre).appendChild(card);
-    document.getElementById(this.padre).appendChild(pie);
+    document.getElementsByTagName(this.padre)[0].appendChild(card);
+    document.getElementsByTagName(this.padre)[0].appendChild(pie);
   }
 
   pulsar(mensaje) {

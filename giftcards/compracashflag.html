@@ -170,13 +170,11 @@
 			</div>
 		</div>
 		<script>
-			var nombres="", apellidos="", telefono="", email="", monto="", idproveedor="", idsocio=localStorage.getItem("idsocio"), moneda='bs', datos = new FormData(), formadepago = "", tipo = 'efectivo';
+			var nombres="", apellidos="", telefono="", email="", monto="", idproveedor=3, idsocio=localStorage.getItem("idsocio"), moneda='bs', datos = new FormData(), formadepago = "", tipo = 'efectivo';
 
 			function inicio() {
 				// Mostrar mensaje de éxito cuando se pague con tarjeta de crédito
 				params = fparamurl(window.location.search.substr(1));
-				console.log(window.location.search.substr(1));
-				console.log(params.mensaje);
 				if (params.exito!=undefined) {
 					exito = params.exito;
 					if(exito=='si') { alert(fmensaje(JSON.parse(params.mensaje))); }
@@ -219,7 +217,7 @@
 				apellidos = "";
 				telefono = "";
 				email = "";
-				idproveedor = "";
+				idproveedor = 3;
 				moneda = 'bs';
 				monto = "";
 				tipo = 'efectivo';
@@ -332,7 +330,7 @@
 						}
 					}
 				};
-				xmlhttp.open("POST", "../php/datosgiftcards2.php", false);
+				xmlhttp.open("POST", "../php/datosgiftcardspremium.php", false);
 				xmlhttp.send(datos);
 				return respuesta;
 			}

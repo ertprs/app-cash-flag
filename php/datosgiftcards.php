@@ -74,8 +74,8 @@ if ($row = mysqli_fetch_array($result)) {
 	// Generar la tarjeta
 	$tarjetaexiste = false;
 	$card = $cardnew;
-    $saldoant = 0.00;
-    $saldo = ($tipopago == 'efectivo') ? $monto : 0.00 ;
+   $saldoant = 0.00;
+   $saldo = ($tipopago == 'efectivo') ? $monto : 0.00 ;
 }
 
 // Fecha de compra
@@ -227,7 +227,8 @@ function correogiftcard($card, $nombres, $remitente, $correo, $comercio, $monto,
 	  <title>Tarjeta de regalo</title>
 	  <link rel="stylesheet" href="">
 	  <script type="text/javascript" src="'.$ruta.'/js/funciones.js"></script>
-	  <script type="text/javascript" src="'.$ruta.'/card/classes.js"></script>
+	  <script type="text/javascript" src="'.$ruta.'/card/classes2.js"></script>
+	  <script type="text/javascript" src="'.$ruta.'/lib/html2canvas.min.js"></script>
      <script>
 		var xmlhttp = new XMLHttpRequest();
 	   xmlhttp.onreadystatechange = function() {
@@ -248,7 +249,13 @@ function correogiftcard($card, $nombres, $remitente, $correo, $comercio, $monto,
 			  idproveedor = respuesta.idproveedor;
 
 			  card1.dibuja("tarjetero");
-			}
+
+			  html2canvas(document.getElementById("tarjetero")) // Llamar a html2canvas y pasarle el elemento
+			  .then(function(canvas) {
+				 document.getElementById("card_img").appendChild(canvas); // Lo agregamos como hijo del div
+				 document.getElementById("tarjetero").style.display = "none";
+			  });
+		  }
 	   };
 	   xmlhttp.open("GET", "'.$ruta.'/php/buscatarjeta.php?t="+'.$card.', true);
 	   xmlhttp.send();
@@ -262,12 +269,51 @@ function correogiftcard($card, $nombres, $remitente, $correo, $comercio, $monto,
 			 <b>¡Felicidades '.$nombres.', has recibido un regalo de '.$remitente.'!</b>
 		  </span>
 		</p>
-		<div id="tarjetero">
-		</div>			
+		<!--
+		<div id="6553415554230016" style="width: 340px; height: 221px; margin: auto; position: relative; top: 10%; border-radius: 6%; display: flex; flex-direction: column; justify-content: space-between; background-image: radial-gradient(white, rgb(192, 158, 112)); color: black; border: 2px solid black;">
+			<div style="border: 2px solid black; margin: 5px; border-radius: 5%; height: 94%;">
+				<div style="width: 30%; height: 20%; top: 5px; left: 5px; position: relative; padding: 2% 0px 0px 2%;">
+					<img src="https://pruebas.cash-flag.com/img/mrf.jpg" style="width: 90%; height: auto;">
+				</div>
+				<div style="display: flex; flex-direction: column; align-items: flex-end; margin-right: 7.5px;">
+					<span style="font-size: 100%;">
+						Tarjeta de regalo
+					</span>
+					<span style="font-size: 120%;">
+						6553 4155 5423 0016
+					</span>
+					<span style="font-size: 100%;">
+						tttt gggg
+					</span>
+					<span style="font-size: 80%;">
+						Valida hasta: 10/2021
+					</span>
+				</div>
+				<div style="display: flex; flex-direction: row; justify-content: space-between; margin-top: -3%; height: 40%;">
+					<div style="width: 25%; height: 15px; position: relative; top: 85%; left: -16px; bottom: 0px; padding: 0px 0px 2% 7%;">
+						<img src="https://pruebas.cash-flag.com/img/negro_hori.png" style="width: 95%; height: auto;">
+					</div>
+					<div style="width: 15%; height: auto; position: relative; bottom: -20px; padding: 0px 5% 2% 0px;">
+						<img src="https://pruebas.cash-flag.com/img/gift-solid.svg" style="width: 100%; height: auto;">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div style="width: 100%; text-align: center; font-size: 55%; margin-top: 0.5em;">
+			<span>
+				<a href="https://www.sgc-consultores.com.ve" style="text-decoration: none; color: black;">
+					Tarjeta generada por SGC Consultores C.A. - www.sgc-consultores.com.ve
+				</a>
+			</span>
+		</div>
+		-->
+
+		<div id="tarjetero"></div>			
+		<div id="card_img"></div>			
 
 		<p>Has recibido una tarjeta de regalo para consumir en <b>'.$comercio.'</b> con un saldo prepagado de <b>'.$monto.' '.$simbolo.'</b> para ser usada hasta <b>'.$validez.'</b></p>
 
-		<p>Para usar esta tarjeta debes ingresar en <a href="'.$ruta.'/giftcards/tarjeta.html", target="_blank">este enlace</a> e introducir el número de tarjeta y la siguiente contraseña: <span style="font-size: 110%;"><b>'.$pwd.'</b></span></p>
+		<p>Para usar esta tarjeta debes ingresar en <a href="'.$ruta.'/giftcards/tarjeta.html", target="_blank">este enlace</a> e introducir el número de tarjeta <span style="font-size: 110%;"><b>'.$card.'</b></span> y la siguiente contraseña: <span style="font-size: 110%;"><b>'.$pwd.'</b></span></p>
 
 		<br/>
 
@@ -290,8 +336,44 @@ fwrite($a,$mensaje);
  
 mail($correo,$asunto,$mensaje,$cabeceras);
 }
-
-
+/*
+<div id="6553415554230016" style="width: 340px; height: 221px; margin: auto; position: relative; top: 10%; border-radius: 6%; display: flex; flex-direction: column; justify-content: space-between; background-image: radial-gradient(white, rgb(192, 158, 112)); color: black; border: 2px solid black;">
+	<div style="border: 2px solid black; margin: 5px; border-radius: 5%; height: 94%;">
+		<div style="width: 30%; height: 20%; top: 5px; left: 5px; position: relative; padding: 2% 0px 0px 2%;">
+			<img src="https://pruebas.cash-flag.com/img/mrf.jpg" style="width: 90%; height: auto;">
+		</div>
+		<div style="display: flex; flex-direction: column; align-items: flex-end; margin-right: 7.5px;">
+			<span style="font-size: 100%;">
+				Tarjeta de regalo
+			</span>
+			<span style="font-size: 120%;">
+				6553 4155 5423 0016
+			</span>
+			<span style="font-size: 100%;">
+				tttt gggg
+			</span>
+			<span style="font-size: 80%;">
+				Valida hasta: 10/2021
+			</span>
+		</div>
+		<div style="display: flex; flex-direction: row; justify-content: space-between; margin-top: -3%; height: 40%;">
+			<div style="width: 25%; height: 15px; position: relative; top: 85%; left: -16px; bottom: 0px; padding: 0px 0px 2% 7%;">
+				<img src="https://pruebas.cash-flag.com/img/negro_hori.png" style="width: 95%; height: auto;">
+			</div>
+			<div style="width: 15%; height: auto; position: relative; bottom: -20px; padding: 0px 5% 2% 0px;">
+				<img src="https://pruebas.cash-flag.com/img/gift-solid.svg" style="width: 100%; height: auto;">
+			</div>
+		</div>
+	</div>
+</div>
+<div style="width: 100%; text-align: center; font-size: 55%; margin-top: 0.5em;">
+	<span>
+		<a href="https://www.sgc-consultores.com.ve" style="text-decoration: none; color: black;">
+			Tarjeta generada por SGC Consultores C.A. - www.sgc-consultores.com.ve
+		</a>
+	</span>
+</div>
+*/
 
 /*
 // Buscar el nombre del proveedor para generar la giftcard

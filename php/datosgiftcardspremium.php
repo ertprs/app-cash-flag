@@ -59,6 +59,7 @@ $cardnew = generagiftcard($nombres,$apellidos,$telefono,$email,$nombreproveedor,
    0123456789012345
 	            xxxx
 */
+
 $dcg = intval(substr($cardnew,12,4));
 
 // Buscaar datos de la tarjeta
@@ -152,7 +153,7 @@ if ($result = mysqli_query($link,$query)) {
 	} else {
 		$quer0 = "INSERT INTO cards (card, tipo) VALUES ('".$card."','giftcard')";
 		if ($resul0 = mysqli_query($link,$quer0)) {
-			$query = "INSERT INTO giftcards (card, remitente, nombres, apellidos, telefono, email, saldo, saldoentransito, moneda, fechacompra, fechavencimiento, validez, status, id_socio, id_proveedor, hash, tipopago, origen, referencia, premium, pwd) VALUES ('".$card."','".$remitente."','".$nombres."','".$apellidos."','".$telefono."','".$email."',".$monto.",0,'".$moneda."','".$fecha."','".$fechavencimiento."','".$validez."','".$status."',".$idsocio.",".$idproveedor.",'".$hash."','".$tipopago."','".$origen."','".$referencia."',0, '".$pwd."')";
+			$query = "INSERT INTO giftcards (card, remitente, nombres, apellidos, telefono, email, saldo, saldoentransito, moneda, fechacompra, fechavencimiento, validez, status, id_socio, id_proveedor, hash, tipopago, origen, referencia, premium, pwd) VALUES ('".$card."','".$remitente."','".$nombres."','".$apellidos."','".$telefono."','".$email."',".$monto.",0,'".$moneda."','".$fecha."','".$fechavencimiento."','".$validez."','".$status."',".$idsocio.",".$idproveedor.",'".$hash."','".$tipopago."','".$origen."','".$referencia."',1, '".$pwd."')";
 			if ($result = mysqli_query($link,$query)) {
 				$txtcard = substr($card,0,4).'-'.substr($card,4,4).'-'.substr($card,8,4).'-'.substr($card,12,4);
 				if ($tipopago == 'efectivo') {

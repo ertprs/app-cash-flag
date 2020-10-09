@@ -19,7 +19,14 @@
 			<div id="div1" align="center">
 				<!-- <h3>Menú principal</h3> -->
 				<br/>
-				<div id="comercios" class="catalogo">
+				<div id="seccion1" style="width: 100%; text-align: left; padding: 10px 0 0;">
+					<span onclick="despliegue(1)" style="cursor: pointer;">
+						<img id="despliegue1" src="../img/angle-double-up-solid.svg" style="height: 0.8em; width: auto;" title="Ícono usado bajo licencia de Font Awesome: https://fontawesome.com/license/free">
+						<span>Operaciones Frecuentes</span>
+					</span>
+				</div>
+				<!-- <div id="comercios1" class="catalogo" style="border: solid lightgray thin; padding: 20px 0;"> -->
+				<div id="comercios1" class="catalogo">
 					<a id="cuponera" href="../cuponera" onclick="">
 						<div class="item" align="center">
 							<div class="imagen" align="center">
@@ -53,41 +60,21 @@
 							</div>
 						</div>
 					</a>
+				</div>
 
-
+				<div id="seccion2" style="width: 100%; text-align: left; padding: 10px 0 0;">
+					<span onclick="despliegue(2)" style="cursor: pointer;">
+						<img id="despliegue2" src="../img/angle-double-up-solid.svg" style="height: 0.8em; width: auto;" title="Ícono usado bajo licencia de Font Awesome: https://fontawesome.com/license/free">
+						<span>Tarjetas prepagadas</span>
+					</span>
+				</div>
+				<!-- <div id="comercios2" class="catalogo" style="border: solid lightgray thin; padding: 20px 0;"> -->
+				<div id="comercios2" class="catalogo">
 					<a id="prepago" href="../prepago/comprasocio.html" onclick="">
 						<div class="item" align="center">
 							<div class="imagen" align="center"> 
 								<!-- <img class="img_opcion" src="" title="Referidos" /> -->
-								Recarga de tarjetas prepagadas
-							</div>
-						</div>
-					</a>
-
-					<a id="giftcards" href="../giftcards/comprasocio.html" onclick="">
-						<div class="item" align="center">
-							<div class="imagen" align="center"> 
-								<!-- <img class="img_opcion" src="" title="Referidos" /> -->
-								Compra de tarjetas de regalo
-							</div>
-						</div>
-					</a>
-
-					<!-- <a id="prepagocf" href="../prepago/compracashflag.html" onclick=""> -->
-					<a id="prepagoae" href="../wallet" onclick="">
-						<div class="item" align="center">
-							<div class="imagen" align="center"> 
-								<!-- <img class="img_opcion" src="" title="Referidos" /> -->
-								Recarga PREMIUM<br/>(Aeternity)
-							</div>
-						</div>
-					</a>
-
-					<a id="swaptoae" href="../wallet/swaptoae.html" onclick="">
-						<div class="item" align="center">
-							<div class="imagen" align="center"> 
-								<!-- <img class="img_opcion" src="" title="Referidos" /> -->
-								Recarga PREMIUM<br/>(Aeternity)<br/>con otras criptomonedas
+								Recarga tarjeta<br/>de comercio afiliado
 							</div>
 						</div>
 					</a>
@@ -97,10 +84,29 @@
 							<div class="item" align="center">
 								<div class="imagen" align="center"> 
 									<!-- <img class="img_opcion" src="" title="Referidos" /> -->
-									Recarga PREMIUM<br/>(Bs. o dólares)
+									Recarga<br/>tarjeta PREMIUM<br/>(Bs. o dólares)
 								</div>
 							</div>
 						</a>
+
+					<!-- <a id="prepagocf" href="../prepago/compracashflag.html" onclick=""> -->
+					<a id="prepagoae" href="../wallet" onclick="">
+						<div class="item" align="center">
+							<div class="imagen" align="center"> 
+								<!-- <img class="img_opcion" src="" title="Referidos" /> -->
+								Recarga<br/>tarjeta PREMIUM<br/>(Aeternity)
+							</div>
+						</div>
+					</a>
+
+					<a id="swaptoae" href="../wallet/swaptoae.html" onclick="">
+						<div class="item" align="center">
+							<div class="imagen" align="center"> 
+								<!-- <img class="img_opcion" src="" title="Referidos" /> -->
+								Recarga<br/>tarjeta PREMIUM<br/>(Aeternity)<br/>otras criptos
+							</div>
+						</div>
+					</a>
 
 					<!--
 					--><!-- <a id="giftcardscf" href="../giftcards/compracashflag.html" onclick=""> --><!--
@@ -113,14 +119,6 @@
 						</div>
 					</a>
 					-->
-					<a id="lector" href="../lector/index.html?menu=socio" onclick="">
-						<div class="item" align="center">
-							<div class="imagen" align="center">
-								<!-- <img class="img_opcion" src="" title="Lector" /> -->
-								Lector de códigos QR
-							</div>
-						</div>
-					</a>
 					<!--
 					<a id="helpdesk" href="" onclick="alert('En Construcción, escribe un email a sgcvzla@gmail.com\npara enterarte de la fecha de lanzamiento.')">
 						<div class="item" align="center">
@@ -131,6 +129,53 @@
 						</div>
 					</a>
 					-->
+				</div>
+
+
+				<div id="seccion3" style="width: 100%; text-align: left; padding: 10px 0 0;">
+					<span onclick="despliegue(3)" style="cursor: pointer;">
+						<img id="despliegue3" src="../img/angle-double-up-solid.svg" style="height: 0.8em; width: auto;" title="Ícono usado bajo licencia de Font Awesome: https://fontawesome.com/license/free">
+						<span>Tarjetas de regalo</span>
+					</span>
+				</div>
+				<!-- <div id="comercios3" class="catalogo" style="border: solid lightgray thin; padding: 20px 0;"> -->
+				<div id="comercios3" class="catalogo">
+					<a id="giftcards" href="../giftcards/comprasocio.html" onclick="">
+						<div class="item" align="center">
+							<div class="imagen" align="center"> 
+								<!-- <img class="img_opcion" src="" title="Referidos" /> -->
+								Compra tarjeta<br/>de comercio afiliado
+							</div>
+						</div>
+					</a>
+
+					<a id="giftcardspremium" href="../giftcards/compracashflag.html" onclick="">
+						<div class="item" align="center">
+							<div class="imagen" align="center"> 
+								<!-- <img class="img_opcion" src="" title="Referidos" /> -->
+								Compra<br/>tarjeta PREMIUM<br/>(Bs. o dólares)
+							</div>
+						</div>
+					</a>
+				</div>
+
+				<div id="seccion4" style="width: 100%; text-align: left; padding: 10px 0 0;">
+					<span onclick="despliegue(4)" style="cursor: pointer;">
+						<img id="despliegue4" src="../img/angle-double-up-solid.svg" style="height: 0.8em; width: auto;" title="Ícono usado bajo licencia de Font Awesome: https://fontawesome.com/license/free">
+						<span>Otras opciones</span>
+					</span>
+				</div>
+				<!-- <div id="comercios4" class="catalogo" style="border: solid lightgray thin; padding: 20px 0;"> -->
+				<div id="comercios4" class="catalogo">
+					<a id="lector" href="../lector/index.html?menu=socio" onclick="">
+						<div class="item" align="center">
+							<div class="imagen" align="center">
+								<!-- <img class="img_opcion" src="" title="Lector" /> -->
+								Lector de códigos QR
+							</div>
+						</div>
+					</a>
+
 					<a id="salir" href="" onclick="">
 						<div class="item" align="center">
 							<div class="imagen" align="center">
@@ -162,7 +207,21 @@
 				};
 				xmlhttp.open("GET", "../php/socios.php?idsocio="+idsocio, true);
 				xmlhttp.send();
+			}
 
+			function despliegue(menu) {
+				console.log(menu);
+				console.log("comercios"+menu);
+				console.log(document.getElementById("comercios"+menu).style.display);
+				if (document.getElementById("comercios"+menu).style.display == 'grid' || document.getElementById("comercios"+menu).style.display == '') {
+					document.getElementById("comercios"+menu).style.display = 'none';
+					document.getElementById("seccion"+menu).style.borderBottom = 'solid lightgray thin';
+					document.getElementById("despliegue"+menu).src = '../img/angle-double-down-solid.svg';
+				} else {
+					document.getElementById("comercios"+menu).style.display = 'grid';
+					document.getElementById("seccion"+menu).style.borderBottom = 'none';
+					document.getElementById("despliegue"+menu).src = '../img/angle-double-up-solid.svg';
+				}
 			}
 		</script>
 	</body>

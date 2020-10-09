@@ -32,6 +32,10 @@
     object-fit: contain;
 }
 
+#div1 {
+    height: 45em;
+}
+
 .catalogo {
     display: grid;
     grid-template-columns: repeat(auto-fit, var(--ancho));
@@ -41,6 +45,9 @@
     grid-auto-rows: auto;
     grid-gap: var(--linea);
     grid-auto-flow: row dense;
+    padding: 20px;
+    border: solid lightgray thin;
+    width: auto;
 }
 
 .item {
@@ -87,6 +94,9 @@
     }
     #container {
         width: 80%;
+    }
+    #div1 {
+        height: 58em;
     }
     .catalogo {
         grid-template-columns: repeat(auto-fit, calc(var(--alto)*1.2));
