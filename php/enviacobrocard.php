@@ -97,9 +97,9 @@ if ($instrumento<>"") {
 			/////////////////////////////////////////////////////////////////////////////////////
 			// Insertar transacción para confirmar
 			$query  = "INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, ";
-			$query .= "instrumento, id_instrumento, documento, status, origen, token) ";
+			$query .= "instrumento, id_instrumento, documento, status, origen, token, pin, hashpin) ";
 			$query .= "VALUES ('".$fecha."','".$fecha."',".$id_proveedor.",".$id_socio.",'".$tipo."','".$moneda."',".$monto;
-			$query .= ",'".$instrumento."','".$id_instrumento."','".$documento."','".$status."','".$origen."','".$token."')";
+			$query .= ",'".$instrumento."','".$id_instrumento."','".$documento."','".$status."','".$origen."','".$token."',0,'')";
 			if ($result = mysqli_query($link, $query)) {
 				$saldo -= $monto;
 				if ($instrumento=='prepago') {

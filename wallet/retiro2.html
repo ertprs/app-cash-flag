@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>Cash-Flag</title>
+		<link rel="stylesheet" href="./retiro.css">
+		<script type="text/javascript" src="../js/funciones.js"></script>
+	</head>
+	<body onload="inicio()">
+		<div id="container">
+			<div class="logo" align="center">
+				<img class="img-logo" id="logo" src="../img/logoclub.png" alt="">
+			</div>
+			<h3 align="center">Enviar fondos fuera de Cash-Flag (Aeternity)</h3>
+			<h3 id="socio" align="center"></h3>
+			<!-- <br/> -->
+			<div id="div1" align="center">
+            <p class="parrafo1">Aquí podrá procesar retiros de Cash-Flag hacia cuentas externas,<br/>actualmente tienes un saldo de <b></b><span id="saldo"></span>.</b></p>
+            <p class="parrafo1">
+               Puede introducir la dirección o clave pública del destinatario o escanear el código QR.
+            </p>
+            <!-- <div style="width: 100%; text-align: center;"> -->
+               <div class="parrafo" style="margin: auto; width: 90%; margin-bottom: 0.5em;">
+                  <div class="cmps" style="width: 100%;">
+                     <!-- <input id="address" class="campo" type="text" maxlength="100" style="padding: 0 0.5em; width: 75%;"/> -->
+                     <span class="etiq">Dirección destinatario:</span>
+                     <div>
+                        <input id="addressretiro" class="campo" type="text" maxlength="100" style="padding: 0 0.5em; width: 73%;"/>
+                        <button id="scanaddress" style="width: 3em; height: 2.55em;" onclick="scanearQR3()">QR</button>
+                     </div>
+                     <!-- <button id="enviaraddress" style="width: 20%; height: 30px; margin: auto;" onclick="enviatx()">Enviar</button> -->
+                  </div>
+                  <div class="cmps" style="width: 100%;">
+                     <!-- <input id="address" class="campo" type="text" maxlength="100" style="padding: 0 0.5em; width: 75%;"/> -->
+                     <span class="etiq">Monto:</span>
+                     <input id="montoretiro" class="campo" type="text" maxlength="15" style="padding: 0 0.5em; width: 80%; text-align: right;"/>
+                  </div>
+               </div>
+            <!-- </div> -->
+				<!-- Linea de botones -->
+            <div class="btns">
+               <button id="enviaraddress" style="width: 120px; height: 30px; margin: 0.5em auto;" onclick="enviatx()">Enviar transacción</button>
+               <button id="btnvolver" style="width: 120px; height: 30px; margin: 0.5em auto;" onclick="cerrar_addorqr()">Volver</button>
+				</div>
+            <br/>
+            <p class="parrafo1">
+               Esta recarga será procesada en la blockchain de Aeternity y se aplicará cuando sea verificada en la red.
+            </p>
+			</div>
+		</div>
+		<script>
+			function inicio() {
+            console.log(localStorage);
+				logo.src = "../img/" + localStorage.getItem("logoprov");
+				logo.title = localStorage.getItem("nombreprov");
+            // socio.innerHTML = respuesta.nombres+" "+respuesta.apellidos;
+            document.getElementById("btnvolver").addEventListener('click', function(){
+               window.open(localStorage.getItem("url_bck2"), "_self")
+            });
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function () {
+					if (this.readyState == 4 && this.status == 200) {
+						respuesta = JSON.parse(this.responseText);
+						console.log(respuesta);
+                  // document.getElementById("socio").innerHTML = respuesta.nombre
+                  document.getElementById("codigoqr").src = respuesta.rutaqr;
+                  document.getElementById("address").innerHTML = respuesta.account;
+               }
+				};
+				xmlhttp.open("GET", "../php/buscacuentaae.php?email="+localStorage.getItem("email"), true);
+				xmlhttp.send();
+			}
+		</script>
+	</body>
+</html>

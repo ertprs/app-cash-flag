@@ -93,13 +93,14 @@
         font-size: 110%;
     }
     #container {
-        width: 80%;
+        width: 90%;
     }
     #div1 {
         height: 58em;
     }
     .catalogo {
         grid-template-columns: repeat(auto-fit, calc(var(--alto)*1.2));
+        padding: 20px 5px;
     }
     .item {
         width: calc(var(--alto)*1.2);

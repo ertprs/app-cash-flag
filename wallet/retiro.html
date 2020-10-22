@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>Cash-Flag</title>
+		<link rel="stylesheet" href="./cardlector.css">
+		<link rel="stylesheet" href="./retiro.css">
+		<script type="text/javascript" src="../js/funciones.js"></script>
+      <style>
+         .popupmsg {
+            width: auto;
+            position: absolute;
+            background: white;
+            padding: 10px;
+            border: solid black thin;
+         }
+         
+         .blink_me {
+            animation: blinker 1s linear infinite;
+         }
+
+         @keyframes blinker {
+            50% {
+               opacity: 0;
+            }
+         }
+      </style>
+		<!-- Librerías para usar el SDK de Aeternity y crear cuentas en AE -->
+		<script src="https://unpkg.com/@aeternity/aepp-sdk@7.3.1/dist/aepp-sdk.browser-script.js"></script>
+		<script src="https://bundle.run/buffer@5.6.0"></script>
+		<script src="../lib/cf-aesdk.js"></script>
+		<!-- hasta aquí -->
+		<script type="text/javascript" src="../lector/instascan.min.js"></script>
+	</head>
+	<body id="cuerpo" onload="inicio()">
+		<div id="container">
+			<div class="logo" align="center">
+				<img class="img-logo" id="logo" src="" alt="">
+			</div>
+			
+			<h3 align="center">Enviar fondos fuera de Cash-Flag (Aeternity)</h3>
+			<div id="div1" align="center">
+            <p>Aquí podrá procesar retiros de Cash-Flag hacia cuentas externas,<br/>actualmente tienes un saldo de <b><span id="saldo"></span>.</b></p>
+            <br/> 
+            <p>
+               Puede introducir la dirección o clave pública del destinatario o escanear el código QR.
+            </p>
+            <br/> 
+				<!-- Correo electrónico -->
+				<div id="div2" class="cmps">
+               <span class="etiq">Dirección destinatario:</span>
+               <div class="textoyboton">
+                  <input id="direccion" class="campo" type="text" size="50" maxlength="100" />
+                  <button id="scanaddress" style="width: 2.7em;" onclick="scaneaQR()">
+                     QR
+                        <!-- <img src="../img/qrcode-solid.svg" style="width: 0.8em;" title="Ícono usado bajo licencia de Font Awesome: https://fontawesome.com/license/free"> -->
+                  </button>
+               </div>
+				</div>
+				<!-- Nombres -->
+				<div id="div3" class="cmps">
+					<span class="etiq">Monto:</span>
+					<input id="monto" class="campo" type="text" size="55" maxlength="15" style="text-align: right" />
+				</div>
+				<div class="btns">
+					<button id="btnenviar" onclick="enviar()" style="width: 10em;">Enviar</button>
+					<button id="btnvolver" style="width: 10em; margin: 0.5em 0 0 0;">Volver</button>
+				</div>
+            <br/>
+            <p>
+               Esta transacción será procesada en la blockchain de Aeternity y se hará efectiva cuando sea verificada en la red.
+            </p>
+			</div>
+		</div>
+      <div id="modal_area2" class="area_modal2" style="display: none;">
+         <p align="center" style="margin: 0.25em 2em 0;">Coloque el código con la dirección de Aeternity en el siguiente recuadro.</p>
+         <div class="framevideo" >
+            <div class="frame2">
+               <video id="preview" class="vd"></video>
+               <div class="scanner-laser laser-rightBottom"></div>
+               <div class="scanner-laser laser-rightTop"></div>
+               <div class="scanner-laser laser-leftBottom"></div>
+               <div class="scanner-laser laser-leftTop"></div>
+            </div>
+         </div>
+         <div style="width: 100%; margin-top: 46%; text-align: center;">
+            <p id="mensaje" align="center"></p>
+            <br/>
+            <button id="volver_lector" style="width: 60px; height: 30px; margin: auto;" onclick="cerrar_lector()">Cerrar</button>
+            <audio id="beep" src="" />
+         </div>
+      </div>
+      <div id="mensaje2" class="popupmsg" style="display: none;">
+		<!-- <div id="mensaje2" class="popupmsg"> -->
+			<span class="blink_me">
+				Enviando transacción...
+			</span>
+		</div>
+		<script>
+			var address="", monto="", saldo=0, idproveedor=localStorage.getItem("idproveedor");
+			var pbKey="", prKey="", Client="", balance=0;
+			let beep = '../lector/audio/beep.mp3';
+			let scanner = "";
+
+			// limpia el formulario
+			function limpiar() {
+				address = "";
+				monto   = "";
+
+				document.getElementById("direccion").value = "";
+				document.getElementById("monto").value = "";
+
+				document.getElementById("direccion").focus();
+			}
+
+			let actubalanceae = new Promise( (resolve, reject) => {
+				let xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = async function() {
+					if (this.readyState == 4 && this.status == 200) {
+						respuesta = JSON.parse(this.responseText);
+						if (respuesta.exito=="SI") {
+							pbKey = respuesta.publickey;
+							prKey = respuesta.secretkey;
+
+							// se crea la instancia del Sdk necesaria para consultar balance y hacer transacciones 
+							Client = await instanciaSdk( prKey,  pbKey );
+
+							balance = await obtenerBalance( pbKey, Client );
+							console.log(balance);
+							resolve( balance );
+						} else {
+							resolve(console.log("No hay cuenta"));
+						}
+					}
+				};
+				xmlhttp.open("GET", "../php/actubalanceaeprov.php?idproveedor="+idproveedor, true);
+				xmlhttp.send();
+			});
+
+			function inicio() {
+				limpiar();
+				document.getElementById("btnvolver").addEventListener('click', function(){
+					window.open(localStorage.getItem("url_bck2"), "_self") });
+				// cargar parámetros de la tabla
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function () {
+					if (this.readyState == 4 && this.status == 200) {
+						respuesta = JSON.parse(this.responseText);
+						if (respuesta.exito == 'SI') {
+							// document.title = 'Menú principal';
+							console.log(respuesta);
+							logo = respuesta.proveedor.logo;
+							if (logo!="") {
+								document.getElementById("logo").src = "../img/" + logo;
+							} else {
+								document.getElementById("logo").src = "../img/" + 'sin_imagen.jpg';
+							}
+							document.getElementById("logo").title = respuesta.proveedor.nombre;
+							actubalanceae.then( function(balance) {
+								saldo = balance;
+								document.getElementById("saldo").innerHTML = balance+" AE";
+							});
+						}
+					}
+				};
+				xmlhttp.open("GET", "../php/proveedores.php?prov="+idproveedor, true);
+				xmlhttp.send();
+			}
+
+			// valida la entrada en los campos
+			function validaciones() {
+				var continuar = true, vacios = 0, campo = "";
+				if ((document.getElementById("direccion").value=="" || document.getElementById("direccion").value==undefined) && vacios == 0) {
+					alert("El campo dirección destinatario no puede quedar en blanco");
+					vacios++;
+					campo = "direccion";
+					continuar = false;
+				} else {
+					if (document.getElementById("direccion").value.substr(0,2) != "ak") {
+						alert("No es una dirección válida de Aeternity");
+						vacios++;
+						campo = "direccion";
+						continuar = false;
+					}
+				}
+				if ((document.getElementById("monto").value=="" || document.getElementById("monto").value==undefined) && vacios == 0) {
+					alert("El campo monto no puede quedar en blanco");
+					vacios++;
+					campo = "monto";
+				} else {
+					if (document.getElementById("monto").value > saldo) {
+						alert("El monto no puede ser mayor al saldo de la cuenta");
+						vacios++;
+						campo = "monto";
+					}
+				}
+				if (vacios>0) { continuar = false; }
+				if (continuar) {
+					address = document.getElementById("direccion").value;
+					monto   = document.getElementById("monto").value;
+				} else {
+					document.getElementById(campo).focus();
+				}
+				return continuar;
+			}
+
+			async function enviar() {
+				if (validaciones()) {
+               document.getElementById("mensaje2").style.display = 'block';
+               document.getElementById("mensaje2").style.left = (window.innerWidth-document.getElementById("mensaje2").clientWidth-2)/2+"px";
+					document.getElementById("mensaje2").style.top = (window.innerHeight-document.getElementById("mensaje2").clientHeight-2)/2+"px";
+					console.log(document.getElementById("mensaje2"));
+					// // se crea la instancia del Sdk necesaria para consultar balance y hacer transacciones 
+					// Client = await instanciaSdk( prKey, pbKey );    
+
+					// var balance = await obtenerBalance( pbKey, Client );
+
+					if (balance >= monto) {
+						// alert("idproveedor "+idproveedor+" monto "+txmonto+" tarjeta "+tarjeta+" origen "+"externo");
+
+						tx = await enviarTransaccion( address, monto, Client );
+
+						ruta = "https://explorer.aeternity.io/transactions/";
+						// ruta = "https://explorer.testnet.aeternity.io/transactions/";
+
+						msj  = "Transacción exitosa\n";
+						msj += "Para monitorear la transacción:\n";
+						msj += "\n";
+						msj += ruta+tx.hash.trim()+"\n";
+						msj += "\n";
+						msj += "¿Desea abrir explorador de blockchain en otra ventana?";
+
+						balance = await obtenerBalance( pbKey, Client );
+						saldo = balance;
+						document.getElementById("saldo").innerHTML = balance+" AE";
+
+						document.getElementById("mensaje2").style.display = 'none';
+
+						limpiar();
+						if (confirm(msj)) {
+							window.open(ruta+tx.hash.trim(), "_blank");
+						}
+					} else {
+						alert("El saldo de la cuenta no es suficiente.");
+					}
+				}
+         }
+         
+         function scaneaQR() {
+				document.getElementById("direccion").value = "";
+				modal_lector();
+         }
+
+			function modal_lector() {
+				beep = '../lector/audio/beep.mp3';
+				scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+
+				scanner.addListener('scan', function (content) {
+					address = content;
+					console.log(address);
+					if (content) { 
+						PlaySound(beep);
+					}
+					avanzar = false;
+					if(address!=undefined) {
+						document.getElementById("direccion").value = address;
+					}
+					cerrar_lector();
+				});
+
+				Instascan.Camera.getCameras().then(function (cameras) {
+					back = 0;
+					for (i=0; i< cameras.length; i++) {
+						if (cameras[i].name.indexOf('back') >= 0) { back = i }
+					}
+					if (cameras.length > 0) {
+						scanner.mirror = false;
+						scanner.start(cameras[back]);
+					} else {
+						console.error('No cameras found.');
+					}
+				}).catch(function (e) {
+					console.error(e);
+				});
+				cuerpo.style.overflow = "hidden";
+				modal_area2.style.display = 'block';
+			}
+
+			function PlaySound(sonido) {
+				document.getElementById('beep').src = sonido;
+				let sound = document.getElementById('beep');
+				if (sound) { sound.play(); }
+			}
+
+			function cerrar_lector() {
+				scanner.stop();
+				cuerpo.style.overflow = "auto";
+				modal_area2.style.display = 'none';
+			}
+		</script>
+	</body>
+</html>
+<!-- 
+			function reportedepago() {
+				if (validaciones()) {
+					respuesta = datosgiftcards();
+					if (respuesta.exito=="SI") {
+						alert('Reporte de pago '+respuesta.hash);
+						// Abrir modal para pedir los datos del pago
+						// Enviar datos a registro de giftcard php con status 'Por conciliar'
+					}
+				}
+			}
+ -->
+
+
+ <!-- https://app.cash-flag.com/php/exitocompraprepago.php? -->
+ <!-- url=https://app.cash-flag.com/menu.html?id_proveedor=1& -->
+ <!-- registro={%22nombres%22:%22Jose%22,%22apellidos%22:%22Alfredo%22,%22telefono%22:%2204142752679%22,%22email%22:%22luisrodriguezestrada@hotmail.com%22,%22moneda%22:%22bs%22,%22monto%22:825,%22idproveedor%22:1,%22tipopago%22:%22online%22,%22origen%22:%22online%22,%22referencia%22:%220%22}& -->
+ <!-- tk=ROLK4E126Z& -->
+ <!-- callback=0 -->

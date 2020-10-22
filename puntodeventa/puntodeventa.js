@@ -204,12 +204,14 @@ function rellenatransacciones(transacciones) {
 		// tarjeta en la columna 1
 		txttarjeta = document.createTextNode(transacciones[i].tarjeta);
 		cl1 = document.createElement("div");
+		cl1.id = 'card-'+transacciones[i].id;
 		cl1.classList.add("columna1");
 		cl1.appendChild(txttarjeta);
 
 		// referencia en la columna 2
 		txtreferencia = document.createTextNode(transacciones[i].referencia);
 		cl2 = document.createElement("div");
+		cl2.id = 'referencia-'+transacciones[i].id;
 		cl2.classList.add("columna2");
 		cl2.appendChild(txtreferencia);
 
@@ -231,6 +233,13 @@ function rellenatransacciones(transacciones) {
 		}
 		cl4.appendChild(txtstatus);
 
+		// pin en la columna 5 (invisible)
+		txthash = document.createTextNode(transacciones[i].hashpin);
+		cl5 = document.createElement("div");
+		cl5.id = 'hash-'+transacciones[i].id;
+		cl5.style.display = 'none';
+		cl5.appendChild(txthash);
+
 		// Crear fila para la transacción
 		fila = document.createElement("div");
 		fila.id = 'fila-'+transacciones[i].id;
@@ -250,12 +259,47 @@ function rellenatransacciones(transacciones) {
 		fila.appendChild(cl2);
 		fila.appendChild(cl3);
 		fila.appendChild(cl4);
+		fila.appendChild(cl5);
 
 		if (transacciones[i].status=='Por confirmar') {
 			fila.addEventListener("click", function() {
-				if (confirm("¿Desea activar el pin pad para la confirmación manual?")) {
-					window.open("./pinpad/index.html?id="+this.id.substr(5), "_blank");
+				if (document.getElementById('status-'+this.id.substr(5)).innerHTML == "Por confirmar") {
+					let pin = prompt("Clave de confirmación:");
+					if(pin==""){
+						alert("La clave de autorización  no puede estar vacía");
+					} else {
+						let datos = new FormData();
+						datos.append("accion", 'confirmar');
+						datos.append("transaccion", this.id.substr(5));
+						datos.append("pin", pin);
+							// mysocket.send("Confirmar transaccion "+arr_accion[1]);
+						console.log(this.id.substr(5));
+						tx = this.id.substr(5);
+	
+						let xmlhttp = new XMLHttpRequest();
+						xmlhttp.onreadystatechange = function() {
+							if (this.readyState == 4 && this.status == 200) {
+								respuesta = JSON.parse(this.responseText);
+								if (respuesta.exito == 'SI') {
+									console.log(document.getElementById('status-'+tx).classList);
+									document.getElementById('status-'+tx).classList.remove("rojo");
+									document.getElementById('status-'+tx).classList.add("negro");
+									console.log(document.getElementById('status-'+tx).classList);
+									document.getElementById('status-'+tx).innerHTML = "Confirmada";
+									document.getElementById(fila.id).removeEventListener("click");
+									alert('Transacción confirmada.');
+								} else {
+									alert('Clave de confirmación incorrecta.');
+								}
+							}
+						};
+						xmlhttp.open("POST", "../php/confirma_transaccion_sms.php", true);
+						xmlhttp.send(datos);
+					}
 				}
+				// if (confirm("¿Desea activar el pin pad para la confirmación manual?")) {
+				// 	window.open("./pinpad/index.html?id="+this.id.substr(5), "_blank");
+				// }
 			});
 		}
 

@@ -25,24 +25,24 @@ if ($instrumento<>"") {
 		$query = "select * from prepago where card='".trim($_POST["tarjeta"])."'";
 		$result = mysqli_query($link, $query);
 		if ($row = mysqli_fetch_array($result)) {
-			$id_socio = $row["id_socio"];
-		   $saldo = $row["saldo"];
+			$id_socio        = $row["id_socio"];
+		   $saldo           = $row["saldo"];
 	    	$saldoentransito = $row["saldoentransito"];
-			$cardProveedor = $row["id_proveedor"];
-			$cardMoneda    = $row["moneda"];
-			$premium       = $row["premium"];
+			$cardProveedor   = $row["id_proveedor"];
+			$cardMoneda      = $row["moneda"];
+			$premium         = $row["premium"];
 		}
 	} else {
 		$tpcard = "giftcards_transacciones";
 		$query = "select * from giftcards where card='".trim($_POST["tarjeta"])."'";
 		$result = mysqli_query($link, $query);
 		if ($row = mysqli_fetch_array($result)) {
-			$id_socio = $row["id_socio"];
-		   $saldo = $row["saldo"];
+			$id_socio        = $row["id_socio"];
+		   $saldo           = $row["saldo"];
 	    	$saldoentransito = 0.00;
-			$cardProveedor = $row["id_proveedor"];
-			$cardMoneda    = $row["moneda"];
-			$premium       = $row["premium"];
+			$cardProveedor   = $row["id_proveedor"];
+			$cardMoneda      = $row["moneda"];
+			$premium         = $row["premium"];
 		}
 	}
 
@@ -51,21 +51,23 @@ if ($instrumento<>"") {
 	$result = mysqli_query($link, $query);
 	if ($row = mysqli_fetch_array($result)) {
 		$secretkey = $row["secretkey"];
-	   $account = $row["account"];
+		$account   = $row["account"];
+		$telefono  = $row["telefono"];
 	} else {
 		$secretkey = "";
-	   $account = "";
+	   $account   = "";
+		$telefono  = "";
 	}
 
 	// Asignar parámetros a variables
-	$fecha = date("Y-m-d");
-	$id_proveedor = $_POST["idproveedor"];
-	$tipo = '01'; // Cobro
-	$moneda = $_POST["moneda"];
-	$monto = $_POST["monto"];
-	$id_instrumento = $_POST["tarjeta"];
-	$documento = generatransaccion_pdv($link, $database);
-	$status = 'Por confirmar'; // Estatus pendiente por confirmación
+	$fecha           = date("Y-m-d");
+	$id_proveedor    = $_POST["idproveedor"];
+	$tipo            = '01'; // Cobro
+	$moneda          = $_POST["moneda"];
+	$monto           = $_POST["monto"];
+	$id_instrumento  = $_POST["tarjeta"];
+	$documento       = generatransaccion_pdv($link, $database);
+	$status          = 'Por confirmar'; // Estatus pendiente por confirmación
 	$tipotransaccion = '51'; // Consumo
 	switch ($moneda) {
 		case 'bs':
@@ -88,13 +90,13 @@ if ($instrumento<>"") {
 	$tasadolarcripto = 1.00;
 	if ($premium) {
 		if ($moneda==$cardMoneda) {
-			$respuesta = procesapago($link, $saldo, $saldoentransito, $monto, $tpcard, $id_proveedor, $id_socio, $tipo, $moneda, $instrumento, $id_instrumento, $documento, $status, $fecha, $tipotransaccion, $montobs, $montodolares, $montocripto, $tasadolarbs, $tasadolarcripto, $secretkey, $account);
+			$respuesta = procesapago($link, $saldo, $saldoentransito, $monto, $tpcard, $id_proveedor, $id_socio, $tipo, $moneda, $instrumento, $id_instrumento, $documento, $status, $fecha, $tipotransaccion, $montobs, $montodolares, $montocripto, $tasadolarbs, $tasadolarcripto, $secretkey, $account, $telefono);
 		} else {
 			$respuesta = '{"exito":"NO","mensaje":"No coinciden tarjeta y tipo de moneda","transaccion":"'.$documento.'"}';
 		}
 	} else {
 		if ($id_proveedor==$cardProveedor && $moneda==$cardMoneda) {
-			$respuesta = procesapago($link, $saldo, $saldoentransito, $monto, $tpcard, $id_proveedor, $id_socio, $tipo, $moneda, $instrumento, $id_instrumento, $documento, $status, $fecha, $tipotransaccion, $montobs, $montodolares, $montocripto, $tasadolarbs, $tasadolarcripto, $secretkey, $account);
+			$respuesta = procesapago($link, $saldo, $saldoentransito, $monto, $tpcard, $id_proveedor, $id_socio, $tipo, $moneda, $instrumento, $id_instrumento, $documento, $status, $fecha, $tipotransaccion, $montobs, $montodolares, $montocripto, $tasadolarbs, $tasadolarcripto, $secretkey, $account, $telefono);
 		} else {
 			if ($id_proveedor<>$cardProveedor) {
 				if ($moneda<>$cardMoneda) {
@@ -114,8 +116,13 @@ if ($instrumento<>"") {
 }
 echo $respuesta;
 
-function procesapago($link, $saldo, $saldoentransito, $monto, $tpcard, $id_proveedor, $id_socio, $tipo, $moneda, $instrumento, $id_instrumento, $documento, $status, $fecha, $tipotransaccion, $montobs, $montodolares, $montocripto, $tasadolarbs, $tasadolarcripto, $secretkey, $account) {
+function procesapago($link, $saldo, $saldoentransito, $monto, $tpcard, $id_proveedor, $id_socio, $tipo, $moneda, $instrumento, $id_instrumento, $documento, $status, $fecha, $tipotransaccion, $montobs, $montodolares, $montocripto, $tasadolarbs, $tasadolarcripto, $secretkey, $account, $telefono) {
 	$respuesta = "";
+
+	// Hashpin
+	$pin     =  rand(10000, 99999);
+	$hashpin = hash("sha256",$id_instrumento.$documento.$pin);
+
 	// Calcular disponibilidad
 	$disponible = $saldo - $saldoentransito;
 	if ($disponible - $monto > 0.00) {
@@ -125,10 +132,11 @@ function procesapago($link, $saldo, $saldoentransito, $monto, $tpcard, $id_prove
 		/////////////////////////////////////////////////////////////////////////////////////
 		// Insertar transacción para confirmar
 		$query  = 'INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, ';
-		$query .= 'instrumento, id_instrumento, documento, status, origen, token) ';
+		$query .= 'instrumento, id_instrumento, documento, status, origen, token, pin, hashpin) ';
 		$query .= 'VALUES ("'.$fecha.'","0000-00-00",'.$id_proveedor.','.$id_socio.',"'.$tipo.'","'.$moneda.'",';
 		$query .= $monto.',"'.$instrumento.'","'.$id_instrumento.'","'.$documento.'","'.$status;
-		$query .= '","","")';
+		$query .= '","","",0,"'.$hashpin.'")';
+		// $query .= '","","",'.$pin.',"'.$hashpin.'")';
 		if ($result = mysqli_query($link, $query)) {
 			$saldoentransito += $monto;
 			if ($instrumento=='prepago') {
@@ -137,6 +145,13 @@ function procesapago($link, $saldo, $saldoentransito, $monto, $tpcard, $id_prove
 				$query = 'UPDATE giftcards SET saldoentransito='.$saldoentransito.' WHERE card="'.trim($id_instrumento).'"';
 			}
 			if ($result = mysqli_query($link, $query)) {
+				if($telefono<>"") {
+					$sms = 'Transacción de cobro en punto de venta número '.$documento.' con la tarjeta '.$id_instrumento.' por un monto de '.$monto.' '.$moneda.'. Clave de confirmación: '.$pin;
+					// echo $telefono;
+					// echo " - ";
+					// echo $sms;
+					$respuesta1 = enviasms($telefono,$sms);
+				}
 				$mensaje = '["Registro exitoso."]';
 				$respuesta = '{"exito":"SI","mensaje":'.$mensaje.',"transaccion":"'.$documento.'", "secretkey": "'.$secretkey.'","account":"'.$account.'"';
 
@@ -161,6 +176,8 @@ function procesapago($link, $saldo, $saldoentransito, $monto, $tpcard, $id_prove
 							$respuesta .= ','.'"referencia":"'.trim($row["documento"]).'"';
 							$respuesta .= ','.'"monto":'.$row["monto"];
 							$respuesta .= ','.'"status":"'.$row["status"].'"';
+							$respuesta .= ','.'"pin":'.$pin;
+							$respuesta .= ','.'"hashpin":"'.$row["hashpin"].'"';
 							$respuesta .= '}';
 						}
 					}

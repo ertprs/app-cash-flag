@@ -88,7 +88,7 @@ function asignacodigolargo2($ultcupon,$email,$nombres,$apellidos,$telefono){
     return $cuponlargo;
 }
 
-function codigocaracter($valor) {
+function codigocaracter($valor){
     $llaves = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
     $codigos =  '111213141A1B1C1D212223242A2B2C2D3132';
@@ -101,7 +101,7 @@ function codigocaracter($valor) {
     return $newvalor;
 }
 
-function generagiftcard($nombres,$apellidos,$telefono,$email,$nombreproveedor,$moneda,$link) {
+function generagiftcard($nombres,$apellidos,$telefono,$email,$nombreproveedor,$moneda,$link){
     // Busca el próximo número correlativo (único)
     $query = "select dcg from _parametros";
     $result = mysqli_query($link,$query);
@@ -153,7 +153,7 @@ function generagiftcard($nombres,$apellidos,$telefono,$email,$nombreproveedor,$m
     return $card;
 }
 
-function generaprepago($nombres,$apellidos,$telefono,$email,$nombreproveedor,$moneda,$link) {
+function generaprepago($nombres,$apellidos,$telefono,$email,$nombreproveedor,$moneda,$link){
     // Busca el próximo número correlativo (único)
     $query = "select dcp from _parametros";
     $result = mysqli_query($link,$query);
@@ -208,7 +208,7 @@ function generaprepago($nombres,$apellidos,$telefono,$email,$nombreproveedor,$mo
     return $card;
 }
 
-function generacodigo($letra,$link) {
+function generacodigo($letra,$link){
     $query = "select codigo from _codigo where valor='".$letra."'";
     $result = mysqli_query($link, $query);
     if ($row = mysqli_fetch_array($result)) {
@@ -223,7 +223,7 @@ function generacodigo($letra,$link) {
 }
 
 // Generar el próximo número de transacción en el pdv
-function generatransaccion_pdv($link, $database) {
+function generatransaccion_pdv($link, $database){
     // Busca el próximo número correlativo (único)
     $query = "select count(id) as increment from pdv_transacciones";
     $result = mysqli_query($link,$query);
@@ -236,7 +236,7 @@ function generatransaccion_pdv($link, $database) {
 }
 
 
-function generatarjetaAE($post, $link) {
+function generatarjetaAE($post, $link){
     // Asignación de variables
     $nombres   = $post['nombres'];
     $apellidos = $post['apellidos'];
@@ -312,15 +312,34 @@ function generatarjetaAE($post, $link) {
 				$tipo2 = '51'; 
 				// Insertar transacción confirmada
 				$quer2  = 'INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, ';
-				$quer2 .= 'moneda, monto, instrumento, id_instrumento, documento, status, origen, token) ';
+				$quer2 .= 'moneda, monto, instrumento, id_instrumento, documento, status, origen, token, pin, hashpin) ';
                 $quer2 .= 'VALUES ("'.$fecha.'","'.$fechaconfirmacion.'",'.$idproveedor.','.$idsocio.',"'.$tipo2.'", ';
                 $quer2 .= '"'.$moneda.'",'.$monto.',"prepago","'.$card.'","'.$referencia.'","'.$status.'", ';
-				$quer2 .= '"'.$origen.'","")';
+				$quer2 .= '"'.$origen.'","",0,"")';
 				$resul2 = mysqli_query($link,$quer2);
 				$querx = 'UPDATE _parametros SET dcp='.$dcp;
 				$resulx = mysqli_query($link,$querx);
             }
         }
     }
+}
+
+function enviasms($telefono,$mensaje){
+    //parámetros de envío
+    $usuario="sgcvzla@gmail.com";
+    $clave="Ma24032008.";
+
+    $parametros="usuario=$usuario&clave=$clave&texto=$mensaje&telefonos=$telefono";
+
+    $url = "http://www.sistema.massivamovil.com/webservices/SendSms";
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST,true);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $parametros);
+    $response = curl_exec($ch);
+
+    curl_close($ch);
 }
 ?>

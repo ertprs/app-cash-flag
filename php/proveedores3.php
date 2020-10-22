@@ -29,6 +29,8 @@ if ($row = mysqli_fetch_array($result)) {
 			$respuesta .= ','.'"referencia":"'.trim($row["documento"]).'"';
 			$respuesta .= ','.'"monto":'.$row["monto"];
 			$respuesta .= ','.'"status":"'.$row["status"].'"';
+			$respuesta .= ','.'"pin":'.$row["pin"];
+			$respuesta .= ','.'"hashpin":"'.$row["hashpin"].'"';
 			$respuesta .= '}';
 		}
 	}

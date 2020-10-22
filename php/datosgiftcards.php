@@ -109,10 +109,10 @@ if ($result = mysqli_query($link,$query)) {
 			$tipo2 = '51'; 
 			// Insertar transacción para confirmar
 			$quer2  = 'INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, ';
-			$quer2 .= 'instrumento, id_instrumento, documento, status, origen, token) ';
+			$quer2 .= 'instrumento, id_instrumento, documento, status, origen, token, pin, hashpin) ';
 			$quer2 .= 'VALUES ("'.$fecha.'","'.$fechaconfirmacion.'",'.$idproveedor.','.$idsocio.',"'.$tipo2.'","'.$moneda.'",';
 			$quer2 .= $monto.',"giftcard","'.$card.'","'.$referencia.'","'.$status;
-			$quer2 .= '","","")';
+			$quer2 .= '","","",0,"")';
 			$resul2 = mysqli_query($link,$quer2);
 
 			$txtcard = substr($card,0,4).'-'.substr($card,4,4).'-'.substr($card,8,4).'-'.substr($card,12,4);
@@ -167,10 +167,10 @@ if ($result = mysqli_query($link,$query)) {
 				$tipo2 = '51'; 
 				// Insertar transacción para confirmar
 				$quer2  = 'INSERT INTO pdv_transacciones (fecha, fechanconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, ';
-				$quer2 .= 'instrumento, id_instrumento, documento, status, origen, token) ';
+				$quer2 .= 'instrumento, id_instrumento, documento, status, origen, token, pin, hashpin) ';
 				$quer2 .= 'VALUES ("'.$fecha.'","0000-00-00",'.$idproveedor.','.$idsocio.',"'.$tipo2.'","'.$moneda.'",';
 				$quer2 .= $monto.',"giftcard","'.$card.'","'.$referencia.'","'.$status;
-				$quer2 .= '","","")';
+				$quer2 .= '","","",0,"")';
 				$resul2 = mysqli_query($link,$quer2);
 
 				$txtcard = substr($card,0,4).'-'.substr($card,4,4).'-'.substr($card,8,4).'-'.substr($card,12,4);

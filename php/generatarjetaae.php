@@ -83,10 +83,10 @@ if ($result = mysqli_query($link,$query)) {
 			$tipo2 = '51'; 
 			// Insertar transacción confirmada
 			$quer2  = 'INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, ';
-			$quer2 .= 'moneda, monto, instrumento, id_instrumento, documento, status, origen, token) ';
+			$quer2 .= 'moneda, monto, instrumento, id_instrumento, documento, status, origen, token, pin, hashpin) ';
          $quer2 .= 'VALUES ("'.$fecha.'","'.$fechaconfirmacion.'",'.$idproveedor.','.$idsocio.',"'.$tipo2.'", ';
          $quer2 .= '"'.$moneda.'",'.$monto.',"prepago","'.$card.'","'.$referencia.'","'.$status.'", ';
-			$quer2 .= '"'.$origen.'","")';
+			$quer2 .= '"'.$origen.'","",0,"")';
 			$resul2 = mysqli_query($link,$quer2);
 			$querx = 'UPDATE _parametros SET dcp='.$dcp;
 			$resulx = mysqli_query($link,$querx);
