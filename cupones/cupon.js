@@ -218,3 +218,24 @@ function buscatitulo() {
 function volver() {
 	window.open(localStorage.getItem("url_back"), "_self");
 }
+
+function validanumero(){
+	valor = document.getElementById("telefono").value;
+	lista = "0123456789";
+	if(valor.length<12){
+		alert("El campo teléfono debe contener 12 números\ny el fofrmato debe ser:\n- Código país (2 dígitos, ejemplo: 58)\n- Prefijo (4 dígitos, ejemplo 0414)\n- Número (7 dígitos, ejemplo 1234567)");
+		document.getElementById("telefono").focus();
+	} else {
+		let novalido = 0;
+		for (let i = 0; i < valor.length; i++) {
+			posicion = lista.indexOf(valor.substr(i,1));
+			if (posicion<0) {
+				novalido++;
+			}
+		}
+		if (novalido>0) {
+			alert("El campo teléfono debe contener sólo números\ny el fofrmato debe ser:\n- Código país (2 dígitos, ejemplo: 58)\n- Prefijo (4 dígitos, ejemplo 0414)\n- Número (7 dígitos, ejemplo 1234567)");
+			document.getElementById("telefono").focus();
+		}
+	}
+}
