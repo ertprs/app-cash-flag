@@ -159,7 +159,7 @@
 
 		tarjeta = (params==undefined) ? '1111222233334444' : params.card ;
 
-		let card1, saldo=0.00, bsdolar=0.00;
+		let card1, saldo=0.00, bsdolar=0.00, usdae=0.00;
 
 		let idproveedor=0, token="";
 		// , ficha='';
@@ -189,6 +189,7 @@
 					saldo         = respuesta.saldo;
 					simbolomoneda = respuesta.simbolomoneda;
 					bsdolar       = respuesta.bsdolar;
+					usdae         = respuesta.usdae;
 					idproveedor   = respuesta.idproveedor;
 					moneda        = respuesta.moneda;
 					secretKey     = respuesta.secretkey;
@@ -211,8 +212,13 @@
 						bsaldo = Math.round( saldo/bsdolar*100 )/100;
 						document.getElementById("ssaldo").innerHTML = "("+formatNumber.new(bsaldo)+" $)";
 					} else {
-						console.log(saldo);
-						document.getElementById("ssaldo").innerHTML = "("+formatNumber.new(saldo)+" $)";
+						if(moneda=="ae") {
+							bsaldo = Math.round( saldo*usdae*100 )/100;
+							document.getElementById("ssaldo").innerHTML = "("+formatNumber.new(bsaldo)+" $)";
+						} else {
+							console.log(saldo);
+							document.getElementById("ssaldo").innerHTML = "("+formatNumber.new(saldo)+" $)";
+						}
 					}
 					document.getElementById("smonto").innerHTML = formatNumber.new(0)+" $";
 					// card2.dibuja('tarjetero');
@@ -522,8 +528,13 @@
 				bmonto = Math.round( document.getElementById("monto").value/bsdolar*100 )/100;
 				document.getElementById("smonto").innerHTML = formatNumber.new(bmonto)+" $";
 			} else {
-				bmonto = document.getElementById("monto").value;
-				document.getElementById("smonto").innerHTML = formatNumber.new(bmonto)+" $";
+				if(moneda=="ae") {
+					bmonto = Math.round( document.getElementById("monto").value*usdae*100 )/100;
+					document.getElementById("smonto").innerHTML = formatNumber.new(bmonto)+" $";
+				} else {
+					bmonto = document.getElementById("monto").value;
+					document.getElementById("smonto").innerHTML = formatNumber.new(bmonto)+" $";
+				}
 			}
 		}
 	</script>

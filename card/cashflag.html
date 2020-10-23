@@ -198,6 +198,7 @@
 					saldo         = respuesta.saldo;
 					simbolomoneda = respuesta.simbolomoneda;
 					bsdolar       = respuesta.bsdolar;
+					usdae         = respuesta.usdae;
 					idproveedor   = respuesta.idproveedor;
 					moneda        = respuesta.moneda;
 					secretKey     = respuesta.secretkey;
@@ -212,7 +213,12 @@
 						bsaldo = Math.round( saldo/bsdolar*100 )/100;
 						document.getElementById("ssaldo").innerHTML = "("+formatNumber.new(bsaldo)+" $)";
 					} else {
-						document.getElementById("ssaldo").innerHTML = "("+formatNumber.new(saldo)+" $)";
+						if(moneda=="ae") {
+							bsaldo = Math.round( saldo*usdae*100 )/100;
+							document.getElementById("ssaldo").innerHTML = "("+formatNumber.new(bsaldo)+" $)";
+						} else {
+							document.getElementById("ssaldo").innerHTML = "("+formatNumber.new(saldo)+" $)";
+						}
 					}
 					document.getElementById("smonto").innerHTML = formatNumber.new(0)+" $";
 				}
@@ -629,8 +635,13 @@
 				bmonto = Math.round( document.getElementById("monto").value/bsdolar*100 )/100;
 				document.getElementById("smonto").innerHTML = formatNumber.new(bmonto)+" $";
 			} else {
-				bmonto = document.getElementById("monto").value;
-				document.getElementById("smonto").innerHTML = formatNumber.new(bmonto)+" $";
+				if(moneda=="ae") {
+					bmonto = Math.round( document.getElementById("monto").value*usdae*100 )/100;
+					document.getElementById("smonto").innerHTML = formatNumber.new(bmonto)+" $";
+				} else {
+					bmonto = document.getElementById("monto").value;
+					document.getElementById("smonto").innerHTML = formatNumber.new(bmonto)+" $";
+				}
 			}
 		}
 	</script>

@@ -55,7 +55,7 @@
 
 		</div>
 		<script>
-			let respuesta, tarjetas, bsdolar, paroimpar, idsocio = localStorage.getItem("idsocio"), nombresocio = localStorage.getItem("nombresocio");
+			let respuesta, tarjetas, bsdolar, usdae, paroimpar, idsocio = localStorage.getItem("idsocio"), nombresocio = localStorage.getItem("nombresocio");
 
 			let actubalanceae = new Promise( (resolve, reject) => {
 				let xmlhttp = new XMLHttpRequest();
@@ -110,6 +110,7 @@
 							if (this.readyState == 4 && this.status == 200) {
 								respuesta = JSON.parse(this.responseText);
 								bsdolar   = respuesta.bsdolar;
+								usdae     = respuesta.usdae;
 								console.log(respuesta);
 								if (respuesta.exito=="SI") {
 									tarjetas = respuesta.tarjetas;
@@ -166,7 +167,11 @@
 					if(tarjetas[i].moneda=="bs") {
 						saldoUSD = Math.round( tarjetas[i].saldo/bsdolar*100 )/100;
 					} else {
-						saldoUSD = tarjetas[i].saldo;
+						if(tarjetas[i].moneda=="ae") {
+							saldoUSD = Math.round( tarjetas[i].saldo*usdae*100 )/100;
+						} else {
+							saldoUSD = tarjetas[i].saldo;
+						}
 					}
 					console.log(bsdolar);
 					console.log(saldoUSD);
