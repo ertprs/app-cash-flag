@@ -3,6 +3,14 @@
 header('Content-Type: application/json');
 include_once("../_config/conexion.php");
 
+// Buscar cambiodolar
+$bsdolar = 0;
+$query = "SELECT dolar from _parametros";
+$result = mysqli_query($link, $query);
+if ($row = mysqli_fetch_array($result)) {
+	$bsdolar = $row["dolar"];
+}
+
 // Buscar giftcards
 $query = "SELECT * from socios where id=".$_GET["idsocio"];
 $result = mysqli_query($link, $query);
@@ -14,7 +22,7 @@ if ($row = mysqli_fetch_array($result)) {
 	$inicio = true;
 
 	// Buscar prepagos
-	$query = "SELECT proveedores.nombre, 'prepago' as tipo, simbolo, card, saldo, saldoentransito, validez, prepago.status, prepago.premium from prepago left outer join proveedores on prepago.id_proveedor=proveedores.id left outer join _monedas on prepago.moneda=_monedas.moneda where prepago.email='".$email."' union SELECT proveedores.nombre, 'giftcard' as tipo, simbolo, card, saldo, 0 as saldoentransito, validez, giftcards.status, giftcards.premium from giftcards left outer join proveedores on giftcards.id_proveedor=proveedores.id left outer join _monedas on giftcards.moneda=_monedas.moneda where giftcards.email='".$email."' order by premium desc, status, nombre, tipo desc, validez, card";
+	$query = "SELECT proveedores.nombre, 'prepago' as tipo, prepago.moneda, simbolo, card, saldo, saldoentransito, validez, prepago.status, prepago.premium from prepago left outer join proveedores on prepago.id_proveedor=proveedores.id left outer join _monedas on prepago.moneda=_monedas.moneda where prepago.email='".$email."' union SELECT proveedores.nombre, 'giftcard' as tipo, giftcards.moneda, simbolo, card, saldo, 0 as saldoentransito, validez, giftcards.status, giftcards.premium from giftcards left outer join proveedores on giftcards.id_proveedor=proveedores.id left outer join _monedas on giftcards.moneda=_monedas.moneda where giftcards.email='".$email."' order by premium desc, status, nombre, tipo desc, validez, card";
 	$result = mysqli_query($link, $query);
 	while ($row = mysqli_fetch_array($result)) {
 		if ($row["tipo"]==$_GET["tipo"]) {
@@ -29,6 +37,7 @@ if ($row = mysqli_fetch_array($result)) {
 				$respuesta .= $coma.'{';
 				$respuesta .= '"nombre":"'.$row["nombre"].'",';
 				$respuesta .= '"tipo":"'.$row["tipo"].'",';
+				$respuesta .= '"moneda":"'.$row["moneda"].'",';
 				$respuesta .= '"simbolo":"'.$row["simbolo"].'",';
 				$respuesta .= '"tarjeta":"'.$row["card"].'",';
 				$respuesta .= '"saldo":'.$monto.',';
@@ -39,7 +48,7 @@ if ($row = mysqli_fetch_array($result)) {
 			}
 		}
 	}
-	$respuesta .= ']}';
+	$respuesta .= '],"bsdolar":'.$bsdolar.'}';
 } else {
 	$respuesta = '{"exito": "NO"}';
 }

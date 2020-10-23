@@ -62,9 +62,18 @@ $result = mysqli_query($link, $query);
 if ($row = mysqli_fetch_array($result)) {
 	$dibujomoneda       = $row["dibujo"];
 	$dibujomonedablanco = $row["dibujoblanco"];
+	$simbolomoneda      = $row["simbolo"];
 }
 
-$respuesta = '{"logocard":"'.$logo.'","tipo":"'.$tipo.'","nombres":"'.$nombres.'","vencimiento":"'.$vencimiento.'","saldo":'.$saldo.',"qr":"'.$qr.'","idproveedor":'.$idproveedor.',"moneda":"'.$moneda.'","dibujomoneda":"'.$dibujomoneda.'","dibujomonedablanco":"'.$dibujomonedablanco.'","secretkey":"'.$secretkey.'","publickey":"'.$account.'"}';
+// Buscar cambiodolar
+$bsdolar = 0;
+$query = "SELECT dolar from _parametros";
+$result = mysqli_query($link, $query);
+if ($row = mysqli_fetch_array($result)) {
+	$bsdolar = $row["dolar"];
+}
+
+$respuesta = '{"logocard":"'.$logo.'","tipo":"'.$tipo.'","nombres":"'.$nombres.'","vencimiento":"'.$vencimiento.'","saldo":'.$saldo.',"qr":"'.$qr.'","idproveedor":'.$idproveedor.',"moneda":"'.$moneda.'","dibujomoneda":"'.$dibujomoneda.'","dibujomonedablanco":"'.$dibujomonedablanco.'","secretkey":"'.$secretkey.'","publickey":"'.$account.'","simbolomoneda":"'.$simbolomoneda.'","bsdolar":'.$bsdolar.'}';
 
 echo $respuesta;
 ?>

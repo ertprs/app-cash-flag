@@ -109,6 +109,7 @@
 						xmlhttp.onreadystatechange = function() {
 							if (this.readyState == 4 && this.status == 200) {
 								respuesta = JSON.parse(this.responseText);
+								bsdolar   = respuesta.bsdolar;
 								console.log(respuesta);
 								if (respuesta.exito=="SI") {
 									tarjetas = respuesta.tarjetas;
@@ -156,10 +157,29 @@
 					cl3.appendChild(txtTarjeta);
 
 					// saldo en la columna 4
+					// txtSaldo = document.createTextNode(formatNumber.new(tarjetas[i].saldo)+" "+tarjetas[i].simbolo);
 					txtSaldo = document.createTextNode(formatNumber.new(tarjetas[i].saldo)+" "+tarjetas[i].simbolo);
+					sp1 = document.createElement("span");
+					sp1 = document.createElement("span");
+					sp1.appendChild(txtSaldo);
+
+					if(tarjetas[i].moneda=="bs") {
+						saldoUSD = Math.round( tarjetas[i].saldo/bsdolar*100 )/100;
+					} else {
+						saldoUSD = tarjetas[i].saldo;
+					}
+					console.log(bsdolar);
+					console.log(saldoUSD);
+					txtSaldoUSD = document.createTextNode("("+formatNumber.new(saldoUSD)+" $)");
+					sp2 = document.createElement("span");
+					sp2.style.fontSize = "70%";
+					sp2.appendChild(txtSaldoUSD);
+
 					cl4 = document.createElement("div");
 					cl4.classList.add("columna4");
-					cl4.appendChild(txtSaldo);
+					cl4.style.display = "grid";
+					cl4.appendChild(sp1);
+					cl4.appendChild(sp2);
 
 					// vencimiento en la columna 5
 					txtValidez = document.createTextNode(tarjetas[i].validez);

@@ -153,13 +153,13 @@
 	<script type="text/javascript" src="../lector/instascan.min.js"></script>
 	<script src="../lib/socket.io.js"></script>
 	<script>
-        var socket = io('https://ws.sgc-consultores.com.ve');
+      // var socket = io('https://ws.sgc-consultores.com.ve');
 
 		let tarjeta, params = fparamurl(window.location.search.substr(1));
 
 		tarjeta = (params==undefined) ? '1111222233334444' : params.card ;
 
-		let card1, saldo=0.00;
+		let card1, saldo=0.00, bsdolar=0.00;
 
 		let idproveedor=0, token="";
 		// , ficha='';
@@ -186,8 +186,14 @@
 						respuesta.qr
 					);
 
-					saldo = respuesta.saldo;
-					idproveedor = respuesta.idproveedor;
+					saldo         = respuesta.saldo;
+					simbolomoneda = respuesta.simbolomoneda;
+					bsdolar       = respuesta.bsdolar;
+					idproveedor   = respuesta.idproveedor;
+					moneda        = respuesta.moneda;
+					secretKey     = respuesta.secretkey;
+					publicKey     = respuesta.publickey;
+
 
 					// const card1 = new Card(
 					// 	'mycard',
@@ -200,6 +206,15 @@
 					// );
 
 					card1.dibuja('tarjetero');
+					document.getElementById("psaldo").innerHTML = "Saldo: "+formatNumber.new(saldo)+" "+simbolomoneda;
+					if(moneda=="bs") {
+						bsaldo = Math.round( saldo/bsdolar*100 )/100;
+						document.getElementById("ssaldo").innerHTML = "("+formatNumber.new(bsaldo)+" $)";
+					} else {
+						console.log(saldo);
+						document.getElementById("ssaldo").innerHTML = "("+formatNumber.new(saldo)+" $)";
+					}
+					document.getElementById("smonto").innerHTML = formatNumber.new(0)+" $";
 					// card2.dibuja('tarjetero');
 				}
 			};
@@ -501,6 +516,16 @@
 			modal_area2.style.display = 'none';
 			console.log('cerrarlector');
 		}
+
+		function actucambio() {
+			if(moneda=="bs") {
+				bmonto = Math.round( document.getElementById("monto").value/bsdolar*100 )/100;
+				document.getElementById("smonto").innerHTML = formatNumber.new(bmonto)+" $";
+			} else {
+				bmonto = document.getElementById("monto").value;
+				document.getElementById("smonto").innerHTML = formatNumber.new(bmonto)+" $";
+			}
+		}
 	</script>
 </head>
 <body id="cuerpo" onload="generacard()">
@@ -508,23 +533,37 @@
 		<div id="mensaje_inicial" style="text-align: center;">
 			<span style="margin-top: 15px; font-size: 120%;">Cargando tarjeta...</span>			
 		</div>
-		<tarjeta id="tarjetero">
-		</tarjeta>
+		<div id="tarjetero">
+		</div>
 		<div class="parrafo">
 			<div class="parrafo_centrado">
+				<p style="margin: 0 0 0.5em;">
+					<span id="psaldo">
+						Saldo: 0,00 $
+					</span>
+					<span id="ssaldo" style="margin-left: 0.25em; font-size: 75%;">
+						(0,00 $)
+					</span>
+				</p>
 				<div class="cmps">
 					<span class="etiq">Monto a pagar:</span>
-					<input id="monto" class="campo" type="text" maxlength="15" />
+					<input id="monto" class="campo" type="text" maxlength="15" onkeyup="actucambio()" />
+					<br/>
+					<div style="width: 280px; text-align: right;">
+						<span id="smonto" style="font-size: 75%;">
+							0,00 $
+						</span>
+					</div>
 				</div>
 			</div>
 			<p class="parrafo_justificado" style="font-size: 75%; margin-top: 0.75em;">
-				A continuación hay dos opciones para enviar la transacción:
+				Opciones para enviar la transacción:
 			</p>
 			<p class="parrafo_justificado" style="font-size: 75%;">
-				1) Mostrar el código QR para que el comercio lo escanee y solicite tu aprobación
+				1) Mostrar el código QR de la tarjeta (el comerciante escanea)
 			</p>
 			<p class="parrafo_justificado" style="font-size: 75%;">
-				2) Escanear el código del comercio y enviar directamente la transacción aprobada
+				2) Escanear código QR del comercio
 			</p>
 		</div>
 		<div class="btns_centrado">
