@@ -3,13 +3,14 @@ include_once("../_config/conexion.php");
 include_once("./funciones.php");
 
 // Asignación de variables
-$idsocio = (isset($_POST['idsocio'])) ? $_POST['idsocio'] : "" ;
-$nombres = (isset($_POST['nombres'])) ? $_POST['nombres'] : "" ;
+$idsocio   = (isset($_POST['idsocio'])) ? $_POST['idsocio'] : "" ;
+$nombres   = (isset($_POST['nombres'])) ? $_POST['nombres'] : "" ;
 $apellidos = (isset($_POST['apellidos'])) ? $_POST['apellidos'] : "" ;
-$telefono = (isset($_POST['telefono'])) ? $_POST['telefono'] : "" ;
-$email = (isset($_POST['email'])) ? $_POST['email'] : "" ;
-$moneda = (isset($_POST['moneda'])) ? $_POST['moneda'] : "bs" ;
-$monto = (isset($_POST['monto'])) ? $_POST['monto'] : 0 ;
+$telefono  = (isset($_POST['telefono'])) ? $_POST['telefono'] : "" ;
+$email     = (isset($_POST['email'])) ? $_POST['email'] : "" ;
+$moneda    = (isset($_POST['moneda'])) ? $_POST['moneda'] : "bs" ;
+$monto     = (isset($_POST['monto'])) ? $_POST['monto'] : 0 ;
+$cardx     = (isset($_POST['card'])) ? $_POST['card'] : "" ;
 switch ($moneda) {
 	case 'bs':
 		$montobs = $monto; $montodolares = 0.00; $montocripto = 0.00; $simbolo = 'Bs.'; 
@@ -17,8 +18,8 @@ switch ($moneda) {
 	case 'dolar':
 		$montobs = 0.00; $montodolares = $monto; $montocripto = 0.00; $simbolo = '$'; 
 		break;
-	case 'cripto':
-		$montobs = 0.00; $montodolares = 0.00; $montocripto = $monto; $simbolo = 'Criptos'; 
+	case 'ae':
+		$montobs = 0.00; $montodolares = 0.00; $montocripto = $monto; $simbolo = 'AE'; 
 		break;
 	default:
 		$montobs = $monto; $montodolares = 0.00; $montocripto = 0.00; $simbolo = 'Bs.'; 
@@ -31,6 +32,11 @@ $idproveedor = (isset($_POST['idproveedor'])) ? $_POST['idproveedor'] : 0 ;
 $tipopago = (isset($_POST['tipopago'])) ? $_POST['tipopago'] : 'efectivo' ;
 $origen = (isset($_POST['origen'])) ? $_POST['origen'] : '' ;
 $referencia = (isset($_POST['referencia'])) ? $_POST['referencia'] : '' ;
+if ($tipopago=="cashflag") {
+	$origen = 'cashflag' ;
+	$referencia = $cardx ;
+}
+
 // Buscar el nombre del proveedor para generar la giftcard
 $query = "select * from proveedores where id=".$idproveedor;
 $result = mysqli_query($link, $query);
@@ -72,13 +78,13 @@ if ($row = mysqli_fetch_array($result)) {
 	$tarjetaexiste = true;
    $card = $row["card"];
    $saldoant = $row["saldo"];
-   $saldo = ($tipopago == 'efectivo') ? $row["saldo"]+$monto : $row["saldo"] ;
+   $saldo = ($tipopago == 'efectivo' || $tipopago == 'cashflag') ? $row["saldo"]+$monto : $row["saldo"] ;
 } else {
 	// Generar la tarjeta
 	$tarjetaexiste = false;
 	$card = $cardnew;
    $saldoant = 0.00;
-   $saldo = ($tipopago == 'efectivo') ? $monto : 0.00 ;
+   $saldo = ($tipopago == 'efectivo' || $tipopago == 'cashflag') ? $monto : 0.00 ;
 }
 
 // Fecha de compra
@@ -95,7 +101,7 @@ $diferencia = date_diff($datetime1, $datetime2);
 $validez = substr($fechavencimiento,5,2)."/".substr($fechavencimiento,0,4);
 
 // Status, si es en efectivo queda lista para usar de inmediato, si no queda por conciliar
-$status = ( $tipopago == 'efectivo') ? 'Lista para usar' : 'Por confirmar pago' ;
+$status = ( $tipopago == 'efectivo' || $tipopago == 'cashflag') ? 'Lista para usar' : 'Por confirmar pago' ;
 
 // Encripta la giftcard
 $hash = hash("sha256",$card.$nombres.$apellidos.$telefono.$email.$monto.$idproveedor.$moneda);
@@ -104,6 +110,20 @@ $pwd  = hash("sha256",$card.$aux);
 
 $query = "INSERT INTO giftcards_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card) VALUES (".$idsocio.",".$idproveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','".$status."','".$card."')";
 if ($result = mysqli_query($link,$query)) {
+	if ($tipopago=="cashflag") {
+		$querz = "select * from prepago where card='".$cardx."'";
+		$resulz = mysqli_query($link,$querz);
+		if ($roz = mysqli_fetch_array($resulz)) {
+			$provx    = $roz["id_proveedor"];
+			$saldx    = $roz["saldo"]-$monto;
+		}
+		$tipotrx = '51';
+		$querz = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card) VALUES (".$idsocio.",".$provx.",'".$fecha."','".$tipotrx."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','".$status."','".$cardx."')";
+		if ($resulz = mysqli_query($link,$querz)) {
+			$querz = "UPDATE prepago SET saldo=".$saldx." WHERE card='".trim($cardx)."'";
+			$resulz = mysqli_query($link,$querz);
+		}
+	}
 	if ($tarjetaexiste) {
 		$query = "UPDATE giftcards SET saldo=".$saldo." WHERE card='".trim($card)."'";
 		if ($result = mysqli_query($link,$query)) {
@@ -116,7 +136,7 @@ if ($result = mysqli_query($link,$query)) {
 				switch ($moneda) {
 					case 'bs':     $mensaje .= "Bs. ";     break;
 					case 'dolar':  $mensaje .= "US$ ";     break;
-					case 'cripto': $mensaje .= "Criptos "; break;
+					case 'ae': $mensaje .= "AE "; break;
 				}
 				$mensaje .= number_format($saldo,2,',','.').'","",';
 				$mensaje .= '"Fecha de vencimiento: '.substr($fechavencimiento,8,2)."/".substr($fechavencimiento,5,2)."/".substr($fechavencimiento,0,4).'",';
@@ -131,14 +151,14 @@ if ($result = mysqli_query($link,$query)) {
 				switch ($moneda) {
 					case 'bs':     $mensaje .= "Bs. ";     break;
 					case 'dolar':  $mensaje .= "US$ ";     break;
-					case 'cripto': $mensaje .= "Criptos "; break;
+					case 'ae': $mensaje .= "AE "; break;
 				}
 				$mensaje .= number_format($saldoant,2,',','.').'",';
 				$mensaje .= '"Una vez confirmada la transacción, su nuevo saldo será de: ';
 				switch ($moneda) {
 					case 'bs':     $mensaje .= "Bs. ";     break;
 					case 'dolar':  $mensaje .= "US$ ";     break;
-					case 'cripto': $mensaje .= "Criptos "; break;
+					case 'ae': $mensaje .= "AE "; break;
 				}
 				$mensaje .= number_format($saldoant+$monto,2,',','.').'","",';
 				$mensaje .= '"Fecha de vencimiento: '.substr($fechavencimiento,8,2)."/".substr($fechavencimiento,5,2)."/".substr($fechavencimiento,0,4).'",';
@@ -164,7 +184,7 @@ if ($result = mysqli_query($link,$query)) {
 					switch ($moneda) {
 						case 'bs':     $mensaje .= "Bs. ";     break;
 						case 'dolar':  $mensaje .= "US$ ";     break;
-						case 'cripto': $mensaje .= "Criptos "; break;
+						case 'ae': $mensaje .= "AE "; break;
 					}
 					$mensaje .= number_format($monto,2,',','.').'","",';
 					$mensaje .= '"Fecha de vencimiento: '.substr($fechavencimiento,8,2)."/".substr($fechavencimiento,5,2)."/".substr($fechavencimiento,0,4).'",';
@@ -179,7 +199,7 @@ if ($result = mysqli_query($link,$query)) {
 					switch ($moneda) {
 						case 'bs':     $mensaje .= "Bs. ";     break;
 						case 'dolar':  $mensaje .= "US$ ";     break;
-						case 'cripto': $mensaje .= "Criptos "; break;
+						case 'ae': $mensaje .= "AE "; break;
 					}
 					$mensaje .= number_format($saldoant+$monto,2,',','.').'"]';
 				}
@@ -198,6 +218,7 @@ if ($result = mysqli_query($link,$query)) {
    $respuesta = '{"exito":"NO","mensaje":"La transacción no pudo completarse por favor comuniquese con soporte técnico [3]","card":"'.$card.'","hash":"'.$hash.'"}';	
 }
 echo $respuesta;
+
 
 function correogiftcard($card, $nombres, $remitente, $correo, $comercio, $monto, $simbolo, $validez, $pwd, $ruta) {
 	$mensaje = 
@@ -268,17 +289,17 @@ function correogiftcard($card, $nombres, $remitente, $correo, $comercio, $monto,
 	 </body>
 	</html>';
  
-$asunto = '¡Felicidades '.$nombres.', has recibido un regalo de '.$remitente.'!';
- 
-$cabeceras = 'Content-type: text/html; charset=utf-8'."\r\n";
-$cabeceras .= 'From: Cash-Flag <info@cash-flag.com>';
- 
-$a = fopen('log.html','w+');
-fwrite($a,$asunto);
-fwrite($a,'-');
-fwrite($a,$mensaje);
- 
-mail($correo,$asunto,$mensaje,$cabeceras);
+	$asunto = '¡Felicidades '.$nombres.', has recibido un regalo de '.$remitente.'!';
+	
+	$cabeceras = 'Content-type: text/html; charset=utf-8'."\r\n";
+	$cabeceras .= 'From: Cash-Flag <info@cash-flag.com>';
+	
+	$a = fopen('log.html','w+');
+	fwrite($a,$asunto);
+	fwrite($a,'-');
+	fwrite($a,$mensaje);
+	
+	mail($correo,$asunto,$mensaje,$cabeceras);
 }
 
 
@@ -325,7 +346,7 @@ if ($result = mysqli_query($link,$query)) {
 	switch ($moneda) {
 		case 'bs':     $mensaje .= "Bs. ";     break;
 		case 'dolar':  $mensaje .= "US$ ";     break;
-		case 'cripto': $mensaje .= "Criptos "; break;
+		case 'ae': $mensaje .= "AE "; break;
 	}
 	$mensaje .= number_format($monto,2,',','.').'",';
 	$mensaje .= '"Fecha de vencimiento: '.substr($fechavencimiento,8,2)."/".substr($fechavencimiento,5,2)."/".substr($fechavencimiento,0,4).'",';

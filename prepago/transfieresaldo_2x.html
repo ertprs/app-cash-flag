@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>Cash-Flag</title>
+		<link rel="stylesheet" href="./transferencia.css">
+		<script type="text/javascript" src="../js/funciones.js"></script>
+	</head>
+	<body onload="inicio()">
+		<div id="container">
+			<div class="logo" align="center">
+				<img class="img-logo" id="logo" src="../img/logoclub.png" alt="">
+			</div>
+			<h3 align="center">Transferir saldo entre tarjetas prepagadas</h3>
+			<h3 id="socio" align="center"></h3>
+			<!-- <br/> -->
+			<div id="div1" align="center">
+				<div id="campos">
+					<div id="tarjetaorigen">
+						<!-- Origen -->
+						<div id="divorigen" class="cmps">
+							<span class="etiq">Tarjeta de origen:</span>
+                     <b><span id="cardorigen"></span></b><br/>
+							<!-- <select id="cardorigen" class="campo" onchange="datostarjetafrom(this.value)">
+								<option value="no">Selecciona tarjeta</option>
+							</select> -->
+                  </div>
+                  <p style="text-align: left; margin: 5px 0 10px 38.75%;">
+                     <!-- <span style="width: 60px;">Tarjeta de origen:</span>
+                     <b><span id="cardorigen"></span></b><br/> -->
+
+							<span style="width: 60px;">Tipo de tarjeta:</span>
+                     <b><span id="tipoorigen"></span></b><br/>
+                     
+                     <span style="width: 50px;">Comercio:</span>
+                     <b><span id="comercioorigen"></span></b><br/>
+                     
+                     <span style="width: 50px;">Moneda:</span>
+                     <b><span id="monedaorigen"></span></b><br/>
+                     
+                     <span style="width: 50px;">Saldo:</span>
+                     <b><span id="saldoorigen"></span></b>
+                  </p>
+					</div>
+					<div id="tarjetadestino">
+						<!-- Origen -->
+						<div id="divdestino" class="cmps">
+							<span class="etiq">Tarjeta de destino:</span>
+							<input id="carddestino" class="campo" type="text" size="20" maxlength="16" title="Debe introducir sólo números" onchange="datostarjetato(this.value)"/>
+							<!-- <select id="carddestino" class="campo">
+								<option value="no">Selecciona tarjeta</option>
+							</select> -->
+						</div>
+                  <p style="text-align: left; margin: 5px 0 10px 38.75%;">
+                     <span style="width: 60px;">Tipo de tarjeta:</span>
+                     <b><span id="tipodestino"></span></b><br/>
+                     
+                     <span style="width: 50px;">Comercio:</span>
+                     <b><span id="comerciodestino"></span></b><br/>
+                     
+                     <span style="width: 50px;">Moneda:</span>
+                     <b><span id="monedadestino"></span></b><br/>
+                     
+                     <span style="width: 50px;">Saldo:</span>
+                     <b><span id="saldodestino"></span></b>
+                  </p>
+					</div>
+				</div>
+				<!-- Linea de botones -->
+				<div class="btns">
+					<button id="btnvolver" style="width: 10em; margin: 0.5em 0 0 0;">Volver</button>
+				</div>
+			</div>
+		</div>
+		<script>
+         var idsocio = localStorage.getItem("idsocio"), tarjetas;
+
+			let tarjorigen, params = fparamurl(window.location.search.substr(1));
+
+			tarjorigen = (params==undefined) ? '1111222233334444' : params.card ;
+
+			function inicio() {
+            console.log(localStorage);
+				document.getElementById("btnvolver").addEventListener('click', function(){
+               window.open(localStorage.getItem("url_bck2"), "_self")
+            });
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function () {
+					if (this.readyState == 4 && this.status == 200) {
+                  respuesta = JSON.parse(this.responseText);
+                  console.log(respuesta);
+
+						txtCard = tarjorigen.substr(0,4)+"-"+tarjorigen.substr(4,4)+"-"+tarjorigen.substr(8,4)+"-"+tarjorigen.substr(12,4);
+                  document.getElementById("cardorigen").innerHTML = txtCard;
+                  if(respuesta.premium) {
+                     document.getElementById("tipoorigen").innerHTML = "PREMIUM";
+                  } else {
+                     document.getElementById("tipoorigen").innerHTML = "Local";
+                  }
+                  document.getElementById("comercioorigen").innerHTML = respuesta.nombreproveedor;
+                  switch (respuesta.moneda) {
+                     case 'bs':    txMoneda = 'Bolívares'; break;
+                     case 'dolar': txMoneda = 'Dólares';   break;
+                     case 'ae':    txMoneda = 'Aeternity'; break;
+                     default:      txMoneda = 'Bolívares'; break;
+                  }
+                  document.getElementById("monedaorigen").innerHTML   = txMoneda;
+                  document.getElementById("saldoorigen").innerHTML    = formatNumber.new(respuesta.saldo)+" "+respuesta.simbolomoneda;
+
+                  // if (respuesta.exito=="SI") {
+                  //    tarjetas = respuesta.tarjetas;
+                  //    tarjetas.forEach( function(element, index) {
+                  //       txc = element.tarjeta.substr(0,4)+"-"+element.tarjeta.substr(4,4)+"-"+element.tarjeta.substr(8,4)+"-"+element.tarjeta.substr(12,4);
+	               //       txtcard = document.createTextNode(txc);
+	               //       item = document.createElement("option");
+	               //       item.value = element.tarjeta;
+	               //       item.id = element.tarjeta;
+	               //       item.appendChild(txtcard);
+	               //       cardorigen.appendChild(item);
+						// 	});
+                  // }
+               }
+				};
+				xmlhttp.open("GET", "../php/buscatarjeta.php?t="+tarjorigen, true);
+				xmlhttp.send();
+			}
+
+			let validadestino = new Promise( (resolve, reject) => {
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function () {
+					if (this.readyState == 4 && this.status == 200) {
+                  respuesta = JSON.parse(this.responseText);
+                  console.log(respuesta);
+
+                  if(respuesta.premium) {
+                     document.getElementById("tipodestino").innerHTML = "PREMIUM";
+                  } else {
+                     document.getElementById("tipodestino").innerHTML = "Local";
+                  }
+						colorFon0 = document.getElementById("tipodestino").style.color;
+						if(document.getElementById("tipoorigen").innerHTML!="PREMIUM") {
+							if(document.getElementById("tipoorigen").innerHTML!=document.getElementById("tipodestino").innerHTML) {
+								document.getElementById("tipodestino").style.color = 'red';
+							} else {
+								document.getElementById("tipodestino").style.color = colorFon0;
+							}
+						} else {
+							document.getElementById("tipodestino").style.color = colorFon0;
+						}
+
+                  document.getElementById("comerciodestino").innerHTML = respuesta.nombreproveedor;
+						colorFon1 = document.getElementById("comerciodestino").style.color;
+						if(document.getElementById("tipoorigen").innerHTML!="PREMIUM") {
+							if(document.getElementById("comercioorigen").innerHTML!=document.getElementById("comerciodestino").innerHTML) {
+								document.getElementById("comerciodestino").style.color = 'red';
+							} else {
+								document.getElementById("comerciodestino").style.color = colorFon1;
+							}
+						} else {
+							document.getElementById("comerciodestino").style.color = colorFon1;
+						}
+
+                  switch (respuesta.moneda) {
+                     case 'bs':    txMoneda = 'Bolívares'; break;
+                     case 'dolar': txMoneda = 'Dólares';   break;
+                     case 'ae':    txMoneda = 'Aeternity'; break;
+                     default:      txMoneda = 'Bolívares'; break;
+                  }
+                  document.getElementById("monedadestino").innerHTML   = txMoneda;
+						colorFon2 = document.getElementById("monedadestino").style.color;
+						if(document.getElementById("monedaorigen").innerHTML!=document.getElementById("monedadestino").innerHTML) {
+							document.getElementById("monedadestino").style.color = 'red';
+						} else {
+							document.getElementById("monedadestino").style.color = colorFon2;
+						}
+
+                  document.getElementById("saldodestino").innerHTML    = formatNumber.new(respuesta.saldo)+" "+respuesta.simbolomoneda;
+
+						compatible = 0;
+						if(document.getElementById("tipoorigen").innerHTML!="PREMIUM") {
+							if(document.getElementById("tipoorigen").innerHTML!=document.getElementById("tipodestino").innerHTML) {
+								compatible = 100;								
+							} else {
+								if(document.getElementById("comercioorigen").innerHTML!=document.getElementById("comerciodestino").innerHTML) {
+									compatible = 200;
+								}
+							}
+						}
+						if(document.getElementById("monedaorigen").innerHTML!=document.getElementById("monedadestino").innerHTML) {
+							compatible = compatible + 10;
+						}
+						resolve(compatible);
+               }
+				};
+				xmlhttp.open("GET", "../php/buscatarjeta.php?t="+card, false);
+				xmlhttp.send();
+			});
+
+			function alertas(compatible) {
+				switch (compatible) {
+					case 10:
+						alert("Algunos datos no coinciden:\n\n- Sólo puede enviar el mismo tipo de moneda.");
+						break;
+					case 100:
+						alert("Algunos datos no coinciden:\n\n- No se puede transferir de una tarjeta local a una tarjeta premium.");
+						break;
+					case 110:
+						alert("Algunos datos no coinciden:\n\n- No se puede transferir de una tarjeta local a una tarjeta premium.\n- Sólo puede enviar el mismo tipo de moneda.");
+						break;
+					case 200:
+						alert("Algunos datos no coinciden:\n\n- No se puede transferir de un comercio a otro con una tarjeta local.");
+						break;
+					case 210:
+						alert("Algunos datos no coinciden:\n\n- No se puede transferir de un comercio a otro con una tarjeta local.\n- Sólo puede enviar el mismo tipo de moneda.");
+						break;
+				}
+			}
+
+         function datostarjetato(card) {
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function () {
+					if (this.readyState == 4 && this.status == 200) {
+                  respuesta = JSON.parse(this.responseText);
+                  console.log(respuesta);
+
+                  if(respuesta.premium) {
+                     document.getElementById("tipodestino").innerHTML = "PREMIUM";
+                  } else {
+                     document.getElementById("tipodestino").innerHTML = "Local";
+                  }
+						colorFon0 = document.getElementById("tipodestino").style.color;
+						if(document.getElementById("tipoorigen").innerHTML!="PREMIUM") {
+							if(document.getElementById("tipoorigen").innerHTML!=document.getElementById("tipodestino").innerHTML) {
+								document.getElementById("tipodestino").style.color = 'red';
+							} else {
+								document.getElementById("tipodestino").style.color = colorFon0;
+							}
+						} else {
+							document.getElementById("tipodestino").style.color = colorFon0;
+						}
+
+                  document.getElementById("comerciodestino").innerHTML = respuesta.nombreproveedor;
+						colorFon1 = document.getElementById("comerciodestino").style.color;
+						if(document.getElementById("tipoorigen").innerHTML!="PREMIUM") {
+							if(document.getElementById("comercioorigen").innerHTML!=document.getElementById("comerciodestino").innerHTML) {
+								document.getElementById("comerciodestino").style.color = 'red';
+							} else {
+								document.getElementById("comerciodestino").style.color = colorFon1;
+							}
+						} else {
+							document.getElementById("comerciodestino").style.color = colorFon1;
+						}
+
+                  switch (respuesta.moneda) {
+                     case 'bs':    txMoneda = 'Bolívares'; break;
+                     case 'dolar': txMoneda = 'Dólares';   break;
+                     case 'ae':    txMoneda = 'Aeternity'; break;
+                     default:      txMoneda = 'Bolívares'; break;
+                  }
+                  document.getElementById("monedadestino").innerHTML   = txMoneda;
+						colorFon2 = document.getElementById("monedadestino").style.color;
+						if(document.getElementById("monedaorigen").innerHTML!=document.getElementById("monedadestino").innerHTML) {
+							document.getElementById("monedadestino").style.color = 'red';
+						} else {
+							document.getElementById("monedadestino").style.color = colorFon2;
+						}
+
+                  document.getElementById("saldodestino").innerHTML    = formatNumber.new(respuesta.saldo)+" "+respuesta.simbolomoneda;
+
+						compatible = 0;
+						if(document.getElementById("tipoorigen").innerHTML!="PREMIUM") {
+							if(document.getElementById("tipoorigen").innerHTML!=document.getElementById("tipodestino").innerHTML) {
+								compatible = 100;								
+							} else {
+								if(document.getElementById("comercioorigen").innerHTML!=document.getElementById("comerciodestino").innerHTML) {
+									compatible = 200;
+								}
+							}
+						}
+						if(document.getElementById("monedaorigen").innerHTML!=document.getElementById("monedadestino").innerHTML) {
+							compatible = compatible + 10;
+						}
+						/*
+						switch (compatible) {
+							case 10:
+								alert("Algunos datos no coinciden:\n\n- Sólo puede enviar el mismo tipo de moneda.");
+								break;
+							case 100:
+								alert("Algunos datos no coinciden:\n\n- No se puede transferir de una tarjeta local a una tarjeta premium.");
+								break;
+							case 110:
+								alert("Algunos datos no coinciden:\n\n- No se puede transferir de una tarjeta local a una tarjeta premium.\n- Sólo puede enviar el mismo tipo de moneda.");
+								break;
+							case 200:
+								alert("Algunos datos no coinciden:\n\n- No se puede transferir de un comercio a otro con una tarjeta local.");
+								break;
+							case 210:
+								alert("Algunos datos no coinciden:\n\n- No se puede transferir de un comercio a otro con una tarjeta local.\n- Sólo puede enviar el mismo tipo de moneda.");
+								break;
+						}
+						*/
+               }
+				};
+				xmlhttp.open("GET", "../php/buscatarjeta.php?t="+card, false);
+				xmlhttp.send();
+         }
+      </script>
+	</body>
+</html>

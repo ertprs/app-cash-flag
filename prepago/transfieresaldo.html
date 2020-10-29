@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>Cash-Flag</title>
+		<link rel="stylesheet" href="./transfieresaldo.css">
+		<script type="text/javascript" src="../js/funciones.js"></script>
+		<!-- Librerías para usar el SDK de Aeternity y crear cuentas en AE -->
+		<script src="https://unpkg.com/@aeternity/aepp-sdk@7.3.1/dist/aepp-sdk.browser-script.js"></script>
+		<script src="https://bundle.run/buffer@5.6.0"></script>
+		<script src="../lib/cf-aesdk.js"></script>
+		<!-- hasta aquí -->
+	</head>
+	<body onload="inicio()">
+		<div id="container">
+			<div class="logo" align="center">
+				<img class="img-logo" id="logo" src="../img/logoclub.png" alt="">
+			</div>
+			<h2 style="text-align: center; color: black;">Transferencia de saldo entre tarjetas prepagadas</h2>
+			<h3 id="socio" align="center"></h3>
+			<br/>
+			<div id="tabla" class="tabla">
+				<div id="f-t" class="fila titulo">
+					<div id="" class="columna1">
+						Comercio
+					</div>
+					<!-- 
+					<div id="" class="columna2">
+						tipo de tarjeta
+					</div>
+					 -->
+					<div id="" class="columna3">
+						Número de tarjeta
+					</div>
+					<div id="" class="columna4">
+						Saldo disponible
+					</div>
+					<div id="" class="columna5">
+						Vencimiento
+					</div>
+					<div id="" class="columna6">
+						Status
+					</div>
+				</div>
+			</div>
+			<h3 id="menu" align="center">Actualizando datos en segundo plano...</h3>
+
+			<!-- Linea de botones -->
+			<div class="btns">
+				<button id="btnvolver" style="width: 7em; margin: 0.5em 0 0 0;">Volver</button>
+			</div>
+
+		</div>
+		<script>
+			let respuesta, tarjetas, bsdolar, usdae, paroimpar, idsocio = localStorage.getItem("idsocio"), nombresocio = localStorage.getItem("nombresocio");
+
+			let actubalanceae = new Promise( (resolve, reject) => {
+				let xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = async function() {
+					if (this.readyState == 4 && this.status == 200) {
+						respuesta = JSON.parse(this.responseText);
+						if (respuesta.exito=="SI") {
+							var pbKey = respuesta.publickey;
+							var prKey = respuesta.secretkey;
+
+							// se crea la instancia del Sdk necesaria para consultar balance y hacer transacciones 
+							var Client = await instanciaSdk( prKey,  pbKey );
+
+							var balance = await obtenerBalance( pbKey, Client );
+							console.log(balance);
+							resolve(actualizasaldoae( idsocio, balance ));
+						} else {
+							resolve(console.log("No hay cuenta"));
+						}
+					}
+				};
+				xmlhttp.open("GET", "../php/actubalanceae.php?idsocio="+idsocio, true);
+				xmlhttp.send();
+			});
+			// function actubalanceae() {
+			// }
+
+			function actualizasaldoae(idsocio, balance) {
+				let datos = new FormData();
+				datos.append("idsocio", idsocio);
+				datos.append("balance", balance);
+
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						respuesta = JSON.parse(this.responseText);
+						console.log(respuesta);
+					}
+				};
+				xmlhttp.open("POST", "../php/actualizasaldoae.php", true);
+				xmlhttp.send(datos);
+			}
+
+			// Inicializa la aplicación
+			function inicio() {
+				actubalanceae.then( function() {
+						socio.innerHTML = nombresocio;
+						menu.innerHTML = "";
+						menu.style.display = "none";
+						let xmlhttp = new XMLHttpRequest();
+						xmlhttp.onreadystatechange = function() {
+							if (this.readyState == 4 && this.status == 200) {
+								respuesta = JSON.parse(this.responseText);
+								bsdolar   = respuesta.bsdolar;
+								usdae     = respuesta.usdae;
+								console.log(respuesta);
+								if (respuesta.exito=="SI") {
+									tarjetas = respuesta.tarjetas;
+									// Rellena la lista de tarjetas
+									pintartarjetas(tarjetas);
+								} else {
+									alert("No hay tarjetas asociadas a este socio.");
+								}
+							}
+						};
+						xmlhttp.open("GET", "../php/tarjetas.php?idsocio="+idsocio+"&tipo=prepago", true);
+						xmlhttp.send();
+						document.getElementById("btnvolver").addEventListener('click', function(){
+							window.open(localStorage.getItem("url_bck2"), "_self") });
+					});
+			}
+
+			// Rellena la tabla
+			function pintartarjetas(tarjetas) {
+				par = true;
+				for (var i = 0; i < tarjetas.length; i++) {
+					// proveedor en la columna 1
+					if (tarjetas[i].premium) {
+						txtNombre = document.createTextNode(tarjetas[i].nombre+" - PREMIUM");
+					} else {
+						txtNombre = document.createTextNode(tarjetas[i].nombre);
+					}
+					// txtTipo = document.createTextNode(tarjetas[i].tipo);
+					cl1 = document.createElement("div");
+					cl1.classList.add("columna1");
+					cl1.appendChild(txtNombre);
+					/*
+					// nombre en la columna 2
+					txtTipo = document.createTextNode(tarjetas[i].tipo.substr(0,1).toUpperCase()+tarjetas[i].tipo.substr(1));
+					// txtTipo = document.createTextNode(tarjetas[i].tipo);
+					cl2 = document.createElement("div");
+					cl2.classList.add("columna2");
+					cl2.appendChild(txtTipo);
+					*/
+					// tarjeta en la columna 3
+					numtarjeta = tarjetas[i].tarjeta.substr(0,4)+' '+tarjetas[i].tarjeta.substr(4,4)+' '+tarjetas[i].tarjeta.substr(8,4)+' '+tarjetas[i].tarjeta.substr(12,4);
+					txtTarjeta = document.createTextNode(numtarjeta);
+					cl3 = document.createElement("div");
+					cl3.classList.add("columna3");
+					cl3.appendChild(txtTarjeta);
+
+					// saldo en la columna 4
+					// txtSaldo = document.createTextNode(formatNumber.new(tarjetas[i].saldo)+" "+tarjetas[i].simbolo);
+					txtSaldo = document.createTextNode(formatNumber.new(tarjetas[i].saldo)+" "+tarjetas[i].simbolo);
+					sp1 = document.createElement("span");
+					sp1 = document.createElement("span");
+					sp1.appendChild(txtSaldo);
+
+					if(tarjetas[i].moneda=="bs") {
+						saldoUSD = Math.round( tarjetas[i].saldo/bsdolar*100 )/100;
+					} else {
+						if(tarjetas[i].moneda=="ae") {
+							saldoUSD = Math.round( tarjetas[i].saldo*usdae*100 )/100;
+						} else {
+							saldoUSD = tarjetas[i].saldo;
+						}
+					}
+					console.log(bsdolar);
+					console.log(saldoUSD);
+					txtSaldoUSD = document.createTextNode("("+formatNumber.new(saldoUSD)+" $)");
+					sp2 = document.createElement("span");
+					sp2.style.fontSize = "70%";
+					sp2.appendChild(txtSaldoUSD);
+
+					cl4 = document.createElement("div");
+					cl4.classList.add("columna4");
+					cl4.style.display = "grid";
+					cl4.appendChild(sp1);
+					cl4.appendChild(sp2);
+
+					// vencimiento en la columna 5
+					txtValidez = document.createTextNode(tarjetas[i].validez);
+					cl5 = document.createElement("div");
+					cl5.classList.add("columna5");
+					cl5.appendChild(txtValidez);
+
+					// vencimiento en la columna 5
+					txtStatus = document.createTextNode(tarjetas[i].status);
+					cl6 = document.createElement("div");
+					cl6.classList.add("columna6");
+					if (tarjetas[i].status=="Lista para usar") {
+						cl6.style.color = "green";
+					} else {
+						cl6.style.color = "red";
+					}
+					cl6.style.fontWeight = 'bold';
+					cl6.appendChild(txtStatus);
+
+					// Crear fila para la transacción
+					fila = document.createElement("div");
+					fila.id = 'fila-'+tarjetas[i].tarjeta;
+					fila.classList.add("fila");
+					// Agregar la clase para definir el comportamiento del css
+					if (par) {
+						fila.classList.add("par");
+						paroimpar = "par";
+						par = false;
+					} else {
+						fila.classList.add("impar");
+						paroimpar = "impar";
+						par = true;
+					}
+					// Agregar las columnas a la fila
+					fila.appendChild(cl1);
+					// fila.appendChild(cl2);
+					fila.appendChild(cl3);
+					fila.appendChild(cl4);
+					fila.appendChild(cl5);
+					fila.appendChild(cl6);
+
+					// Agregar la fila a la tabla
+					document.getElementById("tabla").appendChild(fila);
+					if (tarjetas[i].status=="Lista para usar") {
+						if (tarjetas[i].saldo>0.00) {
+							document.getElementById(fila.id).addEventListener('click', function(){
+								window.open("./transfieresaldo_2.html?card="+this.id.substr(5), "_blank");
+							});
+						} else {
+							document.getElementById(fila.id).addEventListener('click', function(){
+								alert("Tarjeta sin saldo.");
+							});
+						}
+					}
+				}
+			}
+		</script>
+	</body>
+</html>

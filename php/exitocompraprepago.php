@@ -74,7 +74,7 @@ $mensaje .= '"Su nuevo saldo es de: ';
 switch ($moneda) {
 	case 'bs':     $mensaje .= "Bs. ";     break;
 	case 'dolar':  $mensaje .= "US$ ";     break;
-	case 'cripto': $mensaje .= "Criptos "; break;
+	case 'ae': $mensaje .= "AE "; break;
 }
 $mensaje .= number_format($saldo,2,',','.').'"]';
 

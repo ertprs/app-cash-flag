@@ -37,7 +37,7 @@ switch ($tipomoneda) {
 	case 'dolar':
 		$montobs = 0.00; $montodolares = $transaccion["m"]; $montocripto = 0.00; 
 		break;
-	case 'cripto':
+	case 'ae':
 		$montobs = 0.00; $montodolares = 0.00; $montocripto = $transaccion["m"]; 
 		break;
 	default:

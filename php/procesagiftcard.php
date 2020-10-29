@@ -21,7 +21,7 @@ switch ($moneda) {
 	case 'dolar':
 		$montobs = 0.00; $montodolares = $monto; $montocripto = 0.00; 
 		break;
-	case 'cripto':
+	case 'ae':
 		$montobs = 0.00; $montodolares = 0.00; $montocripto = $monto; 
 		break;
 	default:

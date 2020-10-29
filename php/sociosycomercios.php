@@ -10,6 +10,26 @@ if ($ro0 = mysqli_fetch_array($resul0)) {
     $respuesta .= '"apellidos":"' . trim($ro0["apellidos"]) . '",';
     $respuesta .= '"telefono":"' . trim($ro0["telefono"]) . '",';
     $respuesta .= '"email":"' . trim($ro0["email"]) . '",';
+    /*
+    $respuesta .= '"prepagos":[';
+	$query = 'SELECT * FROM prepago where id_socio='.$_GET["idsocio"].' ORDER BY card';
+	$result = mysqli_query($link, $query);
+	$coma = "";
+	$first = true;
+	while ($row = mysqli_fetch_array($result)) {
+		if ($first) {
+			$first = false;
+		} else {
+			$coma = ",";
+        }
+        if ($row["saldo"]>0) {
+            $respuesta .= $coma.'{"card":'.$row["card"].',';
+            // $respuesta .= '"idp":'.$row["id_proveedor"].',';
+            $respuesta .= '"saldo":'.$row["saldo"].'}';
+        }
+	}
+    $respuesta .= '],';
+    */
     $respuesta .= '"comercios":[';
 	$query = 'SELECT * FROM proveedores ORDER BY nombre';
 	$result = mysqli_query($link, $query);

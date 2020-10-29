@@ -228,7 +228,7 @@ function validanumero(){
 	} else {
 		let novalido = 0;
 		for (let i = 0; i < valor.length; i++) {
-			posicion = lista.indexOf(valor.substr(i,1));
+			posicion = lista.(valor.substr(i,1));
 			if (posicion<0) {
 				novalido++;
 			}

@@ -16,7 +16,7 @@ switch ($moneda) {
 	case 'dolar':
 		$montobs = 0.00; $montodolares = $monto; $montocripto = 0.00; 
 		break;
-	case 'cripto':
+	case 'ae':
 		$montobs = 0.00; $montodolares = 0.00; $montocripto = $monto; 
 		break;
 	default:
@@ -122,7 +122,7 @@ if ($result = mysqli_query($link,$query)) {
 				switch ($moneda) {
 					case 'bs':     $mensaje .= "Bs. ";     break;
 					case 'dolar':  $mensaje .= "US$ ";     break;
-					case 'cripto': $mensaje .= "Criptos "; break;
+					case 'ae': $mensaje .= "AE "; break;
 				}
 				$mensaje .= number_format($saldo,2,',','.').'"]';
 				// $mensaje .= '"Fecha de vencimiento: '.substr($fechavencimiento,8,2)."/".substr($fechavencimiento,5,2)."/".substr($fechavencimiento,0,4).'",';
@@ -137,14 +137,14 @@ if ($result = mysqli_query($link,$query)) {
 				switch ($moneda) {
 					case 'bs':     $mensaje .= "Bs. ";     break;
 					case 'dolar':  $mensaje .= "US$ ";     break;
-					case 'cripto': $mensaje .= "Criptos "; break;
+					case 'ae': $mensaje .= "AE "; break;
 				}
 				$mensaje .= number_format($saldoant,2,',','.').'",';
 				$mensaje .= '"Una vez confirmada la transacción, su nuevo saldo será de: ';
 				switch ($moneda) {
 					case 'bs':     $mensaje .= "Bs. ";     break;
 					case 'dolar':  $mensaje .= "US$ ";     break;
-					case 'cripto': $mensaje .= "Criptos "; break;
+					case 'ae': $mensaje .= "AE "; break;
 				}
 				$mensaje .= number_format($saldoant+$monto,2,',','.').'"]';
 				// $mensaje .= '"Fecha de vencimiento: '.substr($fechavencimiento,8,2)."/".substr($fechavencimiento,5,2)."/".substr($fechavencimiento,0,4).'",';
@@ -180,7 +180,7 @@ if ($result = mysqli_query($link,$query)) {
 					switch ($moneda) {
 						case 'bs':     $mensaje .= "Bs. ";     break;
 						case 'dolar':  $mensaje .= "US$ ";     break;
-						case 'cripto': $mensaje .= "Criptos "; break;
+						case 'ae': $mensaje .= "AE "; break;
 					}
 					$mensaje .= number_format($monto,2,',','.').'"]';
 					// $mensaje .= '"Fecha de vencimiento: '.substr($fechavencimiento,8,2)."/".substr($fechavencimiento,5,2)."/".substr($fechavencimiento,0,4).'",';
@@ -195,7 +195,7 @@ if ($result = mysqli_query($link,$query)) {
 					switch ($moneda) {
 						case 'bs':     $mensaje .= "Bs. ";     break;
 						case 'dolar':  $mensaje .= "US$ ";     break;
-						case 'cripto': $mensaje .= "Criptos "; break;
+						case 'ae': $mensaje .= "AE "; break;
 					}
 					$mensaje .= number_format($saldoant+$monto,2,',','.').'"]';
 				}

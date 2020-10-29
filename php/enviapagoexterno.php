@@ -63,9 +63,9 @@ if ($instrumento<>"") {
 		case 'dolar':
 			$montobs = 0.00; $montodolares = $monto; $montocripto = 0.00; 
 			break;
-		case 'cripto':
-			$montobs = 0.00; $montodolares = 0.00; $montocripto = $monto; 
-			break;
+		// case 'cripto':
+		// 	$montobs = 0.00; $montodolares = 0.00; $montocripto = $monto; 
+		// 	break;
       case 'ae':
          $montobs = 0.00; $montodolares = 0.00; $montocripto = $monto; 
          break;

@@ -27,6 +27,7 @@ $info = json_decode($result,true);
 curl_close($ch);
 
 $usdae = $info["data"]["AE"]["quote"]["USD"]["price"];
+$usdae = 0;
 ////////////////////////////////////////////////////////////////////////////
 // Buscar giftcards
 $query = "SELECT * from socios where id=".$_GET["idsocio"];
