@@ -83,7 +83,7 @@ echo $texto;
 ///////////////////////////////////////////////////////////////////////////////////
 echo '<br/><br/>';
 ///////////////////////////////////////////////////////////////////////////////////
-$tabla = 'giftcards_transacciones';
+$tabla = 'prepago_transacciones';
 $campos = array();
 $tipos = array();
 $quer2 = "select * from information_schema.columns where table_schema='".$database."' and table_name='".$tabla."'";
@@ -131,7 +131,7 @@ echo $texto;
 ///////////////////////////////////////////////////////////////////////////////////
 echo '<br/><br/>';
 ///////////////////////////////////////////////////////////////////////////////////
-$tabla = 'prepago_transacciones';
+$tabla = 'giftcards_transacciones';
 $campos = array();
 $tipos = array();
 $quer2 = "select * from information_schema.columns where table_schema='".$database."' and table_name='".$tabla."'";
