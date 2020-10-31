@@ -19,25 +19,26 @@ if ($row = mysqli_fetch_array($result)) { $nombre_ciudad=$row["ciudad"]; } else 
 $archivojson = "../registro/registro.json";
 $socio = 1;
 
-$status="No existe";
+$registro="No existe";
 
 $query = 'select * from socios where id='.$_POST['id_socio'].';';
 $result = mysqli_query($link, $query);
 if ($row = mysqli_fetch_array($result)) {
-	$status=$row["status"];
+	$registro=$row["registro"];
 	$email=$row["email"];
 	$telefono=$row["telefono"];
 	$nombres=$row["nombres"];
 	$apellidos=$row["apellidos"];
 } else {
-	$status="No existe";
+	$registro="No existe";
 }
+$idsocio = $_POST['id_socio'];
 
-if ($status=="Pendiente") {
+if ($registro=="Pendiente") {
 
 	$objetojson = json_decode(file_get_contents($archivojson),true);
 
-	$query = 'update socios set status="Activo",';
+	$query = 'update socios set registro="Activo",';
 	$coma = ',';
 	for ($i=0; $i < count($objetojson["campos"]); $i++) {
 		if ($objetojson["campos"][$i]["nombre"]!="id_proveedor" && $objetojson["campos"][$i]["nombre"]!="id_socio") {
@@ -59,18 +60,22 @@ if ($status=="Pendiente") {
 		// generarprepago($link,$socio,$email,$telefono,$nombres,$apellidos);
 
 		$respuesta = '{"exito":"SI","mensaje":' . mensajes($archivojson,"exitoregistro") . '}';
-		cupondebienvenida($link,$socio,$email,$telefono,$nombres,$apellidos,$archivojson);
+		if ($_POST["id_proveedor"]==3) {
+			recargapremiumdolar($link,$idsocio,$email,$telefono,$nombres,$apellidos);
+		} else {
+			cupondebienvenida($link,$socio,$email,$telefono,$nombres,$apellidos,$archivojson);
+		}
 	} else {
 		$respuesta = '{"exito":"NO","mensaje":' . mensajes($archivojson,"fallaregistro") . '}';
 	}
 } else {
-	if ($status=="Activo") {
+	if ($registro=="Activo") {
 		$respuesta = '{"exito":"NO","mensaje":' . mensajes($archivojson,"yaregistrado") . '}';
 	} else {
-		if ($status=="Inactivo") {
+		if ($registro=="Inactivo") {
 			$respuesta = '{"exito":"NO","mensaje":' . mensajes($archivojson,"socioinactivo") . '}';
 		} else {
-			if ($status=="Suspendido") {
+			if ($registro=="Suspendido") {
 				$respuesta = '{"exito":"NO","mensaje":' . mensajes($archivojson,"sociosuspendido") . '}';
 			} else {
 				$respuesta = '{"exito":"NO","mensaje":' . mensajes($archivojson,"socionoexiste") . '}';
