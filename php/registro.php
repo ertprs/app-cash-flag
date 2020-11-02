@@ -59,11 +59,12 @@ if ($registro=="Pendiente") {
 
 		// generarprepago($link,$socio,$email,$telefono,$nombres,$apellidos);
 
-		$respuesta = '{"exito":"SI","mensaje":' . mensajes($archivojson,"exitoregistro") . '}';
 		if ($_POST["id_proveedor"]==3) {
 			recargapremiumdolar($link,$idsocio,$email,$telefono,$nombres,$apellidos);
+			$respuesta = '{"exito":"SI","mensaje":' . mensajes($archivojson,"exitoregistrocf") . '}';
 		} else {
 			cupondebienvenida($link,$socio,$email,$telefono,$nombres,$apellidos,$archivojson);
+			$respuesta = '{"exito":"SI","mensaje":' . mensajes($archivojson,"exitoregistro") . '}';
 		}
 	} else {
 		$respuesta = '{"exito":"NO","mensaje":' . mensajes($archivojson,"fallaregistro") . '}';

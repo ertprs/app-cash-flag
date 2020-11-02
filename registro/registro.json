@@ -77,6 +77,7 @@
     "mensajes": {
         "fallaregistro": ["Falló el registro","Comuniquese por Whatsapp al +584244071820."],
         "exitoregistro": ["Registro exitoso","Recibirá un email con un cupón de bienvenida."],
+        "exitoregistrocf": ["Registro exitoso","Revisa tu tarjetero","Tu tarjeta prepagada PREMIUM en dólares","ha incrementado su saldo."],
         "yaregistrado": ["El socio ya esta registrado","Para cualquier cambio comuniquese","por Whatsapp al +584244071820."],
         "socioinactivo": ["El socio ya esta registrado","Pero tiene status INACTIVO","Comuniquese por Whatsapp al +584244071820."],
         "sociosuspendido": ["El socio ya esta registrado","Pero tiene status SUSPENDIDO","Comuniquese por Whatsapp al +584244071820."],

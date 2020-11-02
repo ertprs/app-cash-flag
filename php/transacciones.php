@@ -2,7 +2,8 @@
 include_once("../_config/conexion.php");
 include_once("funciones.php");
 
-$fecha = date("Y")."-".date("m")."-".sprintf("%'02d",(date("d")-1));
+// $fecha = date("Y")."-".date("m")."-".sprintf("%'02d",(date("d")-1));
+$fecha = date("Y")."-".date("m")."-".sprintf("%'02d",date("d"));
 
 $fech1 = date('Y-m-d');
 $fech2 = strtotime('-3 day', strtotime ($fech1));

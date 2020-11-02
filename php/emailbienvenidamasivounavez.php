@@ -7,6 +7,6 @@ $query = "select * from socios where id=1";
 $result = mysqli_query($link, $query);
 while ($row = mysqli_fetch_array($result)) {
    $telefono=$row["telefono"];
-   mensajebienvenida($telefono,"¿Quieres incrementar el saldo de tu tarjeta prepagada Cash-Flag? revisa tu correo, haz recibido un email de bienvenida  con una invitación ¡acéptala!");
+   enviasms($telefono,"¿Quieres incrementar el saldo de tu tarjeta prepagada Cash-Flag? revisa tu correo, haz recibido un email de bienvenida  con una invitación ¡acéptala!");
 }
 ?>
