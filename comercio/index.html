@@ -146,7 +146,7 @@
 
 			function login() {
 				usuario = document.getElementById("email").value;
-				clave = document.getElementById("clave").value.toLowerCase();
+				clave = document.getElementById("clave").value;
 				hashp = SHA256(usuario.trim()+clave.trim());
 				console.log(respuesta.hashp);
 				console.log(hashp);
@@ -164,7 +164,7 @@
 
 			function registro() {
 				usuario = document.getElementById("email").value;
-				clave = document.getElementById("clave").value.toLowerCase();
+				clave = document.getElementById("clave").value;
 				confirmacion = document.getElementById("confirmacion").value;
 				if (clave==confirmacion) {
 					question = document.getElementById("question").value;
@@ -217,7 +217,7 @@
 
 			function restablecer() {
 				usuario = document.getElementById("email").value;
-				clave = document.getElementById("clave").value.toLowerCase();
+				clave = document.getElementById("clave").value;
 				confirmacion = document.getElementById("confirmacion").value;
 				if (clave==confirmacion) {
 					hashp = SHA256(usuario.trim()+clave.trim());
