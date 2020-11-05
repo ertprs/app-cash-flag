@@ -76,7 +76,7 @@ if ($instrumento<>"") {
 	if ($id_proveedor==$cardProveedor) {
 		// Calcular disponibilidad
 		$disponible = $saldo - $saldoentransito;
-		if ($disponible - $monto > 0.00) {
+		if ($disponible - $monto >= 0.00) {
 			$query = "select count(id) as increment from pdv_transacciones";
 			$result = mysqli_query($link,$query);
 			if($row = mysqli_fetch_array($result)) {
