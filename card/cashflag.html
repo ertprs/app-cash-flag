@@ -481,7 +481,7 @@
 				avanzar = false;
 				if(respuesta.idp!=undefined) {
 					proveedor = respuesta.idp;
-					if (proveedor==idproveedor) {
+					if (proveedor==idproveedor || proveedor==3) {
 						origen = "Tarjeta en punto de venta";
 						avanzar = true;
 					} else {

@@ -62,40 +62,51 @@ function limpiar() {
 
 // Enviar los datos del formulario para procesar en el servidor
 function enviar() {
-	if (document.getElementById("promociones").checked && document.getElementById("premium").checked && document.getElementById("cargos").checked && document.getElementById("comision").checked) {
-		var id_proveedor = localStorage.getItem("id_proveedor");
-		document.getElementById("id_proveedor").value = id_proveedor;
-		var id_socio = localStorage.getItem("id_socio");
-		document.getElementById("id_socio").value = id_socio;
-	
-		var datos = new FormData();
-		for (campo = 0; campo < document.getElementsByClassName("campo").length; campo++) {
-			if (document.getElementsByClassName("campo")[campo].type=='checkbox'){
-				datos.append(document.getElementsByClassName("campo")[campo].id, document.getElementsByClassName("campo")[campo].checked);
-			} else {
-				datos.append(document.getElementsByClassName("campo")[campo].id, document.getElementsByClassName("campo")[campo].value);
-			}
-		}
-	
-		var xmlhttp = new XMLHttpRequest();
-		xmlhttp.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-				respuesta = JSON.parse(this.responseText);
-				console.log(respuesta);
-				if (respuesta.exito == 'SI') {
-					alert(fmensaje(respuesta.mensaje));
-					limpiar();
-					// window.location.replace("app.cash-flag.com/index.html");
-					window.location.replace("../");
+	var continuar = true;
+	if (document.getElementById("estado").value=="nodefinido") {
+		alert("Debes seleccionar un estado.");
+		continuar = false;
+	}
+	if (document.getElementById("ciudad").value=="nodefinido") {
+		alert("Debes seleccionar una ciudad.");
+		continuar = false;
+	}
+	if (continuar) {
+		if (document.getElementById("promociones").checked && document.getElementById("premium").checked && document.getElementById("cargos").checked && document.getElementById("comision").checked) {
+			var id_proveedor = localStorage.getItem("id_proveedor");
+			document.getElementById("id_proveedor").value = id_proveedor;
+			var id_socio = localStorage.getItem("id_socio");
+			document.getElementById("id_socio").value = id_socio;
+		
+			var datos = new FormData();
+			for (campo = 0; campo < document.getElementsByClassName("campo").length; campo++) {
+				if (document.getElementsByClassName("campo")[campo].type=='checkbox'){
+					datos.append(document.getElementsByClassName("campo")[campo].id, document.getElementsByClassName("campo")[campo].checked);
 				} else {
-					alert(fmensaje(respuesta.mensaje));
+					datos.append(document.getElementsByClassName("campo")[campo].id, document.getElementsByClassName("campo")[campo].value);
 				}
 			}
-		};
-		xmlhttp.open("POST", "../php/registro.php", false);
-		xmlhttp.send(datos);
-	} else {
-		alert("Debes aceptar todos los términos y condiciones del servicio para completar el registro.")
+		
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					respuesta = JSON.parse(this.responseText);
+					console.log(respuesta);
+					if (respuesta.exito == 'SI') {
+						alert(fmensaje(respuesta.mensaje));
+						limpiar();
+						// window.location.replace("app.cash-flag.com/index.html");
+						window.location.replace("../");
+					} else {
+						alert(fmensaje(respuesta.mensaje));
+					}
+				}
+			};
+			xmlhttp.open("POST", "../php/registro.php", false);
+			xmlhttp.send(datos);
+		} else {
+			alert("Debes aceptar todos los términos y condiciones del servicio para completar el registro.")
+		}
 	}
 }
 

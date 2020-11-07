@@ -16,7 +16,7 @@ $fech3 = date ('Y-m-d', $fech3);
 $querx = "SELECT count(id) as socios FROM socios";
 $resulx = mysqli_query($link, $querx);
 $rox = mysqli_fetch_array($resulx);
-echo 'Fecha '.$fech1.'<br/>';
+echo 'Fecha '.substr($fech1,8,2).'/'.substr($fech1,5,2).'/'.substr($fech1,0,4).'<br/>';
 echo 'Cantidad de socios a la fecha '.$rox["socios"].'<br/>';
 
 $querx = "SELECT count(id) as cantidad FROM prepago_transacciones";
@@ -62,7 +62,7 @@ while ($row = mysqli_fetch_array($result)) {
 }
 
 $asunto = 'Tabla: '.$tabla.', datos del ';
-$asunto .= substr($fecha,8,2).'/'.substr($fecha,5,2).'/'.substr($fecha,0,4);
+$asunto .= substr($fech1,8,2).'/'.substr($fech1,5,2).'/'.substr($fech1,0,4);
 
 $texto = '<p><u>'.$asunto.'</u></p>';
 $texto .= '<table border="1">';
