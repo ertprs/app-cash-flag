@@ -39,7 +39,20 @@ img {
     flex-direction: row;
 }
 
+.cmps2 {
+    padding: 0.5em 0 0 0;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1em;
+}
+
 .etiq {
+    width: 37.5%;
+    height: 20px;
+    justify-content: middle;
+}
+
+.etiq3 {
     width: 37.5%;
     height: 20px;
     justify-content: middle;
@@ -84,7 +97,17 @@ img {
         display: flex;
         flex-direction: column;
     }
+    .cmps2 {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1em;
+    }
     .etiq {
+        width: 100%;
+        height: 30px;
+        justify-content: left;
+    }
+    .etiq3 {
         width: 100%;
         height: 30px;
         justify-content: left;

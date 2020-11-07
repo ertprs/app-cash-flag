@@ -11,7 +11,7 @@
         "Ciudad de residencia",
         "Sector de residencia",
         "Dirección de residencia",
-        "¿Posee vehículo?",
+        "¿Posee vehículo? (Marca si tu respuesta es SI)",
         "Profesión",
         "Ocupación",
         "Lugar de trabajo",
@@ -22,10 +22,10 @@
         "Nombre de su pareja",
         "Cumpleaños de su pareja",
         "Fecha de aniversario",
-        "¿Vive su padre?",
+        "¿Vive su padre? (Marca si tu respuesta es SI)",
         "Nombre de su padre",
         "Cumpleaños de su padre",
-        "¿Vive su madre?",
+        "¿Vive su madre? (Marca si tu respuesta es SI)",
         "Nombre de su madre",
         "Cumpleaños de su madre",
         "Cantidad de hijos",
@@ -33,8 +33,8 @@
         "Hijos entre 5 y 10 años",
         "Hijos entre 11 y 20 años",
         "Hijos mayores de 20 años",
-        "Donde entregar",
-        "Dirección para entregas"
+        "Donde entregar compras en línea",
+        "Dirección para entrega de compras en línea"
     ],
     "campos": [
         {"nombre":"fechanacimiento","tipo":"date"},

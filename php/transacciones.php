@@ -2,21 +2,21 @@
 include_once("../_config/conexion.php");
 include_once("funciones.php");
 
-// $fecha = date("Y")."-".date("m")."-".sprintf("%'02d",(date("d")-1));
-$fecha = date("Y")."-".date("m")."-".sprintf("%'02d",date("d"));
+$fecha = date("Y")."-".date("m")."-".sprintf("%'02d",(date("d")-1));
+// $fecha = date("Y")."-".date("m")."-".sprintf("%'02d",date("d"));
 
 $fech1 = date('Y-m-d');
-$fech2 = strtotime('-3 day', strtotime ($fech1));
+$fech2 = strtotime('-1 day', strtotime ($fech1));
 $fech2 = date ('Y-m-d', $fech2);
 
-$fech3 = strtotime('-5 day', strtotime ($fech1));
+$fech3 = strtotime('-3 day', strtotime ($fech1));
 $fech3 = date ('Y-m-d', $fech3);
 
 ///////////////////////////////////////////////////////////////////////////////////
 $querx = "SELECT count(id) as socios FROM socios";
 $resulx = mysqli_query($link, $querx);
 $rox = mysqli_fetch_array($resulx);
-echo 'Fecha '.$fecha.'<br/>';
+echo 'Fecha '.$fech1.'<br/>';
 echo 'Cantidad de socios a la fecha '.$rox["socios"].'<br/>';
 
 $querx = "SELECT count(id) as cantidad FROM prepago_transacciones";
@@ -96,7 +96,7 @@ while($row = mysqli_fetch_array($resul2)) {
     $tipos[] = $x;
 }
 
-$query = "SELECT * FROM ".$tabla;
+$query = "SELECT * FROM ".$tabla." where fecha >= '".$fech2."' and fecha <= '".$fech1."'";
 $result = mysqli_query($link, $query);
 $cuerpo = '';
 while ($row = mysqli_fetch_array($result)) {
@@ -109,8 +109,11 @@ while ($row = mysqli_fetch_array($result)) {
     $cuerpo .= '</tr>';
 }
 
-$asunto = 'Tabla: '.$tabla.', datos del ';
-$asunto .= substr($fecha,8,2).'/'.substr($fecha,5,2).'/'.substr($fecha,0,4);
+$asunto = 'Tabla: '.$tabla.', datos desde el ';
+// $asunto .= substr($fecha,8,2).'/'.substr($fecha,5,2).'/'.substr($fecha,0,4);
+$asunto .= substr($fech2,8,2).'/'.substr($fech2,5,2).'/'.substr($fech2,0,4);
+$asunto .= ' hasta el ';
+$asunto .= substr($fech1,8,2).'/'.substr($fech1,5,2).'/'.substr($fech1,0,4);
 
 $texto = '<p><u>'.$asunto.'</u></p>';
 $texto .= '<table border="1">';
@@ -144,7 +147,7 @@ while($row = mysqli_fetch_array($resul2)) {
     $tipos[] = $x;
 }
 
-$query = "SELECT * FROM ".$tabla;
+$query = "SELECT * FROM ".$tabla." where fecha >= '".$fech2."' and fecha <= '".$fech1."'";
 $result = mysqli_query($link, $query);
 $cuerpo = '';
 while ($row = mysqli_fetch_array($result)) {
@@ -157,8 +160,11 @@ while ($row = mysqli_fetch_array($result)) {
     $cuerpo .= '</tr>';
 }
 
-$asunto = 'Tabla: '.$tabla.', datos del ';
-$asunto .= substr($fecha,8,2).'/'.substr($fecha,5,2).'/'.substr($fecha,0,4);
+$asunto = 'Tabla: '.$tabla.', datos desde el ';
+// $asunto .= substr($fecha,8,2).'/'.substr($fecha,5,2).'/'.substr($fecha,0,4);
+$asunto .= substr($fech2,8,2).'/'.substr($fech2,5,2).'/'.substr($fech2,0,4);
+$asunto .= ' hasta el ';
+$asunto .= substr($fech1,8,2).'/'.substr($fech1,5,2).'/'.substr($fech1,0,4);
 
 $texto = '<p><u>'.$asunto.'</u></p>';
 $texto .= '<table border="1">';
@@ -192,7 +198,7 @@ while($row = mysqli_fetch_array($resul2)) {
     $tipos[] = $x;
 }
 
-$query = "SELECT * FROM ".$tabla;
+$query = "SELECT * FROM ".$tabla." where fechacupon >= '".$fech2."' and fechacupon <= '".$fech1."'";
 $result = mysqli_query($link, $query);
 $cuerpo = '';
 while ($row = mysqli_fetch_array($result)) {
@@ -205,8 +211,11 @@ while ($row = mysqli_fetch_array($result)) {
     $cuerpo .= '</tr>';
 }
 
-$asunto = 'Tabla: '.$tabla.', datos del ';
-$asunto .= substr($fecha,8,2).'/'.substr($fecha,5,2).'/'.substr($fecha,0,4);
+$asunto = 'Tabla: '.$tabla.', datos desde el ';
+// $asunto .= substr($fecha,8,2).'/'.substr($fecha,5,2).'/'.substr($fecha,0,4);
+$asunto .= substr($fech2,8,2).'/'.substr($fech2,5,2).'/'.substr($fech2,0,4);
+$asunto .= ' hasta el ';
+$asunto .= substr($fech1,8,2).'/'.substr($fech1,5,2).'/'.substr($fech1,0,4);
 
 $texto = '<p><u>'.$asunto.'</u></p>';
 $texto .= '<table border="1">';
