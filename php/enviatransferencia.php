@@ -53,14 +53,16 @@ if($from<>"" && $to<>"" && $monto<>0) {
 $query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card) VALUES (".$idsociofrom.",".$idproveedorfrom.",'".$fecha."','".$tipofrom."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referenciafrom."','".$origen."','".$status."','".$from."')";
 if ($result = mysqli_query($link,$query)) {
    $saldo = $saldofrom - $monto;
+   $saldofinalfrom = $saldo;
    $query = "UPDATE prepago SET saldo=".$saldo." WHERE card='".trim($from)."'";
 	if ($result = mysqli_query($link,$query)) {
       $query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card) VALUES (".$idsocioto.",".$idproveedorto.",'".$fecha."','".$tipoto."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referenciato."','".$origen."','".$status."','".$to."')";
       if ($result = mysqli_query($link,$query)) {
          $saldo = $saldoto + $monto;
+         $saldofinalto = $saldo;
          $query = "UPDATE prepago SET saldo=".$saldo." WHERE card='".trim($to)."'";
          if ($result = mysqli_query($link,$query)) {
-            $respuesta = '{"exito":"SI","mensaje":"Transacción exitosa."}';	
+            $respuesta = '{"exito":"SI","mensaje":"Transacción exitosa.","saldofinalfrom":'.$saldofinalfrom.',"saldofinalto":'.$saldofinalto.'}';	
          } else {
             $respuesta = '{"exito":"NO","mensaje":"La tarjeta no pudo recargarse por favor comuniquese con soporte técnico"}';	
          }

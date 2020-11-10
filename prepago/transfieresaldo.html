@@ -111,6 +111,8 @@
 								respuesta = JSON.parse(this.responseText);
 								bsdolar   = respuesta.bsdolar;
 								usdae     = respuesta.usdae;
+								localStorage.setItem("bsdolar",bsdolar);
+								localStorage.setItem("usdae",usdae);
 								console.log(respuesta);
 								if (respuesta.exito=="SI") {
 									tarjetas = respuesta.tarjetas;
@@ -161,7 +163,7 @@
 					// txtSaldo = document.createTextNode(formatNumber.new(tarjetas[i].saldo)+" "+tarjetas[i].simbolo);
 					txtSaldo = document.createTextNode(formatNumber.new(tarjetas[i].saldo)+" "+tarjetas[i].simbolo);
 					sp1 = document.createElement("span");
-					sp1 = document.createElement("span");
+					sp1.id = "saldocard1-"+tarjetas[i].tarjeta;
 					sp1.appendChild(txtSaldo);
 
 					if(tarjetas[i].moneda=="bs") {
@@ -177,6 +179,7 @@
 					console.log(saldoUSD);
 					txtSaldoUSD = document.createTextNode("("+formatNumber.new(saldoUSD)+" $)");
 					sp2 = document.createElement("span");
+					sp2.id = "saldocard2-"+tarjetas[i].tarjeta;
 					sp2.style.fontSize = "70%";
 					sp2.appendChild(txtSaldoUSD);
 

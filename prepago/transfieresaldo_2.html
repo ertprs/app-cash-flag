@@ -64,8 +64,8 @@
                      <span style="width: 50px;">Moneda:</span>
                      <b><span id="monedadestino"></span></b><br/>
                      
-                     <span style="width: 50px;">Saldo:</span>
-                     <b><span id="saldodestino"></span></b>
+                     <!-- <span style="width: 50px;">Saldo:</span> -->
+                     <b><span id="saldodestino" style="display: none;"></span></b>
                   </p>
 					</div>
 					<div id="montodestino" class="cmps">
@@ -81,7 +81,7 @@
 			</div>
 		</div>
 		<script>
-         var idsocio = localStorage.getItem("idsocio"), tarjetas;
+         var idsocio = localStorage.getItem("idsocio"), tarjetas, mnd = "", smblmnd = "";
 
 			var tarjorigen, params = fparamurl(window.location.search.substr(1));
 
@@ -114,6 +114,8 @@
                   }
                   document.getElementById("monedaorigen").innerHTML   = txMoneda;
                   document.getElementById("saldoorigen").innerHTML    = formatNumber.new(respuesta.saldo)+" "+respuesta.simbolomoneda;
+						mnd     = respuesta.moneda;
+						smblmnd = respuesta.simbolomoneda;
 
                   // if (respuesta.exito=="SI") {
                   //    tarjetas = respuesta.tarjetas;
@@ -293,14 +295,43 @@
 					xmlhttp.onreadystatechange = function() {
 						if (this.readyState == 4 && this.status == 200) {
 							respuesta = JSON.parse(this.responseText);
+							console.log(respuesta);
 							if (respuesta.exito == 'SI') {
-								alert("Transaccion exitosa.");
+								document.getElementById("saldoorigen").innerHTML = formatNumber.new(respuesta.saldofinalfrom)+" "+smblmnd;
+								tarjdestino = document.getElementById("carddestino").value;
 								document.getElementById("carddestino").value = "";
-								document.getElementById("tipodestino").value = "";
-								document.getElementById("comerciodestino").value = "";
-								document.getElementById("monedadestino").value = "";
-								document.getElementById("saldodestino").value = "";
+								document.getElementById("tipodestino").innerHTML = "";
+								document.getElementById("comerciodestino").innerHTML = "";
+								document.getElementById("monedadestino").innerHTML = "";
+								document.getElementById("saldodestino").innerHTML = "";
 								document.getElementById("monto").value = "";
+								alert("Transaccion exitosa.");
+								bsdolar = localStorage.getItem("bsdolar");
+								usdae   = localStorage.getItem("usdae");
+								
+								window.opener.document.getElementById("saldocard1-"+tarjorigen).innerHTML = formatNumber.new(respuesta.saldofinalfrom)+" "+smblmnd;
+								if(mnd=="bs") {
+									saldoUSD = Math.round( respuesta.saldofinalfrom/bsdolar*100 )/100;
+								} else {
+									if(mnd=="ae") {
+										saldoUSD = Math.round( respuesta.saldofinalfrom*usdae*100 )/100;
+									} else {
+										saldoUSD = respuesta.saldofinalfrom;
+									}
+								}
+								window.opener.document.getElementById("saldocard2-"+tarjorigen).innerHTML = "("+formatNumber.new(saldoUSD)+" $)";
+
+								window.opener.document.getElementById("saldocard1-"+tarjdestino).innerHTML = formatNumber.new(respuesta.saldofinalto)+" "+smblmnd;
+								if(mnd=="bs") {
+									saldoUSD = Math.round( respuesta.saldofinalto/bsdolar*100 )/100;
+								} else {
+									if(mnd=="ae") {
+										saldoUSD = Math.round( respuesta.saldofinalto*usdae*100 )/100;
+									} else {
+										saldoUSD = respuesta.saldofinalto;
+									}
+								}
+								window.opener.document.getElementById("saldocard2-"+tarjdestino).innerHTML = "("+formatNumber.new(saldoUSD)+" $)";
 							} else {
 								alert(respuesta.mensaje);
 							}
