@@ -86,7 +86,6 @@ if ($registro=="Pendiente") {
 }
 echo $respuesta;
 
-
 function cupondebienvenida($link,$socio,$email,$telefono,$nombres,$apellidos,$archivojson) {
 	// Buscar datos de proveedor
 	$query = "select * from proveedores where id=".$_POST['id_proveedor'];
@@ -145,7 +144,7 @@ function cupondebienvenida($link,$socio,$email,$telefono,$nombres,$apellidos,$ar
 		- Descripción premio
 		- Status cupón
 		*/
-		$hash = hash("sha256",$numcupon.$_POST['id_proveedor']. $id.$tipopremio.$montopremio.$descpremio."Generado");
+		$hash = hash("sha256",$numcupon.$_POST['id_proveedor'].$_POST['id_socio'].$tipopremio.$montopremio.$descpremio."Generado");
 
 		$query = "INSERT INTO cupones (cupon,cuponlargo,id_proveedor,id_socio,status,factura,monto,id_premio,tipopremio,montopremio,descpremio,socio,email,telefono,nombres,apellidos,fechacupon,fechavencimiento,fechacanje,facturacanje,montocanje,hash) VALUES ('".$numcupon."','".$cuponlargo."'," . $_POST['id_proveedor'] . "," . $_POST['id_socio'] . ",'Generado','00000',0,".$id_premio.",'".$tipopremio."',".$montopremio.",'Bienvenida'," . $socio . ",'" . $email . "','" . $telefono . "','" . $nombres . "','" . $apellidos . "','".$fechacupon."','".$fechavencimiento."','0000-00-00','',0,'".$hash."')";
 		// echo $query;
