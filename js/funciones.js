@@ -6,7 +6,7 @@ var formatNumber = {
 		num += '';
 		var splitStr = num.split('.');
 		var splitLeft = splitStr[0];
-		var xright = splitStr[1] < 10 ? splitStr[1] * 10 : splitStr[1];
+		var xright = splitStr[1] < 1 ? splitStr[1] * 10 : splitStr[1];
 		var splitRight = splitStr.length > 1 ? this.sepDecimal + xright : this.sepDecimal + '00';
 		var regx = /(\d+)(\d{3})/;
 		while (regx.test(splitLeft)) {

@@ -28,7 +28,7 @@ if ($row = mysqli_fetch_array($result)) {
 
    if ($montocripto!=0.00) {
       /////////////////////////////////////////////////////////////////////////////////////
-      $query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card) VALUES (".$_POST["idsocio"].",".$idproveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$documento."','".$origen."','".$status."','".$id_instrumento."')";
+      $query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio) VALUES (".$_POST["idsocio"].",".$idproveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$documento."','".$origen."','".$status."','".$id_instrumento."',".$idproveedor.")";
       if ($result = mysqli_query($link, $query)) {
          $query = 'UPDATE prepago SET saldo='.$balance.' WHERE card="'.$card.'"';
          // echo $query;

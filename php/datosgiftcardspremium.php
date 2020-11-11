@@ -108,7 +108,7 @@ $hash = hash("sha256",$card.$nombres.$apellidos.$telefono.$email.$monto.$idprove
 $aux  =  rand(10000, 99999);
 $pwd  = hash("sha256",$card.$aux);
 
-$query = "INSERT INTO giftcards_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card) VALUES (".$idsocio.",".$idproveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','".$status."','".$card."')";
+$query = "INSERT INTO giftcards_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio) VALUES (".$idsocio.",".$idproveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','".$status."','".$card."',".$idproveedor.")";
 if ($result = mysqli_query($link,$query)) {
 	if ($tipopago=="cashflag") {
 		$querz = "select * from prepago where card='".$cardx."'";
@@ -118,7 +118,7 @@ if ($result = mysqli_query($link,$query)) {
 			$saldx    = $roz["saldo"]-$monto;
 		}
 		$tipotrx = '51';
-		$querz = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card) VALUES (".$idsocio.",".$provx.",'".$fecha."','".$tipotrx."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','".$status."','".$cardx."')";
+		$querz = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio) VALUES (".$idsocio.",".$provx.",'".$fecha."','".$tipotrx."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','".$status."','".$cardx."',".$provx.")";
 		if ($resulz = mysqli_query($link,$querz)) {
 			$querz = "UPDATE prepago SET saldo=".$saldx." WHERE card='".trim($cardx)."'";
 			$resulz = mysqli_query($link,$querz);

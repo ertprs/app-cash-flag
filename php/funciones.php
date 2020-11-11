@@ -301,7 +301,7 @@ function generatarjetaAE($post, $link){
     // Encripta la card
     $hash = hash("sha256",$card.$nombres.$apellidos.$telefono.$email.$monto.$idproveedor.$moneda);
 
-    $query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card) VALUES (".$idsocio.",".$idproveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','".$status."','".$card."')";
+    $query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio) VALUES (".$idsocio.",".$idproveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','".$status."','".$card."',".$idproveedor.")";
     if ($result = mysqli_query($link,$query)) {
 		$quer0 = "INSERT INTO cards (card, tipo) VALUES ('".$card."','prepago')";
 		if ($resul0 = mysqli_query($link,$quer0)) {
@@ -389,7 +389,7 @@ function generatarjetadolar($post, $link){
     // Encripta la card
     $hash = hash("sha256",$card.$nombres.$apellidos.$telefono.$email.$monto.$idproveedor.$moneda);
 
-    $query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card) VALUES (".$idsocio.",".$idproveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','".$status."','".$card."')";
+    $query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio) VALUES (".$idsocio.",".$idproveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','".$status."','".$card."',".$idproveedor.")";
     if ($result = mysqli_query($link,$query)) {
 		$quer0 = "INSERT INTO cards (card, tipo) VALUES ('".$card."','prepago')";
 		if ($resul0 = mysqli_query($link,$quer0)) {
@@ -468,7 +468,7 @@ function recargapremiumdolar($link,$idsocio,$email,$telefono,$nombres,$apellidos
 		$tasadolarbs = 1.00;
 		$tasadolarcripto = 1.00;
 		
-		$query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card) VALUES (".$idsocio.",3,'".$fecha."','".$tipotransaccion."','dolar',0 ,1 ,0 ,".$tasadolarbs.",".$tasadolarcripto.",'0000','registro','Confirmada','".$card."')";
+		$query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio) VALUES (".$idsocio.",3,'".$fecha."','".$tipotransaccion."','dolar',0 ,1 ,0 ,".$tasadolarbs.",".$tasadolarcripto.",'0000','registro','Confirmada','".$card."',3)";
 		if ($result = mysqli_query($link,$query)) {
 			$saldo = $saldoant + 1;
 			$query = "UPDATE prepago SET saldo=".$saldo." WHERE card='".trim($card)."'";

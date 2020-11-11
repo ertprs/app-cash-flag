@@ -159,7 +159,7 @@
 
 		tarjeta = (params==undefined) ? '1111222233334444' : params.card ;
 
-		let card1, saldo=0.00, bsdolar=0.00, usdae=0.00;
+		let card1, saldo=0.00, bsdolar=0.00, usdae=0.00, moneda="", simbolomoneda="", firstrow = "par";
 
 		let idproveedor=0, token="";
 		// , ficha='';
@@ -271,6 +271,7 @@
 				// monto en la columna 3
 				if (transacciones[i].recarga>0.00) {
 					recarga = formatNumber.new(transacciones[i].recarga);
+					// recarga = transacciones[i].recarga;
 				} else {
 					recarga = "";
 				}
@@ -282,6 +283,7 @@
 				// monto en la columna 3
 				if (transacciones[i].consumo>0.00) {
 					consumo = formatNumber.new(transacciones[i].consumo);
+					// consumo = transacciones[i].consumo;
 				} else {
 					consumo = "";
 				}
@@ -408,8 +410,37 @@
 					respuesta = JSON.parse(this.responseText);
 					if (respuesta.exito == 'SI') {
 						alert(fmensaje(respuesta.mensaje));
-						socket.emit('card', '{"pdv_id":'+respuesta.pdv_id+'}');
+						// socket.emit('card', '{"pdv_id":'+respuesta.pdv_id+'}');
+						mnt = document.getElementById("monto").value;
 						limpiar();
+
+						document.getElementById("psaldo").innerHTML = "Saldo: "+formatNumber.new(respuesta.nuevosaldo)+" "+simbolomoneda;
+						if(moneda=="bs") {
+							bsaldo = Math.round( respuesta.nuevosaldo/bsdolar*100 )/100;
+							document.getElementById("ssaldo").innerHTML = "("+formatNumber.new(bsaldo)+" $)";
+						} else {
+							if(moneda=="ae") {
+								bsaldo = Math.round( respuesta.nuevosaldo*usdae*100 )/100;
+								document.getElementById("ssaldo").innerHTML = "("+formatNumber.new(bsaldo)+" $)";
+							} else {
+								console.log(respuesta.nuevosaldo);
+								document.getElementById("ssaldo").innerHTML = "("+formatNumber.new(respuesta.nuevosaldo)+" $)";
+							}
+						}
+						document.getElementById("smonto").innerHTML = formatNumber.new(0)+" $";
+
+						pinta1transaccion(respuesta.fecha,respuesta.transaccion,mnt);
+						window.opener.document.getElementById("saldocard1-"+tarjeta).innerHTML = formatNumber.new(respuesta.nuevosaldo)+" "+simbolomoneda;
+						if(moneda=="bs") {
+							saldoUSD = Math.round( respuesta.nuevosaldo/bsdolar*100 )/100;
+						} else {
+							if(moneda=="ae") {
+								saldoUSD = Math.round( respuesta.nuevosaldo*usdae*100 )/100;
+							} else {
+								saldoUSD = respuesta.nuevosaldo;
+							}
+						}
+						window.opener.document.getElementById("saldocard2-"+tarjeta).innerHTML = "("+formatNumber.new(saldoUSD)+" $)";
 					} else {
 						alert(respuesta.mensaje);
 					}
@@ -525,18 +556,82 @@
 
 		function actucambio() {
 			if(moneda=="bs") {
-				bmonto = Math.round( document.getElementById("monto").value/bsdolar*100 )/100;
-				document.getElementById("smonto").innerHTML = formatNumber.new(bmonto)+" $";
+				bmonto = document.getElementById("monto").value/bsdolar;
+				// document.getElementById("smonto").innerHTML = Math.round(bmonto*100)/100 +" $";
+				// bmonto = Math.round( document.getElementById("monto").value*usdae*100 )/100;
+				document.getElementById("smonto").innerHTML = formatNumber.new(Math.round(bmonto*100)/100)+" $";
 			} else {
 				if(moneda=="ae") {
-					bmonto = Math.round( document.getElementById("monto").value*usdae*100 )/100;
-					document.getElementById("smonto").innerHTML = formatNumber.new(bmonto)+" $";
+					bmonto = document.getElementById("monto").value*usdae;
+					// document.getElementById("smonto").innerHTML = Math.round(bmonto*100)/100 +" $";
+					// bmonto = Math.round( document.getElementById("monto").value*usdae*100 )/100;
+					// document.getElementById("smonto").innerHTML = formatNumber.new(bmonto)+" $";
+					document.getElementById("smonto").innerHTML = formatNumber.new(Math.round(bmonto*100)/100)+" $";
 				} else {
 					bmonto = document.getElementById("monto").value;
+					// document.getElementById("smonto").innerHTML = formatNumber.new(bmonto)+" $";
 					document.getElementById("smonto").innerHTML = formatNumber.new(bmonto)+" $";
 				}
 			}
 		}
+
+		function pinta1transaccion(fch,trx,mnt) {
+			if (firstrow=="par") {
+				firstrow = "impar";
+				par = false;	
+			} else {
+				firstrow = "par";
+				par = true;	
+			}
+			// tarjeta en la columna 1
+			fecha = fch.substr(8,2)+'/'+fch.substr(5,2)+'/'+fch.substr(0,4);
+			txtfecha = document.createTextNode(fecha);
+			cl1 = document.createElement("div");
+			cl1.classList.add("columna1");
+			cl1.appendChild(txtfecha);
+
+			// referencia en la columna 2
+			txtreferencia = document.createTextNode(trx);
+			cl2 = document.createElement("div");
+			cl2.classList.add("columna2");
+			cl2.appendChild(txtreferencia);
+
+			// monto en la columna 3
+			recarga = "";
+			txtrecarga = document.createTextNode(recarga);
+			cl3 = document.createElement("div");
+			cl3.classList.add("columna3");
+			cl3.appendChild(txtrecarga);
+
+			// monto en la columna 3
+			consumo = formatNumber.new(mnt);
+			txtconsumo = document.createTextNode(consumo);
+			cl4 = document.createElement("div");
+			cl4.classList.add("columna3");
+			cl4.appendChild(txtconsumo);
+
+			// Crear fila para la transacción
+			fila = document.createElement("div");
+			fila.classList.add("fila");
+			// Agregar la clase para definir el comportamiento del css
+			if (par) {
+				fila.classList.add("par");
+				paroimpar = "par";
+				par = false;
+			} else {
+				fila.classList.add("impar");
+				paroimpar = "impar";
+				par = true;
+			}
+			// Agregar las columnas a la fila
+			fila.appendChild(cl1);
+			fila.appendChild(cl2);
+			fila.appendChild(cl3);
+			fila.appendChild(cl4);
+			// Agregar la fila a la tabla
+			// document.getElementById("transaccionestarjeta").appendChild(fila);
+			document.getElementById("transaccionestarjeta").insertBefore(fila, document.getElementById("transaccionestarjeta").childNodes[0]);
+		}		
 	</script>
 </head>
 <body id="cuerpo" onload="generacard()">
@@ -589,7 +684,7 @@
 		<h4 style="text-align: center; width: auto; padding: 0.5em; margin: auto; border: solid thin gray; background: gray;">
 			<u>Últimos 10 movimientos</u><br/>
 		</h4>
-		<div id="transaccionestarjeta" style="margin: 0 0 0 0;">
+		<div id="filatitulos" style="margin: 0 0 0 0;">
 			<div id="f-t" class="fila titulo">
 				<div id="" class="columna1">
 					Fecha
@@ -604,6 +699,8 @@
 					Consumo
 				</div>
 			</div>
+		</div>
+		<div id="transaccionestarjeta" style="margin: 0 0 0 0;">
 		</div>
 	</div>
 	<div id="modal_area" class="area_modal">

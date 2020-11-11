@@ -92,7 +92,7 @@ if ($instrumento<>"") {
 			// 	$pdv_id = 0;
 			// }
 			/////////////////////////////////////////////////////////////////////////////////////
-			$query = "INSERT INTO ".$tpcard." (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card) VALUES (".$id_socio.",".$id_proveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$documento."','','".$status."','".$id_instrumento."')";
+			$query = "INSERT INTO ".$tpcard." (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio) VALUES (".$id_socio.",".$id_proveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$documento."','','".$status."','".$id_instrumento."',".$id_proveedor.")";
 			$result = mysqli_query($link, $query);
 			/////////////////////////////////////////////////////////////////////////////////////
 			// Insertar transacción para confirmar
@@ -102,6 +102,7 @@ if ($instrumento<>"") {
 			$query .= ",'".$instrumento."','".$id_instrumento."','".$documento."','".$status."','".$origen."','".$token."',0,'')";
 			if ($result = mysqli_query($link, $query)) {
 				$saldo -= $monto;
+				$nuevodisponible = $saldo - $saldoentransito;
 				if ($instrumento=='prepago') {
 					$query = 'UPDATE prepago SET saldo='.$saldo.' WHERE card="'.trim($id_instrumento).'"';
 				} else {
@@ -109,7 +110,7 @@ if ($instrumento<>"") {
 				}
 				if ($result = mysqli_query($link, $query)) {
 					$mensaje = '["Registro exitoso."]';
-					$respuesta = '{"exito":"SI","mensaje":'.$mensaje.',"transaccion":"'.$documento.'","pdv_id":'.$pdv_id;
+					$respuesta = '{"exito":"SI","mensaje":'.$mensaje.',"fecha":"'.$fecha.'","transaccion":"'.$documento.'","pdv_id":'.$pdv_id.',"nuevosaldo":'.$nuevodisponible;
 					$respuesta .= '}';
 				} else {
 					$mensaje = '["Fallo el registro, por favor comuniquese con soporte técnico."]';

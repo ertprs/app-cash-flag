@@ -85,7 +85,7 @@
 
 			var tarjorigen, params = fparamurl(window.location.search.substr(1));
 
-			tarjorigen = (params==undefined) ? '1111222233334444' : params.card ;
+			tarjorigen = (params==undefined) ? '1111222233334444' : params.card, txtCard = "";
 
 			function inicio() {
             console.log(localStorage);
@@ -285,61 +285,82 @@
 			}
 
 			function enviardatos() {
-				if (validaciones()) {
-					var datos = new FormData();
-					datos.append("cardorigen", tarjorigen);
-					datos.append("carddestino", document.getElementById("carddestino").value);
-					datos.append("monto", document.getElementById("monto").value);
+				cd = document.getElementById("carddestino").value;
+				txtcd = cd.substr(0,4)+"-"+cd.substr(4,4)+"-"+cd.substr(8,4)+"-"+cd.substr(12,4);
 
-					var xmlhttp = new XMLHttpRequest();
-					xmlhttp.onreadystatechange = function() {
-						if (this.readyState == 4 && this.status == 200) {
-							respuesta = JSON.parse(this.responseText);
-							console.log(respuesta);
-							if (respuesta.exito == 'SI') {
-								document.getElementById("saldoorigen").innerHTML = formatNumber.new(respuesta.saldofinalfrom)+" "+smblmnd;
-								tarjdestino = document.getElementById("carddestino").value;
-								document.getElementById("carddestino").value = "";
-								document.getElementById("tipodestino").innerHTML = "";
-								document.getElementById("comerciodestino").innerHTML = "";
-								document.getElementById("monedadestino").innerHTML = "";
-								document.getElementById("saldodestino").innerHTML = "";
-								document.getElementById("monto").value = "";
-								alert("Transaccion exitosa.");
-								bsdolar = localStorage.getItem("bsdolar");
-								usdae   = localStorage.getItem("usdae");
-								
-								window.opener.document.getElementById("saldocard1-"+tarjorigen).innerHTML = formatNumber.new(respuesta.saldofinalfrom)+" "+smblmnd;
-								if(mnd=="bs") {
-									saldoUSD = Math.round( respuesta.saldofinalfrom/bsdolar*100 )/100;
-								} else {
-									if(mnd=="ae") {
-										saldoUSD = Math.round( respuesta.saldofinalfrom*usdae*100 )/100;
-									} else {
-										saldoUSD = respuesta.saldofinalfrom;
-									}
-								}
-								window.opener.document.getElementById("saldocard2-"+tarjorigen).innerHTML = "("+formatNumber.new(saldoUSD)+" $)";
+				mensaje  = "Estas a punto de realizar la siguiente transacción:\n";
+				mensaje += "Transferencia de "+formatNumber.new(document.getElementById("monto").value)+" "+smblmnd+"\n\n";
 
-								window.opener.document.getElementById("saldocard1-"+tarjdestino).innerHTML = formatNumber.new(respuesta.saldofinalto)+" "+smblmnd;
-								if(mnd=="bs") {
-									saldoUSD = Math.round( respuesta.saldofinalto/bsdolar*100 )/100;
-								} else {
-									if(mnd=="ae") {
-										saldoUSD = Math.round( respuesta.saldofinalto*usdae*100 )/100;
+				mensaje += "Tarjeta de origen: "+document.getElementById("cardorigen").innerText+"\n";
+				mensaje += "Tipo de tarjeta: "+document.getElementById("tipoorigen").innerText;
+				if(document.getElementById("tipoorigen").innerText=="Local") {
+					mensaje += " - "+document.getElementById("comercioorigen").innerText;
+				}
+				mensaje += "\n\n";
+
+				mensaje += "Tarjeta de destino: "+txtcd+"\n";
+				mensaje += "Tipo de tarjeta: "+document.getElementById("tipodestino").innerText;
+				if(document.getElementById("tipodestino").innerText=="Local") {
+					mensaje += " - "+document.getElementById("comerciodestino").innerText;
+				}
+				
+				if (confirm(mensaje)) {
+					if (validaciones()) {
+						var datos = new FormData();
+						datos.append("cardorigen", tarjorigen);
+						datos.append("carddestino", document.getElementById("carddestino").value);
+						datos.append("monto", document.getElementById("monto").value);
+
+						var xmlhttp = new XMLHttpRequest();
+						xmlhttp.onreadystatechange = function() {
+							if (this.readyState == 4 && this.status == 200) {
+								respuesta = JSON.parse(this.responseText);
+								console.log(respuesta);
+								if (respuesta.exito == 'SI') {
+									document.getElementById("saldoorigen").innerHTML = formatNumber.new(respuesta.saldofinalfrom)+" "+smblmnd;
+									tarjdestino = document.getElementById("carddestino").value;
+									document.getElementById("carddestino").value = "";
+									document.getElementById("tipodestino").innerHTML = "";
+									document.getElementById("comerciodestino").innerHTML = "";
+									document.getElementById("monedadestino").innerHTML = "";
+									document.getElementById("saldodestino").innerHTML = "";
+									document.getElementById("monto").value = "";
+									alert("Transaccion exitosa.");
+									bsdolar = localStorage.getItem("bsdolar");
+									usdae   = localStorage.getItem("usdae");
+									
+									window.opener.document.getElementById("saldocard1-"+tarjorigen).innerHTML = formatNumber.new(respuesta.saldofinalfrom)+" "+smblmnd;
+									if(mnd=="bs") {
+										saldoUSD = Math.round( respuesta.saldofinalfrom/bsdolar*100 )/100;
 									} else {
-										saldoUSD = respuesta.saldofinalto;
+										if(mnd=="ae") {
+											saldoUSD = Math.round( respuesta.saldofinalfrom*usdae*100 )/100;
+										} else {
+											saldoUSD = respuesta.saldofinalfrom;
+										}
 									}
+									window.opener.document.getElementById("saldocard2-"+tarjorigen).innerHTML = "("+formatNumber.new(saldoUSD)+" $)";
+
+									window.opener.document.getElementById("saldocard1-"+tarjdestino).innerHTML = formatNumber.new(respuesta.saldofinalto)+" "+smblmnd;
+									if(mnd=="bs") {
+										saldoUSD = Math.round( respuesta.saldofinalto/bsdolar*100 )/100;
+									} else {
+										if(mnd=="ae") {
+											saldoUSD = Math.round( respuesta.saldofinalto*usdae*100 )/100;
+										} else {
+											saldoUSD = respuesta.saldofinalto;
+										}
+									}
+									window.opener.document.getElementById("saldocard2-"+tarjdestino).innerHTML = "("+formatNumber.new(saldoUSD)+" $)";
+								} else {
+									alert(respuesta.mensaje);
 								}
-								window.opener.document.getElementById("saldocard2-"+tarjdestino).innerHTML = "("+formatNumber.new(saldoUSD)+" $)";
-							} else {
-								alert(respuesta.mensaje);
 							}
-						}
-					};
-					xmlhttp.open("POST", "../php/enviatransferencia.php", true);
-					xmlhttp.send(datos);					
-				}								
+						};
+						xmlhttp.open("POST", "../php/enviatransferencia.php", true);
+						xmlhttp.send(datos);					
+					}
+				}
 			}
 		</script>
 	</body>
