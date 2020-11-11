@@ -224,9 +224,9 @@ function cupondebienvenida($link,$socio,$email,$telefono,$nombres,$apellidos,$ar
 
 			$asunto = utf8_decode('Hola '.trim($nombres).', recibe este obsequio de bienvenida a Cash-Flag, tu comunidad de beneficios.');
 			$cabeceras = 'Content-type: text/html;';
-			if ($_SERVER["HTTP_HOST"]!='localhost') {
+			// if ($_SERVER["HTTP_HOST"]!='localhost') {
 				mail($correo,$asunto,$mensaje,$cabeceras);
-			}
+			// }
 
 			$a = fopen('log.html','w+');
 			fwrite($a,$asunto);
