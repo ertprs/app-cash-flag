@@ -175,10 +175,13 @@ if ($row = mysqli_fetch_array($result)) {
 		// $mensaje .= $numcupon;
 
 		$asunto = utf8_decode(trim($_POST["nombres"]).' ganaste un premio en '.($nombreproveedor).' por tu compra.');
-		$cabeceras = 'Content-type: text/html;';
-		if ($_SERVER["HTTP_HOST"]!='localhost') {
+		// $cabeceras = 'Content-type: text/html;';
+
+		$cabeceras = 'Content-type: text/html'."\r\n";
+		$cabeceras .= 'From: Cash-Flag <info@cash-flag.com>';
+	//   if ($_SERVER["HTTP_HOST"]!='localhost') {
 			mail($correo,$asunto,$mensaje,$cabeceras);
-		}
+		// }
 
 		$a = fopen('log.html','w+');
 		fwrite($a,$asunto);

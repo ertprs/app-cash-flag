@@ -223,8 +223,11 @@ function cupondebienvenida($link,$socio,$email,$telefono,$nombres,$apellidos,$ar
 			// $mensaje .= $numcupon;
 
 			$asunto = utf8_decode('Hola '.trim($nombres).', recibe este obsequio de bienvenida a Cash-Flag, tu comunidad de beneficios.');
-			$cabeceras = 'Content-type: text/html;';
-			// if ($_SERVER["HTTP_HOST"]!='localhost') {
+			// $cabeceras = 'Content-type: text/html;';
+
+			$cabeceras = 'Content-type: text/html'."\r\n";
+			$cabeceras .= 'From: Cash-Flag <info@cash-flag.com>';
+		  // if ($_SERVER["HTTP_HOST"]!='localhost') {
 				mail($correo,$asunto,$mensaje,$cabeceras);
 			// }
 

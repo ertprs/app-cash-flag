@@ -296,6 +296,7 @@ $fileExtension = strtolower(end($fileNameCmps));
 
 $cabeceras .= "Content-type: multipart/mixed;";
 $cabeceras .= "boundary=\"--_Separador-de-mensajes_--\"\n";
+$cabeceras .= 'From: Cash-Flag <info@cash-flag.com>';
 
 $sCabeceraTexto = "----_Separador-de-mensajes_--\n";
 $sCabeceraTexto .= "Content-type: text/html;charset=iso-8859-1\n";

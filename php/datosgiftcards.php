@@ -328,7 +328,7 @@ $asunto = '¡Felicidades '.$nombres.', has recibido un regalo de '.$remitente.'!
  
 $cabeceras = 'Content-type: text/html; charset=utf-8'."\r\n";
 $cabeceras .= 'From: Cash-Flag <info@cash-flag.com>';
- 
+
 $a = fopen('log.html','w+');
 fwrite($a,$asunto);
 fwrite($a,'-');

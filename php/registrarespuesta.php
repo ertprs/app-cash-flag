@@ -66,8 +66,11 @@ if ($row = mysqli_fetch_array($result)) {
 	// }
 
 	$asunto = utf8_decode("Asignación de ticket de soporte No.: ".$ticket);
-	$cabeceras = 'Content-type: text/html;';
-	// if (strpos($_SERVER["SERVER_NAME"],'localhost')===FALSE) {	           	
+	// $cabeceras = 'Content-type: text/html;';
+
+	$cabeceras = 'Content-type: text/html'."\r\n";
+	$cabeceras .= 'From: Cash-Flag <info@cash-flag.com>';
+  // if (strpos($_SERVER["SERVER_NAME"],'localhost')===FALSE) {	           	
 		mail($emailas,$asunto,$mensaje,$cabeceras);
 	// }
 //////////////////////////////////////////////
@@ -95,8 +98,11 @@ if ($row = mysqli_fetch_array($result)) {
 	// }
 
 	$asunto = "Respuesta al ticket de soporte No.: ".$ticket;
-	$cabeceras = 'Content-type: text/html;';
-	// if (strpos($_SERVER["SERVER_NAME"],'localhost')===FALSE) {	           	
+	// $cabeceras = 'Content-type: text/html;';
+
+	$cabeceras = 'Content-type: text/html'."\r\n";
+	$cabeceras .= 'From: Cash-Flag <info@cash-flag.com>';
+  // if (strpos($_SERVER["SERVER_NAME"],'localhost')===FALSE) {	           	
 		mail($row["email"],$asunto,$mensaje,$cabeceras);
 	// }
 //////////////////////////////////////////////

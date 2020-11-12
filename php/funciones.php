@@ -449,8 +449,12 @@ function mensajebienvenida($reg) {
 	$mensaje .= utf8_decode('<b>Nota:</b> Esta cuenta no es monitoreada, por favor no respondas este email, si deseas comunicarte con tu club escribe a: <b><a href="mailto:info@cash-flag.com">info@cash-flag.com</a></b>'.'<br/><br/>');
 
 	$asunto = utf8_decode(trim($reg["nombres"]).', Bienvenido a Cash-Flag, tu comunidad de beneficios!!!');
-	$cabeceras = 'Content-type: text/html;';
-	// if ($_SERVER["HTTP_HOST"]!='localhost') {
+	// $cabeceras = 'Content-type: text/html;';
+
+    $cabeceras = 'Content-type: text/html'."\r\n";
+    $cabeceras .= 'From: Cash-Flag <info@cash-flag.com>';
+    
+    // if ($_SERVER["HTTP_HOST"]!='localhost') {
 		mail($correo,$asunto,$mensaje,$cabeceras);
 	// }
 }
