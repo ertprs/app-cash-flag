@@ -71,11 +71,16 @@
 							<div id="div-efectivo" style="width: 100%; text-align: left;">
 								<input class="valores" type="radio" name="tipo" value='efectivo' style="width: auto;" onclick="formapago('efectivo')" selected /> Efectivo
 							</div>
+							<!--
 							<div id="div-tarjeta" style="width: 100%; text-align: left;">
 								<input class="valores" type="radio" name="tipo" value='tarjeta' style="width: auto;" onclick="formapago('tarjeta')"/> Tarjeta
 							</div>
+							-->
+							<div id="div-pagomovil" style="width: 100%; text-align: left;">
+								<input class="valores" type="radio" name="tipo" value='pagomovil' style="width: auto;" onclick="formapago('pagomovil')"/> Pago movil
+							</div>
 							<div id="div-transferencia" style="width: 100%; text-align: left;">
-								<input class="valores" type="radio" name="tipo" value='transferencia' style="width: auto;" onclick="formapago('transferencia')"/> Transferencia
+								<input class="valores" type="radio" name="tipo" value='transferencia' style="width: auto;" onclick="formapago('transferencia')"/><span id="txttx"> Transferencia</span>
 							</div>
 						</div>
 					</div>
@@ -257,6 +262,7 @@
 				document.getElementById("referencia").value = "";
 
 				document.getElementById("datospago").style.display = 'none';
+				document.getElementById("pagopaypal").style.display = 'none';
 				document.getElementById("pagocf").style.display = 'none';
 
 				document.getElementById("btnenviardatos").style.display = 'none';
@@ -470,6 +476,14 @@
 			function datosreportepago() {
 				document.getElementById("datospago").style.display = 'block';
 
+				if (moneda=='bs') {
+					document.getElementById("div-pagomovil").style.display = 'block';
+					document.getElementById("txttx").innerHTML = 'Transferencia';
+				} else {
+					document.getElementById("div-pagomovil").style.display = 'none';
+					document.getElementById("txttx").innerHTML = 'UPHOLD';
+				}
+
 				document.getElementById("btnenviardatos").style.display = 'inline-block';
 				document.getElementById("btnpagoenlinea").style.display = 'none';
 				document.getElementById("btnpagocashflag").style.display = 'none';
@@ -525,10 +539,20 @@
 						break;
 					case 'tarjeta':
 						document.getElementById("banco-punto").innerHTML = "Punto de venta";
+						document.getElementById("div9").style.display = 'flex';
+						document.getElementById("detalle_pago").style.display = 'block';
+						break;
+					case 'pagomovil':
+						document.getElementById("div9").style.display = 'none';
 						document.getElementById("detalle_pago").style.display = 'block';
 						break;
 					case 'transferencia':
-						document.getElementById("banco-punto").innerHTML = "Banco de origen";
+						if (moneda=='bs') {
+							document.getElementById("banco-punto").innerHTML = "Banco de origen";
+						} else {
+							document.getElementById("banco-punto").innerHTML = "Cuenta de origen";
+						}
+						document.getElementById("div9").style.display = 'flex';
 						document.getElementById("detalle_pago").style.display = 'block';
 						break;
 				}
