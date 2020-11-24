@@ -1,0 +1,73 @@
+payable contract Comision =
+   record tx = {
+      idtx : int,
+      monto : int,
+      comision : int,
+      neto  : int }
+
+   record card = {
+      cuenta : address,
+      card  : string,
+      saldo: int,
+      comisiones : int }
+
+   record state = { 
+      cards : map(address, card) }
+
+   entrypoint init() = { cards = {} }
+
+
+   entrypoint getAccountct() : address = Contract.address
+
+   entrypoint getBalancect() : int = Contract.balance
+
+   entrypoint getAccountcl() : address = Call.caller
+
+   entrypoint getBalancecl() : int = Chain.balance(Call.caller)
+
+   entrypoint getBalanceak(direccion' : address) : int = Chain.balance(direccion')
+
+   entrypoint getCuenta(cuenta' : address) : card = state.cards[cuenta']
+      
+   entrypoint existCuenta(cuenta' : address) = Map.member(cuenta', state.cards)
+
+
+   payable stateful entrypoint txpagoct() =
+      Chain.spend(Contract.address, Call.value) // Aqui hay que poner monto para que el contrato lo guarde
+
+
+   payable stateful entrypoint txpagoak(direccion' : address) =
+      Chain.spend(direccion', Call.value) // Aqui si no se llama con monto el dinero sale del contrato
+
+
+   /* Función para calcular la comisión cuando no existe la cuenta */
+   payable stateful entrypoint calculaComisionCuentaNueva(card' : string, idtx' : int) =
+      let comision' = Call.value * 3 / 100
+
+      let neto' = Call.value - comision'
+      Chain.spend(Call.caller, neto') // Aqui hay que poner monto para que el contrato lo guarde
+      let saldo' = getBalancecl()
+      
+      let comisiones' = comision'
+      
+      let crd = { cuenta = Call.caller, card = card', saldo = saldo', comisiones = comisiones' }
+      put(state{ cards[Call.caller] = crd })
+
+
+   /* Función para calcular la comisión cuando ya existe la cuenta */
+   payable stateful entrypoint calculaComisionCuentaExistente(idtx' : int) =
+      let comision' = Call.value * 3 / 100
+
+      let neto' = Call.value - comision'
+      Chain.spend(Call.caller, neto') // Aqui hay que poner monto para que el contrato lo guarde
+      let saldo' = getBalancecl()
+      
+      let crd = getCuenta(Call.caller)
+
+      let comisiones' = crd.comisiones + comision'
+      let card1 = state.cards{  [Call.caller].saldo = saldo' }
+      put(state {cards = card1})
+
+      let card2 = state.cards{  [Call.caller].comisiones = comisiones' }
+      put(state {cards = card2})
+      

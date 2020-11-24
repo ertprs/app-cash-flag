@@ -30,11 +30,18 @@ if ($row = mysqli_fetch_array($result)) {
       /////////////////////////////////////////////////////////////////////////////////////
       $query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio) VALUES (".$_POST["idsocio"].",".$idproveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$documento."','".$origen."','".$status."','".$id_instrumento."',".$idproveedor.")";
       if ($result = mysqli_query($link, $query)) {
+         $query = 'select id from prepago_transacciones where fecha="'.$fecha.'" and documento="'.$documento.'" and origen="'.$origen.'" and status="'.$status.'" and card= "'.$id_instrumento.'"';
+         $result = mysqli_query($link, $query);
+         if ($row = mysqli_fetch_array($result)) {
+            $trxid = $row["id"];
+         } else {
+            $trxid = 0;
+         }
          $query = 'UPDATE prepago SET saldo='.$balance.' WHERE card="'.$card.'"';
          // echo $query;
          $result = mysqli_query($link, $query);
          $mensaje = '["Registro exitoso."]';
-         $respuesta = '{"exito":"SI","mensaje":'.$mensaje.'}';
+         $respuesta = '{"exito":"SI","trxid":'.$trxid.',"mensaje":'.$mensaje.'}';
       } else {
          $mensaje = '["Error registrando la transacción."]';
          $respuesta = '{"exito":"NO","mensaje":'.$mensaje.'}';

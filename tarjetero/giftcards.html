@@ -12,6 +12,7 @@
 		<script src="https://unpkg.com/@aeternity/aepp-sdk@7.3.1/dist/aepp-sdk.browser-script.js"></script>
 		<script src="https://bundle.run/buffer@5.6.0"></script>
 		<script src="../lib/cf-aesdk.js"></script>
+		<script src="../lib/contratoComisionTarjeta.js"></script>
 		<!-- hasta aquí -->
 	</head>
 	<body onload="inicio()">
@@ -65,13 +66,17 @@
 						if (respuesta.exito=="SI") {
 							var pbKey = respuesta.publickey;
 							var prKey = respuesta.secretkey;
+							var saldo = respuesta.saldo;
+							var exist = respuesta.existe;
 
 							// se crea la instancia del Sdk necesaria para consultar balance y hacer transacciones 
 							var Client = await instanciaSdk( prKey,  pbKey );
 
 							var balance = await obtenerBalance( pbKey, Client );
 							console.log(balance);
-							resolve(actualizasaldoae( idsocio, balance ));
+
+							if (exist) { montocripto = balance - saldo; } else { montocripto = 0; }
+							resolve(actualizasaldoae( idsocio, balance, montocripto));
 						} else {
 							resolve(console.log("No hay cuenta"));
 						}
@@ -83,7 +88,7 @@
 			// function actubalanceae() {
 			// }
 
-			function actualizasaldoae(idsocio, balance) {
+			async function actualizasaldoae(idsocio, balance, montocripto) {
 				let datos = new FormData();
 				datos.append("idsocio", idsocio);
 				datos.append("balance", balance);
@@ -93,6 +98,11 @@
 					if (this.readyState == 4 && this.status == 200) {
 						respuesta = JSON.parse(this.responseText);
 						console.log(respuesta);
+						trx = respuesta.trxid
+						if (montocripto>0.00) {
+							var comision = await calculoComisionCuentaExistente( trx, montocripto );
+						}
+
 					}
 				};
 				xmlhttp.open("POST", "../php/actualizasaldoae.php", true);

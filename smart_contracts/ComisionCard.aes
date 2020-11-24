@@ -1,0 +1,55 @@
+payable contract Comision =
+   record tx = {
+      idtx : int,
+      monto : int,
+      comision : int,
+      neto  : int }
+
+   record card = {
+      card  : string,
+      saldo: int,
+      comisiones : int }
+
+   record state = { 
+      cards : map(string, card) }
+
+   entrypoint init() = { cards = {} }
+
+   entrypoint getAccountct() : address = Contract.address
+
+   entrypoint getBalancect() : int = Contract.balance
+
+   entrypoint getAccountcl() : address = Call.caller
+
+   entrypoint getBalancecl() : int = Chain.balance(Call.caller)
+
+   entrypoint getBalanceak(direccion' : address) : int = Chain.balance(direccion')
+
+   entrypoint getCard(card' : string) : card = state.cards[card']
+   
+   entrypoint existCard(card' : string) = Map.member(card', state.cards)
+
+   payable stateful entrypoint txpagoct() =
+      Chain.spend(Contract.address, Call.value) // Aqui hay que poner monto para que el contrato lo guarde
+   
+   payable stateful entrypoint txpagoak(direccion' : address) =
+      Chain.spend(direccion', Call.value) // Aqui si no se llama con monto el dinero sale del contrato
+
+   payable stateful entrypoint calculaComision(card' : string, idtx' : int) =
+      let comision' = Call.value * 3 / 100
+
+      let neto' = Call.value - comision'
+      Chain.spend(Call.caller, neto') // Aqui hay que poner monto para que el contrato lo guarde
+      let saldo' = getBalancecl()
+      
+      if(!existCard(card'))
+        let comisiones' = comision'
+      
+        let crd = { card = card', saldo = saldo', comisiones = comisiones' }
+        put(state{ cards[card'] = crd })
+      else
+        let crd = getCard(card')
+        let comisiones' = crd.comisiones + comision'
+        let cardActualizada = state.cards{ [card'].comisiones = comisiones' }
+        put(state {cards = cardActualizada})
+        

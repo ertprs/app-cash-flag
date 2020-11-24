@@ -1,0 +1,46 @@
+payable contract Pago =
+   record pago = {
+      cuenta : address,
+      monto  : int,
+      comision : int,
+      neto  : int }
+
+   record state = { 
+      pagos : map(address, pago),
+      saldo : int }
+
+   entrypoint init() = { pagos = {}, saldo = 0 }
+   /*
+   stateful function pago(cuenta' : address, montotx : int) =
+      Chain.spend(cuenta', montotx)
+
+   stateful entrypoint txpago(cuenta' : address, montotx : int) =
+      pago(cuenta', montotx)
+      put(state{ cuenta = cuenta', monto = montotx })
+   */
+   entrypoint getAccountct() : address = Contract.address
+
+   entrypoint getBalancect() : int = Contract.balance
+
+   entrypoint getAccountcl() : address = Call.caller
+
+   entrypoint getBalancecl() : int = Chain.balance(Call.caller)
+
+   entrypoint getBalanceak(direccion' : address) : int = Chain.balance(direccion')
+
+   payable stateful entrypoint txpagoct(montotx : int) =
+      Chain.spend(Contract.address, montotx) // Aqui hay que poner monto para que el contrato lo guarde
+   
+   payable stateful entrypoint txpagoak(direccion' : address, montotx : int) =
+      Chain.spend(direccion', montotx) // Aqui si no se llama con monto el dinero sale del contrato
+
+   payable stateful entrypoint calculaComision(direccion' : address, montotx : int) =
+      let comision' = montotx * 3 / 100
+      Chain.spend(Contract.address, comision') // Aqui hay que poner monto para que el contrato lo guarde
+
+      let neto' = montotx - comision'
+      let saldo' = getBalancecl()
+      //put(state{cuenta = direccion', monto = montotx, comision = comision', neto = neto', saldo = saldo'})
+
+      let tx = { cuenta = direccion', monto = montotx, comision = comision', neto = neto' }
+      put(state{ pagos[direccion'] = tx, saldo = saldo' })
