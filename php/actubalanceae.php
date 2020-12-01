@@ -7,6 +7,17 @@ $moneda = 'ae';
 $premium = true;
 $existe = false;
 
+// Buscar parametros
+$query  = "SELECT * from _parametros";
+$result = mysqli_query($link, $query);
+if ($row = mysqli_fetch_array($result)) {
+	$acct = $row["account"];
+	$skey = $row["secretkey"];
+} else {
+	$acct = "";
+	$skey = "";
+}
+
 // Buscar tarjetas
 $query  = "SELECT * from socios where id=".$_GET["idsocio"];
 $result = mysqli_query($link, $query);
@@ -26,6 +37,8 @@ if ($row = mysqli_fetch_array($result)) {
    $respuesta .= '"exito":"SI",';
    $respuesta .= '"secretkey":"'.$row["secretkey"].'",';
 	$respuesta .= '"publickey":"'.$row["account"].'",';
+   $respuesta .= '"skeyCshFlg":"'.$skey.'",';
+	$respuesta .= '"acctCshFlg":"'.$acct.'",';
 	$respuesta .= '"saldo":'.$saldo.',';
 	$respuesta .= '"existe":'.$existe;
 	$respuesta .= '}';
@@ -34,6 +47,8 @@ if ($row = mysqli_fetch_array($result)) {
 	$respuesta .= '"exito":"NO",';
 	$respuesta .= '"secretkey":"",';
 	$respuesta .= '"publickey":"",';
+   $respuesta .= '"skeyCshFlg":"",';
+	$respuesta .= '"acctCshFlg":"",';
 	$respuesta .= '"saldo":0,';
 	$respuesta .= '"existe":'.$existe;
 	$respuesta .= '}';

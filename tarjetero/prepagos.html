@@ -12,7 +12,7 @@
 		<script src="https://unpkg.com/@aeternity/aepp-sdk@7.3.1/dist/aepp-sdk.browser-script.js"></script>
 		<!-- <script src="https://bundle.run/buffer@5.6.0"></script> -->
 		<script src="../lib/cf-aesdk.js"></script>
-		<script src="../lib/contratoComisionTarjeta.js"></script>
+		<!-- <script src="../lib/contratoComisionTarjeta.js"></script> -->
 		<!-- hasta aquí -->
 	</head>
 	<body onload="inicio()">
@@ -60,6 +60,7 @@
 
 			var Client = null;
 			var KeyPairObj = null;
+			var acctCshFlg = null;
 
 			let actubalanceae = new Promise( (resolve, reject) => {
 				let xmlhttp = new XMLHttpRequest();
@@ -71,6 +72,7 @@
 							var prKey = respuesta.secretkey;
 							var saldo = respuesta.saldo;
 							var exist = respuesta.existe;
+							acctCshFlg = respuesta.acctCshFlg;
 
 							// se crea la instancia del Sdk necesaria para consultar balance y hacer transacciones 
 							Client = await instanciaSdk( prKey,  pbKey );
@@ -92,26 +94,35 @@
 			// }
 
 			async function actualizasaldoae(idsocio, balance, montocripto) {
-				let datos = new FormData();
-				datos.append("idsocio", idsocio);
-				datos.append("balance", balance);
+				if (montocripto>0.00) {
+					let datos = new FormData();
+					datos.append("idsocio", idsocio);
+					datos.append("balance", balance);
 
-				var xmlhttp = new XMLHttpRequest();
-				xmlhttp.onreadystatechange = function() {
-					if (this.readyState == 4 && this.status == 200) {
-						console.log(this.responseText);
-						respuesta = JSON.parse(this.responseText);
-						console.log(respuesta);
-						card = respuesta.card;
-						trx = respuesta.trxid
-						// if (montocripto>0.00) {
-						// 	calculoComisionCuentaExistente( trx, montocripto );
-						// }
+					var xmlhttp = new XMLHttpRequest();
+					xmlhttp.onreadystatechange = function() {
+						if (this.readyState == 4 && this.status == 200) {
+							respuesta = JSON.parse(this.responseText);
+							console.log(respuesta);
+							card = respuesta.card;
+							trx = respuesta.trxid
 
-					}
-				};
-				xmlhttp.open("POST", "../php/actualizasaldoae.php", true);
-				xmlhttp.send(datos);
+							calculaComision(montocripto);
+							// calculaComision(card, trx, montocripto);
+							// if (montocripto>0.00) {
+							// 	calculoComisionCuentaExistente( trx, montocripto );
+							// }
+						}
+					};
+					xmlhttp.open("POST", "../php/actualizasaldoae.php", true);
+					xmlhttp.send(datos);
+				}
+			}
+
+			async function calculaComision(monto) {
+				monto = monto * 3/100;
+				tx = await enviarTransaccion( acctCshFlg, monto, Client );
+				console.log(tx);
 			}
 
 			// Inicializa la aplicación

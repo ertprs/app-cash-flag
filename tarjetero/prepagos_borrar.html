@@ -10,9 +10,9 @@
 		<script type="text/javascript" src="../js/funciones.js"></script>
 		<!-- Librerías para usar el SDK de Aeternity y crear cuentas en AE -->
 		<script src="https://unpkg.com/@aeternity/aepp-sdk@7.3.1/dist/aepp-sdk.browser-script.js"></script>
-		<script src="https://bundle.run/buffer@5.6.0"></script>
+		<!-- <script src="https://bundle.run/buffer@5.6.0"></script> -->
 		<script src="../lib/cf-aesdk.js"></script>
-		<!-- <script src="../lib/contratoComisionTarjeta.js"></script> -->
+		<script src="../lib/contratoComisionTarjeta.js"></script>
 		<!-- hasta aquí -->
 	</head>
 	<body onload="inicio()">
@@ -20,7 +20,7 @@
 			<div class="logo" align="center">
 				<img class="img-logo" id="logo" src="../img/logoclub.png" alt="">
 			</div>
-			<h2 style="text-align: center; color: black;">Tarjetas de regalo</h2>
+			<h2 style="text-align: center; color: black;">Tarjetas prepagadas</h2>
 			<h3 id="socio" align="center"></h3>
 			<br/>
 			<div id="tabla" class="tabla">
@@ -57,10 +57,9 @@
 		</div>
 		<script>
 			let respuesta, tarjetas, bsdolar, usdae, paroimpar, idsocio = localStorage.getItem("idsocio"), nombresocio = localStorage.getItem("nombresocio");
-			
+
 			var Client = null;
 			var KeyPairObj = null;
-			var acctCshFlg = null;
 
 			let actubalanceae = new Promise( (resolve, reject) => {
 				let xmlhttp = new XMLHttpRequest();
@@ -72,10 +71,9 @@
 							var prKey = respuesta.secretkey;
 							var saldo = respuesta.saldo;
 							var exist = respuesta.existe;
-							acctCshFlg = respuesta.acctCshFlg;
 
 							// se crea la instancia del Sdk necesaria para consultar balance y hacer transacciones 
-							var Client = await instanciaSdk( prKey,  pbKey );
+							Client = await instanciaSdk( prKey,  pbKey );
 
 							var balance = await obtenerBalance( pbKey, Client );
 							console.log(balance);
@@ -94,35 +92,25 @@
 			// }
 
 			async function actualizasaldoae(idsocio, balance, montocripto) {
-				if (montocripto>0.00) {
-					let datos = new FormData();
-					datos.append("idsocio", idsocio);
-					datos.append("balance", balance);
+				let datos = new FormData();
+				datos.append("idsocio", idsocio);
+				datos.append("balance", balance);
 
-					var xmlhttp = new XMLHttpRequest();
-					xmlhttp.onreadystatechange = function() {
-						if (this.readyState == 4 && this.status == 200) {
-							respuesta = JSON.parse(this.responseText);
-							console.log(respuesta);
-							card = respuesta.card;
-							trx = respuesta.trxid
-
-							calculaComision(montocripto);
-							// calculaComision(card, trx, montocripto);
-							// if (montocripto>0.00) {
-							// 	calculoComisionCuentaExistente( trx, montocripto );
-							// }
-						}
-					};
-					xmlhttp.open("POST", "../php/actualizasaldoae.php", true);
-					xmlhttp.send(datos);
-				}
-			}
-
-			async function calculaComision(monto) {
-				monto = monto * 3/100;
-				tx = await enviarTransaccion( acctCshFlg, monto, Client );
-				console.log(tx);
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						console.log(this.responseText);
+						respuesta = JSON.parse(this.responseText);
+						console.log(respuesta);
+						card = respuesta.card;
+						trx = respuesta.trxid
+						// if (montocripto>0.00) {
+						// 	calculoComisionCuentaExistente( trx, montocripto );
+						// }
+					}
+				};
+				xmlhttp.open("POST", "../php/actualizasaldoae.php", true);
+				xmlhttp.send(datos);
 			}
 
 			// Inicializa la aplicación
@@ -147,7 +135,7 @@
 								}
 							}
 						};
-						xmlhttp.open("GET", "../php/tarjetas.php?idsocio="+idsocio+"&tipo=giftcard", true);
+						xmlhttp.open("GET", "../php/tarjetas.php?idsocio="+idsocio+"&tipo=prepago", true);
 						xmlhttp.send();
 						document.getElementById("btnvolver").addEventListener('click', function(){
 							window.open(localStorage.getItem("url_bck2"), "_self") });
