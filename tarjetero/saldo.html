@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Cash-Flag</title>
+   <link rel="stylesheet" href="./tarjetero.css">
+   <script type="text/javascript" src="../js/funciones.js"></script>
+   <script src="https://unpkg.com/@aeternity/aepp-sdk@7.3.1/dist/aepp-sdk.browser-script.js"></script>
+   <!-- <script src="https://bundle.run/buffer@5.6.0"></script> -->
+   <!-- <script src="./bignumber.js"></script> -->
+   <script src="../lib/cf-aesdk.js"></script>
+   <script src="../lib/contratoComisionTarjeta.js"></script>
+</head>
+<body onload="iniciar()">
+   <div id="container">
+      <div class="logo" align="center">
+         <img class="img-logo" id="logo" src="../img/logoclub.png" alt="">
+      </div>
+      <h2 style="text-align: center; color: black;">Tarjetas prepagadas</h2>
+      <h3 id="socio" align="center"></h3>
+      <br/>
+      <div id="tabla" class="tabla">
+         <div id="f-t" class="fila titulo">
+            <div id="" class="columna1">
+               Comercio
+            </div>
+            <!-- 
+            <div id="" class="columna2">
+               tipo de tarjeta
+            </div>
+             -->
+            <div id="" class="columna3">
+               Número de tarjeta
+            </div>
+            <div id="" class="columna4">
+               Saldo disponible
+            </div>
+            <div id="" class="columna5">
+               Vencimiento
+            </div>
+            <div id="" class="columna6">
+               Status
+            </div>
+         </div>
+      </div>
+      <h3 id="menu" align="center">Actualizando datos en segundo plano...</h3>
+   </div>
+   <script>
+      var idsocio = localStorage.getItem("idsocio"), nombresocio = localStorage.getItem("nombresocio");
+
+      function iniciar() {
+         socio.innerHTML = nombresocio;
+			// menu.innerHTML = "";
+			// menu.style.display = "none";
+
+			let xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = async function() {
+				if (this.readyState == 4 && this.status == 200) {
+					respuesta = JSON.parse(this.responseText);
+					if (respuesta.exito=="SI") {
+						var pbKey = respuesta.publickey;
+						var prKey = respuesta.secretkey;
+						var saldo = respuesta.saldo;
+						var exist = respuesta.existe;
+                  if (exist) {
+                     actualizaSaldoAE(prKey, pbKey, saldo, exist);
+                  } else {
+						   console.log("No hay tarjeta AE");
+                  }
+               }
+            };
+         }
+         xmlhttp.open("GET", "../php/actubalanceysaldoae.php?idsocio="+idsocio, true);
+         xmlhttp.send();
+      }
+
+      async function actualizaSaldoAE(prKey, pbKey, saldo, exist) {
+         // se crea la instancia del Sdk necesaria para consultar balance y hacer transacciones 
+			Client = await instanciaSdk( prKey,  pbKey );
+
+         console.log(Client);
+
+			var balance = await obtenerBalance( pbKey, Client );
+			console.log(balance);
+
+         montocripto = balance - saldo;
+
+         if (montocripto>0.00) {
+				let datos = new FormData();
+            datos.append("idsocio", idsocio);
+            datos.append("balance", balance);
+
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+               if (this.readyState == 4 && this.status == 200) {
+                  console.log(this.responseText);
+                  respuesta = JSON.parse(this.responseText);
+                  console.log(respuesta);
+                  card = respuesta.card;
+                  trx = respuesta.trxid
+                  /*
+                  var resultado = await contractCall('calculaComision', [card,trx], montocripto)
+                  console.log(resultado);
+                  .then((resultado) => {
+                     console.log("xxx");
+                     console.log(resultado);
+                  }).catch((e) => {
+                     console.log("yyy");
+                     console.log(e);
+                  });
+                  */
+                  console.log(saldo);
+                  console.log(balance);
+                  console.log(montocripto);
+                  calculaComision(card, trx, montocripto);
+               }
+            };
+            xmlhttp.open("POST", "../php/actualizasaldoae.php", true);
+            xmlhttp.send(datos);
+         }
+      }
+
+
+      async function calculaComision(card, trx, monto) {
+         // monto = 1000000000000000000;
+         await contractCall('calculaComision', [card,trx], monto)
+         .then((resultado) => {
+            console.log("xxx");
+            console.log(resultado);
+         }).catch((e) => {
+            console.log("yyy");
+            console.log(e);
+         });
+      }
+   </script>
+</body>
+</html>

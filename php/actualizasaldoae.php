@@ -41,7 +41,7 @@ if ($row = mysqli_fetch_array($result)) {
          // echo $query;
          $result = mysqli_query($link, $query);
          $mensaje = '["Registro exitoso."]';
-         $respuesta = '{"exito":"SI","trxid":'.$trxid.',"mensaje":'.$mensaje.'}';
+         $respuesta = '{"exito":"SI","card":"'.$card.'","trxid":'.$trxid.',"mensaje":'.$mensaje.'}';
       } else {
          $mensaje = '["Error registrando la transacción."]';
          $respuesta = '{"exito":"NO","mensaje":'.$mensaje.'}';

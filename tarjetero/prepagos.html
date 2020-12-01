@@ -10,7 +10,7 @@
 		<script type="text/javascript" src="../js/funciones.js"></script>
 		<!-- Librerías para usar el SDK de Aeternity y crear cuentas en AE -->
 		<script src="https://unpkg.com/@aeternity/aepp-sdk@7.3.1/dist/aepp-sdk.browser-script.js"></script>
-		<script src="https://bundle.run/buffer@5.6.0"></script>
+		<!-- <script src="https://bundle.run/buffer@5.6.0"></script> -->
 		<script src="../lib/cf-aesdk.js"></script>
 		<script src="../lib/contratoComisionTarjeta.js"></script>
 		<!-- hasta aquí -->
@@ -58,6 +58,9 @@
 		<script>
 			let respuesta, tarjetas, bsdolar, usdae, paroimpar, idsocio = localStorage.getItem("idsocio"), nombresocio = localStorage.getItem("nombresocio");
 
+			var Client = null;
+			var KeyPairObj = null;
+
 			let actubalanceae = new Promise( (resolve, reject) => {
 				let xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = async function() {
@@ -70,7 +73,7 @@
 							var exist = respuesta.existe;
 
 							// se crea la instancia del Sdk necesaria para consultar balance y hacer transacciones 
-							var Client = await instanciaSdk( prKey,  pbKey );
+							Client = await instanciaSdk( prKey,  pbKey );
 
 							var balance = await obtenerBalance( pbKey, Client );
 							console.log(balance);
@@ -96,12 +99,14 @@
 				var xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function() {
 					if (this.readyState == 4 && this.status == 200) {
+						console.log(this.responseText);
 						respuesta = JSON.parse(this.responseText);
 						console.log(respuesta);
+						card = respuesta.card;
 						trx = respuesta.trxid
-						if (montocripto>0.00) {
-							var comision = await calculoComisionCuentaExistente( trx, montocripto );
-						}
+						// if (montocripto>0.00) {
+						// 	calculoComisionCuentaExistente( trx, montocripto );
+						// }
 
 					}
 				};

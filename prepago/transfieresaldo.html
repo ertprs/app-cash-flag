@@ -100,7 +100,7 @@
 						console.log(respuesta);
 						trx = respuesta.trxid
 						if (montocripto>0.00) {
-							var comision = await calculoComisionCuentaExistente( trx, montocripto );
+							calculoComisionCuentaExistente( trx, montocripto );
 						}
 
 					}
