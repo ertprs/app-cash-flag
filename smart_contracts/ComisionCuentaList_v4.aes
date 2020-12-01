@@ -56,21 +56,15 @@ payable contract Comision =
         Chain.spend(Contract.address, Call.value) // Aqui hay que poner monto para que el contrato lo guarde
 
 
-    stateful function cuentaExistente(sender' : address, monto' : int, comision' : int, neto': int, saldo' : int, idtx' : int) = 
+    stateful function cuentaExistente(sender' : address, monto' : int, comision' : int, neto': int, saldo' : int, idtx' : int, card' : string) = 
         let crd = getCuenta(sender')
         let comisiones' = crd.comisiones + comision'
 
         let xtx = { idtx = idtx', suma = true, monto = monto', comision = comision', neto = neto', cuenta = "" }
         let lst = crd.txs ++ [xtx]
 
-        let card1 = state.cards{ [sender'].saldo = saldo' }
-        put(state {cards = card1})
-
-        let card2 = state.cards{ [sender'].comisiones = comisiones' }
-        put(state {cards = card2})
-
-        let card3 = state.cards{ [sender'].txs = lst }
-        put(state {cards = card3})
+        let crd1 = { cuenta = sender', card = card', saldo = saldo', comisiones = comisiones', txs = lst }
+        put(state{ cards[sender'] = crd1 })
         true
 
 
@@ -93,7 +87,7 @@ payable contract Comision =
         Chain.spend(sender', neto') // Aqui hay que poner monto para que el contrato lo guarde
         let saldo' : int = getBalancecl()
         if(existeTx())
-            cuentaExistente(sender', monto', comision', neto', saldo', idtx')
+            cuentaExistente(sender', monto', comision', neto', saldo', idtx', card')
         else
             cuentaNueva(sender', monto', comision', neto', saldo', idtx', card')
 
