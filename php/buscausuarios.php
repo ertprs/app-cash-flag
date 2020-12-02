@@ -11,6 +11,8 @@ if ($_GET["tipo"]=='comercio') {
             $logo = ($row['logo']<>'') ? $row['logo'] : 'sin_imagen.jpg' ;
             $nombreprov = utf8_encode($row["nombre"]);
             $id = $row['id'];
+            $secretKey = $row["secretkey"];
+            $account = $row["account"];
         } else {
             $valido = false;
             $logo = 'sin_imagen.jpg';
@@ -27,6 +29,8 @@ if ($_GET["tipo"]=='comercio') {
                     $respuesta .= '"hashp":"'. $ro2["hashp"] .'",';
                     $respuesta .= '"pregunta":"' . utf8_encode($ro2["pregunta"]) . '",';
                     $respuesta .= '"hashr":"' . $ro2["hashr"] . '",';
+                    $respuesta .= '"skey":"' . $secretKey . '",';
+                    $respuesta .= '"acct":"' . $account . '",';
                     $respuesta .= '"mensaje":"exito"}';
                 } else {
                     $respuesta = '{"exito":"NO",';
@@ -36,6 +40,8 @@ if ($_GET["tipo"]=='comercio') {
                     $respuesta .= '"hashp":"",';
                     $respuesta .= '"pregunta":"",';
                     $respuesta .= '"hashr":"",';
+                    $respuesta .= '"skey":"",';
+                    $respuesta .= '"acct":"",';
                     $respuesta .= '"mensaje":"error de tipo"}';
                 }
             } else {
@@ -46,6 +52,8 @@ if ($_GET["tipo"]=='comercio') {
                 $respuesta .= '"hashp":"",';
                 $respuesta .= '"pregunta":"",';
                 $respuesta .= '"hashr":"",';
+                $respuesta .= '"skey":"",';
+                $respuesta .= '"acct":"",';
                 $respuesta .= '"mensaje":"correo no registrado"}';                
             }
         } else {
@@ -56,6 +64,8 @@ if ($_GET["tipo"]=='comercio') {
             $respuesta .= '"hashp":"",';
             $respuesta .= '"pregunta":"",';
             $respuesta .= '"hashr":"",';
+            $respuesta .= '"skey":"",';
+            $respuesta .= '"acct":"",';
             $respuesta .= '"mensaje":"error de status"}';       
         }
     } else {
@@ -69,6 +79,8 @@ if ($_GET["tipo"]=='comercio') {
             $respuesta .= '"hashp":"",';
             $respuesta .= '"pregunta":"",';
             $respuesta .= '"hashr":"",';
+            $respuesta .= '"skey":"",';
+            $respuesta .= '"acct":"",';
             $respuesta .= '"mensaje":"error de tipo"}';
         } else {
             $respuesta = '{"exito":"NO",';
@@ -78,6 +90,8 @@ if ($_GET["tipo"]=='comercio') {
             $respuesta .= '"hashp":"",';
             $respuesta .= '"pregunta":"",';
             $respuesta .= '"hashr":"",';
+            $respuesta .= '"skey":"",';
+            $respuesta .= '"acct":"",';
             $respuesta .= '"mensaje":"usuario no registrado"}';
         }
     }
@@ -88,6 +102,8 @@ if ($_GET["tipo"]=='comercio') {
         // if ($row["status"]=="Activo") {
             $valido = true;
             $id = $row['id'];
+            $secretKey = $row["secretkey"];
+            $account = $row["account"];
         // } else {
         //     $valido = false;
         // }
@@ -102,6 +118,8 @@ if ($_GET["tipo"]=='comercio') {
                     $respuesta .= '"hashp":"'. $ro2["hashp"] .'",';
                     $respuesta .= '"pregunta":"' . utf8_encode($ro2["pregunta"]) . '",';
                     $respuesta .= '"hashr":"' . $ro2["hashr"] . '",';
+                    $respuesta .= '"skey":"' . $secretKey . '",';
+                    $respuesta .= '"acct":"' . $account . '",';
                     $respuesta .= '"mensaje":"exito"}';
                 } else {
                     $respuesta = '{"exito":"NO",';
@@ -110,6 +128,8 @@ if ($_GET["tipo"]=='comercio') {
                     $respuesta .= '"hashp":"",';
                     $respuesta .= '"pregunta":"",';
                     $respuesta .= '"hashr":"",';
+                    $respuesta .= '"skey":"",';
+                    $respuesta .= '"acct":"",';
                     $respuesta .= '"mensaje":"error de tipo"}';
                 }
             } else {
@@ -119,6 +139,8 @@ if ($_GET["tipo"]=='comercio') {
                 $respuesta .= '"hashp":"",';
                 $respuesta .= '"pregunta":"",';
                 $respuesta .= '"hashr":"",';
+                $respuesta .= '"skey":"",';
+                $respuesta .= '"acct":"",';
                 $respuesta .= '"mensaje":"correo no registrado"}';                
             }
         } else {
@@ -128,6 +150,8 @@ if ($_GET["tipo"]=='comercio') {
             $respuesta .= '"hashp":"",';
             $respuesta .= '"pregunta":"",';
             $respuesta .= '"hashr":"",';
+            $respuesta .= '"skey":"",';
+            $respuesta .= '"acct":"",';
             $respuesta .= '"mensaje":"error de status"}';       
         }
     } else {
@@ -140,6 +164,8 @@ if ($_GET["tipo"]=='comercio') {
             $respuesta .= '"hashp":"",';
             $respuesta .= '"pregunta":"",';
             $respuesta .= '"hashr":"",';
+            $respuesta .= '"skey":"",';
+            $respuesta .= '"acct":"",';
             $respuesta .= '"mensaje":"error de tipo"}';
         } else {
             $respuesta = '{"exito":"NO",';
@@ -149,6 +175,8 @@ if ($_GET["tipo"]=='comercio') {
             $respuesta .= '"hashp":"",';
             $respuesta .= '"pregunta":"",';
             $respuesta .= '"hashr":"",';
+            $respuesta .= '"skey":"",';
+            $respuesta .= '"acct":"",';
             $respuesta .= '"mensaje":"usuario no registrado"}';
         }
     }

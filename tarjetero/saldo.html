@@ -10,7 +10,7 @@
    <!-- <script src="https://bundle.run/buffer@5.6.0"></script> -->
    <!-- <script src="./bignumber.js"></script> -->
    <script src="../lib/cf-aesdk.js"></script>
-   <!-- <script src="../lib/contratoComisionTarjeta.js"></script> -->
+   <script src="../lib/contratoComisionTarjeta.js"></script>
 </head>
 <body onload="iniciar()">
    <div id="container">
@@ -133,11 +133,13 @@
          monto = monto * 3/100;
          console.log("comision");
          console.log(monto);
+         /*
          tx = await enviarTransaccion( address, monto, Client );
          console.log(tx);
-         /*
+         */
          // monto = 1000000000000000000;
-         await contractCall('calculaComision', [card,trx], monto)
+         // await contract.methods.calculaComision(card,trx, {amount: monto})
+         await contractCall('calculaComision', card,trx, monto)
          .then((resultado) => {
             console.log("xxx");
             console.log(resultado);
@@ -145,7 +147,7 @@
             console.log("yyy");
             console.log(e);
          });
-         */
+         
       }
    </script>
 </body>

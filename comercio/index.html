@@ -8,6 +8,12 @@
 		<title>Cash-Flag</title>
 		<link rel="stylesheet" href="comercio.css">
 		<script type="text/javascript" src="../js/funciones.js"></script>
+		<!-- Librerías para usar el SDK de Aeternity y crear cuentas en AE -->
+		<script src="https://unpkg.com/@aeternity/aepp-sdk@7.3.1/dist/aepp-sdk.browser-script.js"></script>
+		<!-- <script src="https://bundle.run/buffer@5.6.0"></script> -->
+		<script src="../lib/cf-aesdk.js"></script>
+		<!-- <script src="../lib/contratoComisionTarjeta.js"></script> -->
+		<!-- hasta aquí -->
 	</head>
 	<body onload="inicio()">
 		<div id="container">
@@ -37,6 +43,9 @@
 					<span id="txtpregunta" class="etiq">Respuesta a la pregunta</span>
 					<input id="answer" class="campo" type="password" size="50" maxlength="100" />
 				</div>
+				<div class="cmps">
+					<span id="mensaje" class="blink_me" style="text-align: center; margin: auto;"></span>
+				</div>
 				<!-- Linea de botones -->
 				<div align="center">
 					<button id="norecuerda" onclick="pregunta()" style="width: 10em; margin: 0.5em 0 0 0;">Olvidé mi password</button>
@@ -55,8 +64,9 @@
 			</div>
 		</div>
 		<script>
-			var respuesta, idproveedor, logoprov, nombreprov;
+			var respuesta, idproveedor, logoprov, nombreprov, skey="", acct="";
 
+			var Client = null;
 			var tipo = "comercio";
 
 			function inicio() {
@@ -108,6 +118,9 @@
 									idproveedor = respuesta.id;
 									logoprov = respuesta.logo;
 									nombreprov = respuesta.nombreprov;
+									skey = respuesta.skey;
+									acct = respuesta.acct;
+
 									document.getElementById("div2").style.display = 'flex';
 									document.getElementById("norecuerda").style.display = 'inline-block';
 									document.getElementById("buscar").style.display = 'none';
@@ -144,7 +157,7 @@
 				}
 			}
 
-			function login() {
+			async function login() {
 				usuario = document.getElementById("email").value;
 				clave = document.getElementById("clave").value;
 				hashp = SHA256(usuario.trim()+clave.trim());
@@ -155,7 +168,22 @@
 					localStorage.setItem("idproveedor", idproveedor);
 					localStorage.setItem("logoprov", logoprov);
 					localStorage.setItem("nombreprov", nombreprov);
-					window.location.replace("menu.html");
+					document.getElementById("mensaje").innerHTML = "Buscando status de comisiones...";
+					document.getElementById("norecuerda").style.display = 'none';
+					// se crea la instancia del Sdk necesaria para consultar balance y hacer transacciones 
+					Client = await instanciaSdk( skey,  acct );
+
+					var balance = await obtenerBalance( acct, Client );
+					console.log(balance);
+
+					if (balance<5) {
+						document.getElementById("mensaje").innerHTML = "Saldo insuficiente.";
+						alert("Debe tener un balance mayor o igual a 5 AE\nen su cuenta de comisiones para realizar operaciones");
+						window.location.replace("menu2.html");
+					} else {
+						window.location.replace("menu.html");
+
+					}
 				} else {
 					alert('no valido');
 					document.getElementById("clave").focus();
