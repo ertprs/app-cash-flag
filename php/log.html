@@ -1,1 +1,104 @@
-Hola Luis, recibe este obsequio de bienvenida a Cash-Flag, tu comunidad de beneficios.-Hola Luis,<br/><br/>¡Bienvenido a Cash-Flag, tu comunidad de beneficios!<br/><br/>Queremos darte un obsequio de bienvenida, la próxima que visites <b>Mr. Falafel</b> podrás reclamar el siguiente premio:<br/><br/><h3 style="text-align:center;"><b>15,00% de descuento sobre el monto total de tu factura.</b></h3>Este premio podrás reclamarlo cualquier día, siempre que sea antes del <b>09/12/2020</b>.<br/><br/>Sólo debes presentar este correo electrónico o indicar el siguiente código:<br/><h2 style="text-align:center"><b>002A0033004200430B</b></h2><p style="text-align:center;"><img src="https://app.cash-flag.com/php/barcode.php?text=002A0033004200430B&size=50&orientation=horizontal&codetype=Code39&print=true&sizefactor=1" /></p><p style="text-align:center;">Para canjear desde el móvil:</p><p style="text-align:center;"><img src="https://app.cash-flag.com/php/qr/000000000B.png" height="200" width="200" /></p><p style="text-align:center;">ab60d5189fa421ef93a30b89e29f2df7c4feba2363a77b2270ca746d83ea8b20</p>¡Te esperamos!<br/><br/>Atentamente<br/><br/>Cash-Flag<br/><br/><b>Nota:</b> Esta cuenta no es monitoreada, por favor no respondas este email, si deseas comunicarte con tu club escribe a: <b><a href="mailto:info@cash-flag.com">info@cash-flag.com</a></b><br/><br/>
+Â¡Felicidades c, has recibido un regalo de a!-<!DOCTYPE html>
+	<html>
+	<head>
+	  <meta charset="utf-8">
+	  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	  <title>Tarjeta de regalo</title>
+	  <link rel="stylesheet" href="">
+	  <script type="text/javascript" src="http://localhost/app-cash-flag/js/funciones.js"></script>
+	  <script type="text/javascript" src="http://localhost/app-cash-flag/card/classes2.js"></script>
+	  <script type="text/javascript" src="http://localhost/app-cash-flag/lib/html2canvas.min.js"></script>
+     <script>
+		var xmlhttp = new XMLHttpRequest();
+	   xmlhttp.onreadystatechange = function() {
+		  if (this.readyState == 4 && this.status == 200) {
+			  respuesta = JSON.parse(this.responseText);
+
+			  card1 = new Card(
+				  "1313131354230037",
+				  respuesta.logocard,
+				  respuesta.tipo,
+				  "1313131354230037",
+				  respuesta.nombres,
+				  respuesta.vencimiento,
+				  respuesta.qr
+			  );
+
+			  saldo = respuesta.saldo;
+			  idproveedor = respuesta.idproveedor;
+
+			  card1.dibuja("tarjetero");
+
+			  html2canvas(document.getElementById("tarjetero")) // Llamar a html2canvas y pasarle el elemento
+			  .then(function(canvas) {
+				 document.getElementById("card_img").appendChild(canvas); // Lo agregamos como hijo del div
+				 document.getElementById("tarjetero").style.display = "none";
+			  });
+		  }
+	   };
+	   xmlhttp.open("GET", "http://localhost/app-cash-flag/php/buscatarjeta.php?t="+1313131354230037, true);
+	   xmlhttp.send();
+	 </script>
+	</head>
+	<body>
+	 <div>
+		<p><img src="http://localhost/app-cash-flag/img/logoclub.png" width="120" height="auto" /></p>
+		<p>
+		  <span style="font-size: 150%; color: blue;">
+			 <b>Â¡Felicidades c, has recibido un regalo de a!</b>
+		  </span>
+		</p>
+		<!--
+		<div id="6553415554230016" style="width: 340px; height: 221px; margin: auto; position: relative; top: 10%; border-radius: 6%; display: flex; flex-direction: column; justify-content: space-between; background-image: radial-gradient(white, rgb(192, 158, 112)); color: black; border: 2px solid black;">
+			<div style="border: 2px solid black; margin: 5px; border-radius: 5%; height: 94%;">
+				<div style="width: 30%; height: 20%; top: 5px; left: 5px; position: relative; padding: 2% 0px 0px 2%;">
+					<img src="https://pruebas.cash-flag.com/img/mrf.jpg" style="width: 90%; height: auto;">
+				</div>
+				<div style="display: flex; flex-direction: column; align-items: flex-end; margin-right: 7.5px;">
+					<span style="font-size: 100%;">
+						Tarjeta de regalo
+					</span>
+					<span style="font-size: 120%;">
+						6553 4155 5423 0016
+					</span>
+					<span style="font-size: 100%;">
+						tttt gggg
+					</span>
+					<span style="font-size: 80%;">
+						Valida hasta: 10/2021
+					</span>
+				</div>
+				<div style="display: flex; flex-direction: row; justify-content: space-between; margin-top: -3%; height: 40%;">
+					<div style="width: 25%; height: 15px; position: relative; top: 85%; left: -16px; bottom: 0px; padding: 0px 0px 2% 7%;">
+						<img src="https://pruebas.cash-flag.com/img/negro_hori.png" style="width: 95%; height: auto;">
+					</div>
+					<div style="width: 15%; height: auto; position: relative; bottom: -20px; padding: 0px 5% 2% 0px;">
+						<img src="https://pruebas.cash-flag.com/img/gift-solid.svg" style="width: 100%; height: auto;">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div style="width: 100%; text-align: center; font-size: 55%; margin-top: 0.5em;">
+			<span>
+				<a href="https://www.sgc-consultores.com.ve" style="text-decoration: none; color: black;">
+					Tarjeta generada por SGC Consultores C.A. - www.sgc-consultores.com.ve
+				</a>
+			</span>
+		</div>
+		-->
+
+		<div id="tarjetero"></div>			
+		<div id="card_img"></div>			
+
+		<p>Has recibido una tarjeta de regalo para consumir en <b>Mr. Falafel</b> con un saldo prepagado de <b>5 $</b> para ser usada hasta <b>12/2021</b></p>
+
+		<p>Para usar esta tarjeta debes ingresar en <a href="http://localhost/app-cash-flag/giftcards/tarjeta.html", target="_blank">este enlace</a> e introducir el nÃºmero de tarjeta <span style="font-size: 110%;"><b>1313131354230037</b></span> y la siguiente contraseÃ±a: <span style="font-size: 110%;"><b>36322</b></span></p>
+
+		<br/>
+
+		<p><i>Â¡Disfruta de tu regalo y gana con Cash-Flag!</i></p>
+ 
+		<p style="font-size: 80%;"><b>Si tienes alguna pregunta o comentario, contÃ¡ctanos a travÃ©s de <a href="mailto:info@cash-flag.com">este enlace</a></b></p>
+	 </div>
+	 </body>
+	</html>

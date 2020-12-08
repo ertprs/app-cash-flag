@@ -69,13 +69,13 @@ if ($row = mysqli_fetch_array($result)) {
 	$tarjetaexiste = true;
    $card = $row["card"];
    $saldoant = $row["saldo"];
-   $saldo = ($tipopago == 'efectivo') ? $row["saldo"]+$monto : $row["saldo"] ;
+   $saldo = ($tipopago == 'efectivo' || $tipopago == 'tarjeta') ? $row["saldo"]+$monto : $row["saldo"] ;
 } else {
 	// Generar la tarjeta
 	$tarjetaexiste = false;
 	$card = $cardnew;
    $saldoant = 0.00;
-   $saldo = ($tipopago == 'efectivo') ? $monto : 0.00 ;
+   $saldo = ($tipopago == 'efectivo' || $tipopago == 'tarjeta') ? $monto : 0.00 ;
 }
 
 // Fecha de compra
@@ -92,8 +92,8 @@ $diferencia = date_diff($datetime1, $datetime2);
 $validez = substr($fechavencimiento,5,2)."/".substr($fechavencimiento,0,4);
 
 // Status, si es en efectivo queda lista para usar de inmediato, si no queda por conciliar
-$status = ( $tipopago == 'efectivo') ? 'Lista para usar' : 'Por confirmar pago' ;
-$fechaconfirmacion = ( $tipopago == 'efectivo') ? $fecha : '0000-00-00' ;
+$status = ( $tipopago == 'efectivo' || $tipopago == 'tarjeta') ? 'Lista para usar' : 'Por confirmar pago' ;
+$fechaconfirmacion = ( $tipopago == 'efectivo' || $tipopago == 'tarjeta') ? $fecha : '0000-00-00' ;
 
 // Encripta la giftcard
 $hash = hash("sha256",$card.$nombres.$apellidos.$telefono.$email.$monto.$idproveedor.$moneda);
@@ -114,7 +114,7 @@ if ($result = mysqli_query($link,$query)) {
 			$resul2 = mysqli_query($link,$quer2);
 
 			$txtcard = substr($card,0,4).'-'.substr($card,4,4).'-'.substr($card,8,4).'-'.substr($card,12,4);
-			if ($tipopago == 'efectivo') {
+			if ($tipopago == 'efectivo' || $tipopago == 'tarjeta') {
 				$mensaje = '["Tarjeta prepagada recargada exitosamente:","",';
 				$mensaje .= '"A nombre de: '.trim($nombres).' '.trim($apellidos).'",';
 				$mensaje .= '"Número de tarjeta: '.$txtcard.'",';
@@ -172,7 +172,7 @@ if ($result = mysqli_query($link,$query)) {
 				$resul2 = mysqli_query($link,$quer2);
 
 				$txtcard = substr($card,0,4).'-'.substr($card,4,4).'-'.substr($card,8,4).'-'.substr($card,12,4);
-				if ($tipopago == 'efectivo') {
+				if ($tipopago == 'efectivo' || $tipopago == 'tarjeta') {
 					$mensaje = '["Tarjeta prepagada generada exitosamente:","",';
 					$mensaje .= '"A nombre de: '.trim($nombres).' '.trim($apellidos).'",';
 					$mensaje .= '"Número de tarjeta: '.$txtcard.'",';

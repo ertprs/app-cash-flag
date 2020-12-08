@@ -76,7 +76,7 @@
 
 							// se crea la instancia del Sdk necesaria para consultar balance y hacer transacciones 
 							Client = await instanciaSdk( prKey,  pbKey );
-
+						
 							var balance = await obtenerBalance( pbKey, Client );
 							console.log(balance);
 

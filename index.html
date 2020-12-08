@@ -71,12 +71,25 @@
 				<div align="right">
 				</div>
 			</div>
-			<div style="height: 2.5em; margin: 0.5em auto; text-align: center; align-items: center;">
+			<!-- Superhero Button -->
+			<script src="https://unpkg.com/@aeternity/superhero-utils@0.5.1/dist/index.js"></script>
+			<div style="height: 2.5em; margin: 0.5em auto; text-align: center; align-items: center; width: auto;">
+				<div class="my-button">Donar</div>
+				<script type="text/javascript">
+					superheroUtils.createButton('.my-button', {
+						size: 'small',
+						account: 'cashflag.chain',
+						url: 'https://www.cash-flag.com',
+					});
+				</script>
+			</div>
+			<!-- 
 				<a class="superhero-tip-button" data-size="small" data-account="cashflag.chain" data-href="https://www.cash-flag.com">
 				  Donar
 				</a>
 				<script src="https://superhero.com/buttons/widget.js"></script>
 			</div>
+			-->
 		</div>
 	</body>
 </html>
