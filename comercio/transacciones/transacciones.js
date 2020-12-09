@@ -14,7 +14,7 @@ function inicio() {
 			limpiar();
 		}
 	};
-	xmlhttp.open("GET", "../../php/transac_comercio.php?idproveedor="+idproveedor, true);
+	xmlhttp.open("GET", "../../php/transac_comercio_pdvt.php?idproveedor="+idproveedor, true);
 	xmlhttp.send();
 	document.getElementById("btnvolver").addEventListener('click', function(){
 		window.open(localStorage.getItem("url_bck2"), "_self") }
@@ -54,7 +54,7 @@ function accion(id) {
 			}
 		}
 	};
-	xmlhttp.open("POST", "../../php/confirma_transaccion_comercio.php", true);
+	xmlhttp.open("POST", "../../php/confirma_transaccion_comercio_pdvt.php", true);
 	xmlhttp.send(datos);
 }
 
@@ -64,7 +64,7 @@ function pintartransacciones() {
 
 	for (var i = 0; i < transacciones.length; i++) {
 		// tipocard en la columna 1
-		textotipo = transacciones[i].tipocard.substr(0,1).toUpperCase()+transacciones[i].tipocard.substr(1,100);
+		textotipo = transacciones[i].txttipocard.substr(0,1).toUpperCase()+transacciones[i].txttipocard.substr(1,100);
 		txttipocard = document.createTextNode(textotipo);
 		cl1 = document.createElement("div");
 		cl1.classList.add("columna1");

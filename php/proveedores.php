@@ -21,6 +21,7 @@ curl_close($ch);
 
 $usdae = $info["data"]["AE"]["quote"]["USD"]["price"];
 // $usdae = 0.1; //   O J O Borrar o comentar
+$usdae = (isset($usdae)) ? $usdae : 0.1 ;
 ////////////////////////////////////////////////////////////////////////////
 // Buscar parametros
 $query  = "SELECT * from _parametros";

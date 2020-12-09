@@ -8,21 +8,33 @@ $apellidos = (isset($_POST['apellidos'])) ? $_POST['apellidos'] : "" ;
 $telefono = (isset($_POST['telefono'])) ? $_POST['telefono'] : "" ;
 $email = (isset($_POST['email'])) ? $_POST['email'] : "" ;
 $moneda = (isset($_POST['moneda'])) ? $_POST['moneda'] : "bs" ;
-$monto = (isset($_POST['monto'])) ? $_POST['monto'] : 0 ;
+$montobruto = (isset($_POST['monto'])) ? $_POST['monto'] : 0 ;
+$monto = $montobruto - ($montobruto*3/100);
+$comis = $montobruto*3/100;
+
 switch ($moneda) {
 	case 'bs':
+		$brutobs = $montobruto; $brutodolares = 0.00; $brutocripto = 0.00; 
 		$montobs = $monto; $montodolares = 0.00; $montocripto = 0.00; 
+		$comisbs = $comis; $comisdolares = 0.00; $comiscripto = 0.00; 
 		break;
 	case 'dolar':
+		$brutobs = 0.00; $brutodolares = $montobruto; $brutocripto = 0.00; 
 		$montobs = 0.00; $montodolares = $monto; $montocripto = 0.00; 
+		$comisbs = 0.00; $comisdolares = $comis; $comiscripto = 0.00; 
 		break;
 	case 'ae':
+		$brutobs = 0.00; $brutodolares = 0.00; $brutocripto = $montobruto; 
 		$montobs = 0.00; $montodolares = 0.00; $montocripto = $monto; 
+		$comisbs = 0.00; $comisdolares = 0.00; $comiscripto = $comis; 
 		break;
 	default:
+		$brutobs = $montobruto; $brutodolares = 0.00; $brutocripto = 0.00; 
 		$montobs = $monto; $montodolares = 0.00; $montocripto = 0.00; 
+		$comisbs = $comis; $comisdolares = 0.00; $comiscripto = 0.00; 
 		break;
 }
+
 $tipotransaccion = '01';
 $tasadolarbs = 1.00;
 $tasadolarcripto = 1.00;
@@ -69,13 +81,13 @@ if ($row = mysqli_fetch_array($result)) {
 	$tarjetaexiste = true;
    $card = $row["card"];
    $saldoant = $row["saldo"];
-   $saldo = ($tipopago == 'efectivo' || $tipopago == 'tarjeta') ? $row["saldo"]+$monto : $row["saldo"] ;
+   $saldo = ($tipopago == 'efectivo' || $tipopago == 'tarjeta') ? $row["saldo"]+$montobruto : $row["saldo"] ;
 } else {
 	// Generar la tarjeta
 	$tarjetaexiste = false;
 	$card = $cardnew;
    $saldoant = 0.00;
-   $saldo = ($tipopago == 'efectivo' || $tipopago == 'tarjeta') ? $monto : 0.00 ;
+   $saldo = ($tipopago == 'efectivo' || $tipopago == 'tarjeta') ? $montobruto : 0.00 ;
 }
 
 // Fecha de compra
@@ -98,7 +110,7 @@ $fechaconfirmacion = ( $tipopago == 'efectivo' || $tipopago == 'tarjeta') ? $fec
 // Encripta la giftcard
 $hash = hash("sha256",$card.$nombres.$apellidos.$telefono.$email.$monto.$idproveedor.$moneda);
 
-$query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio) VALUES (".$idsocio.",".$idproveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','".$status."','".$card."',".$idproveedor.")";
+$query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio) VALUES (".$idsocio.",".$idproveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$brutobs.",".$brutodolares.",".$brutocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','".$status."','".$card."',".$idproveedor.")";
 if ($result = mysqli_query($link,$query)) {
 	if ($tarjetaexiste) {
 		$query = "UPDATE prepago SET saldo=".$saldo." WHERE card='".trim($card)."'";
@@ -106,12 +118,21 @@ if ($result = mysqli_query($link,$query)) {
 			// Punto de venta
 			$tipo2 = '51'; 
 			// Insertar transacción para confirmar
-			$quer2  = 'INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, ';
+			$quer2  = 'INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, comision, ';
 			$quer2 .= 'instrumento, id_instrumento, documento, status, origen, token, pin, hashpin) ';
 			$quer2 .= 'VALUES ("'.$fecha.'","'.$fechaconfirmacion.'",'.$idproveedor.','.$idsocio.',"'.$tipo2.'","'.$moneda.'",';
-			$quer2 .= $monto.',"prepago","'.$card.'","'.$referencia.'","'.$status;
+			$quer2 .= $monto.','.$comis.',"prepago","'.$card.'","'.$referencia.'","'.$status;
 			$quer2 .= '","","",0,"")';
 			$resul2 = mysqli_query($link,$quer2);
+
+			// Comision Punto de venta
+			$tipo3 = '03'; 
+			// Insertar transacción para confirmar
+			$quer3  = 'INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, comision,';
+			$quer3 .= 'instrumento, id_instrumento, documento, status, origen, token, pin, hashpin) ';
+			$quer3 .= 'VALUES ("'.$fecha.'","'.$fecha.'",'.$idproveedor.','.$idsocio.',"'.$tipo3.'","'.$moneda.'",';
+			$quer3 .= $comis.', 0,"prepago","'.$card.'","'.$referencia.'","Confirmada","","",0,"")';
+			$resul3 = mysqli_query($link,$quer3);
 
 			$txtcard = substr($card,0,4).'-'.substr($card,4,4).'-'.substr($card,8,4).'-'.substr($card,12,4);
 			if ($tipopago == 'efectivo' || $tipopago == 'tarjeta') {
@@ -146,7 +167,7 @@ if ($result = mysqli_query($link,$query)) {
 					case 'dolar':  $mensaje .= "US$ ";     break;
 					case 'ae': $mensaje .= "AE "; break;
 				}
-				$mensaje .= number_format($saldoant+$monto,2,',','.').'"]';
+				$mensaje .= number_format($saldoant+$montobruto,2,',','.').'"]';
 				// $mensaje .= '"Fecha de vencimiento: '.substr($fechavencimiento,8,2)."/".substr($fechavencimiento,5,2)."/".substr($fechavencimiento,0,4).'",';
 				// $mensaje .= '"Te quedan ';
 				// $mensaje .= $diferencia->format('%a').' días';
@@ -159,17 +180,26 @@ if ($result = mysqli_query($link,$query)) {
 	} else {
 		$quer0 = "INSERT INTO cards (card, tipo) VALUES ('".$card."','prepago')";
 		if ($resul0 = mysqli_query($link,$quer0)) {
-			$query = "INSERT INTO prepago (card, nombres, apellidos, telefono, email, saldo, saldoentransito, moneda, fechacompra, fechavencimiento, validez, status, id_socio, id_proveedor, hash, premium) VALUES ('".$card."','".$nombres."','".$apellidos."','".$telefono."','".$email."',".$monto.",0.00,'".$moneda."','".$fecha."','".$fechavencimiento."','".$validez."','".$status."',".$idsocio.",".$idproveedor.",'".$hash."',0)";
+			$query = "INSERT INTO prepago (card, nombres, apellidos, telefono, email, saldo, saldoentransito, moneda, fechacompra, fechavencimiento, validez, status, id_socio, id_proveedor, hash, premium) VALUES ('".$card."','".$nombres."','".$apellidos."','".$telefono."','".$email."',".$montobruto.",0.00,'".$moneda."','".$fecha."','".$fechavencimiento."','".$validez."','".$status."',".$idsocio.",".$idproveedor.",'".$hash."',0)";
 			if ($result = mysqli_query($link,$query)) {
 				// Punto de venta
 				$tipo2 = '51'; 
 				// Insertar transacción para confirmar
-				$quer2  = 'INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, ';
+				$quer2  = 'INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, comision,';
 				$quer2 .= 'instrumento, id_instrumento, documento, status, origen, token, pin, hashpin) ';
 				$quer2 .= 'VALUES ("'.$fecha.'","0000-00-00",'.$idproveedor.','.$idsocio.',"'.$tipo2.'","'.$moneda.'",';
-				$quer2 .= $monto.',"prepago","'.$card.'","'.$referencia.'","'.$status;
+				$quer2 .= $monto.','.$comis.',"prepago","'.$card.'","'.$referencia.'","'.$status;
 				$quer2 .= '","","",0,"")';
 				$resul2 = mysqli_query($link,$quer2);
+
+				// Comision Punto de venta
+				$tipo3 = '03'; 
+				// Insertar transacción para confirmar
+				$quer3  = 'INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, comision,';
+				$quer3 .= 'instrumento, id_instrumento, documento, status, origen, token, pin, hashpin) ';
+				$quer3 .= 'VALUES ("'.$fecha.'","'.$fecha.'",'.$idproveedor.','.$idsocio.',"'.$tipo3.'","'.$moneda.'",';
+				$quer3 .= $comis.', 0,"prepago","'.$card.'","'.$referencia.'","Confirmada","","",0,"")';
+				$resul3 = mysqli_query($link,$quer3);
 
 				$txtcard = substr($card,0,4).'-'.substr($card,4,4).'-'.substr($card,8,4).'-'.substr($card,12,4);
 				if ($tipopago == 'efectivo' || $tipopago == 'tarjeta') {
@@ -197,7 +227,7 @@ if ($result = mysqli_query($link,$query)) {
 						case 'dolar':  $mensaje .= "US$ ";     break;
 						case 'ae': $mensaje .= "AE "; break;
 					}
-					$mensaje .= number_format($saldoant+$monto,2,',','.').'"]';
+					$mensaje .= number_format($saldoant+$montobruto,2,',','.').'"]';
 				}
 				$querx = 'UPDATE _parametros SET dcp='.$dcp;
 				$resulx = mysqli_query($link,$querx);

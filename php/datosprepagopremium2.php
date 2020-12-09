@@ -8,22 +8,34 @@ $apellidos = (isset($_POST['apellidos'])) ? $_POST['apellidos'] : "" ;
 $telefono = (isset($_POST['telefono'])) ? $_POST['telefono'] : "" ;
 $email = (isset($_POST['email'])) ? $_POST['email'] : "" ;
 $moneda = (isset($_POST['moneda'])) ? $_POST['moneda'] : "bs" ;
-$monto = (isset($_POST['monto'])) ? $_POST['monto'] : 0 ;
+$montobruto = (isset($_POST['monto'])) ? $_POST['monto'] : 0 ;
+$monto = $montobruto - ($montobruto*3/100);
+$comis = $montobruto*3/100;
+
 switch ($moneda) {
 	case 'bs':
+		$brutobs = $montobruto; $brutodolares = 0.00; $brutocripto = 0.00; 
 		$montobs = $monto; $montodolares = 0.00; $montocripto = 0.00; 
+		$comisbs = $comis; $comisdolares = 0.00; $comiscripto = 0.00; 
 		break;
 	case 'dolar':
+		$brutobs = 0.00; $brutodolares = $montobruto; $brutocripto = 0.00; 
 		$montobs = 0.00; $montodolares = $monto; $montocripto = 0.00; 
+		$comisbs = 0.00; $comisdolares = $comis; $comiscripto = 0.00; 
 		break;
 	case 'ae':
+		$brutobs = 0.00; $brutodolares = 0.00; $brutocripto = $montobruto; 
 		$montobs = 0.00; $montodolares = 0.00; $montocripto = $monto; 
+		$comisbs = 0.00; $comisdolares = 0.00; $comiscripto = $comis; 
 		break;
 	default:
+		$brutobs = $montobruto; $brutodolares = 0.00; $brutocripto = 0.00; 
 		$montobs = $monto; $montodolares = 0.00; $montocripto = 0.00; 
+		$comisbs = $comis; $comisdolares = 0.00; $comiscripto = 0.00; 
 		break;
 }
-$tipotransaccion = '01';
+$tipotransaccion = '03';
+$tipotrxcomision = '53';
 $tasadolarbs = 1.00;
 $tasadolarcripto = 1.00;
 $idproveedor = (isset($_POST['idproveedor'])) ? $_POST['idproveedor'] : 0 ;
@@ -70,13 +82,13 @@ if ($row = mysqli_fetch_array($result)) {
 	$tarjetaexiste = true;
    $card = $row["card"];
    $saldoant = $row["saldo"];
-   $saldo = ($tipopago == 'efectivo') ? $row["saldo"]+$monto : $row["saldo"] ;
+   $saldo = ($tipopago == 'efectivo' || $tipopago == 'tarjeta') ? $row["saldo"]+$monto : $row["saldo"] ;
 } else {
 	// Generar la tarjeta
 	$tarjetaexiste = false;
 	$card = $cardnew;
    $saldoant = 0.00;
-   $saldo = ($tipopago == 'efectivo') ? $monto : 0.00 ;
+   $saldo = ($tipopago == 'efectivo' || $tipopago == 'tarjeta') ? $monto : 0.00 ;
 }
 
 // Fecha de compra
@@ -93,8 +105,8 @@ $diferencia = date_diff($datetime1, $datetime2);
 $validez = substr($fechavencimiento,5,2)."/".substr($fechavencimiento,0,4);
 
 // Status, si es en efectivo queda lista para usar de inmediato, si no queda por conciliar
-$status = ( $tipopago == 'efectivo') ? 'Lista para usar' : 'Por confirmar pago' ;
-$fechaconfirmacion = ( $tipopago == 'efectivo') ? $fecha : '0000-00-00' ;
+$status = ( $tipopago == 'efectivo' || $tipopago == 'tarjeta') ? 'Lista para usar' : 'Por confirmar pago' ;
+$fechaconfirmacion = ( $tipopago == 'efectivo' || $tipopago == 'tarjeta') ? $fecha : '0000-00-00' ;
 
 // Encripta la giftcard
 $hash = hash("sha256",$card.$nombres.$apellidos.$telefono.$email.$monto.$idproveedor.$moneda);
@@ -105,17 +117,30 @@ if ($result = mysqli_query($link,$query)) {
 		$query = "UPDATE prepago SET saldo=".$saldo." WHERE card='".trim($card)."'";
 		if ($result = mysqli_query($link,$query)) {
 			// Punto de venta
-			$tipo2 = '51'; 
+			$tipo2 = '53'; 
 			// Insertar transacción para confirmar
-			$quer2  = 'INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, ';
+			$quer2  = 'INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, comision, ';
 			$quer2 .= 'instrumento, id_instrumento, documento, status, origen, token, pin, hashpin) ';
 			$quer2 .= 'VALUES ("'.$fecha.'","'.$fechaconfirmacion.'",'.$idproveedor.','.$idsocio.',"'.$tipo2.'","'.$moneda.'",';
-			$quer2 .= $monto.',"prepago","'.$card.'","'.$referencia.'","'.$status;
-			$quer2 .= '","","",0,"")';
+			$quer2 .= $monto.', '.$comis.',"prepago","'.$card.'","'.$referencia.'","'.$status.'","","",0,"")';
 			$resul2 = mysqli_query($link,$quer2);
 
+			// Comision por pagar (del punto de venta a Cash-Flag)
+			$tipo3 = '54'; 
+			// Insertar transacción para confirmar
+			$quer3  = 'INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, comision, ';
+			$quer3 .= 'instrumento, id_instrumento, documento, status, origen, token, pin, hashpin) ';
+			$quer3 .= 'VALUES ("'.$fecha.'","'.$fechaconfirmacion.'",'.$idproveedor.','.$idsocio.',"'.$tipo3.'","'.$moneda.'",';
+			$quer3 .= $comis.', 0,"prepago","'.$card.'","'.$referencia.'","Por enterar","","",0,"")';
+			$resul3 = mysqli_query($link,$quer3);
+			// 
+			//       Registro de la comisión
+			// 
+			$query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio) VALUES (".$idsocio.",".$idproveedor.",'".$fecha."','".$tipotrxcomision."','".$moneda."',".$comisbs.",".$comisdolares.",".$comiscripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','Confirmada','".$card."',".$comercio.")";
+			$result = mysqli_query($link,$query);
+
 			$txtcard = substr($card,0,4).'-'.substr($card,4,4).'-'.substr($card,8,4).'-'.substr($card,12,4);
-			if ($tipopago == 'efectivo') {
+			if ($tipopago == 'efectivo' || $tipopago == 'tarjeta') {
 				$mensaje = '["Tarjeta prepagada recargada exitosamente:","",';
 				$mensaje .= '"A nombre de: '.trim($nombres).' '.trim($apellidos).'",';
 				$mensaje .= '"Número de tarjeta: '.$txtcard.'",';
@@ -153,9 +178,9 @@ if ($result = mysqli_query($link,$query)) {
 				// $mensaje .= $diferencia->format('%a').' días';
 				// $mensaje .= ' para usarla."]';
 			}
-		    $respuesta = '{"exito":"SI","mensaje":'.$mensaje.',"card":"'.$card.'","hash":"'.$hash.'"}';	
+			$respuesta = '{"exito":"SI","mensaje":'.$mensaje.',"card":"'.$card.'","hash":"'.$hash.'"}';	
 		} else {
-		    $respuesta = '{"exito":"NO","mensaje":"La tarjeta no pudo recargarse por favor comuniquese con soporte técnico","card":"'.$card.'","hash":"'.$hash.'"}';	
+		   $respuesta = '{"exito":"NO","mensaje":"La tarjeta no pudo recargarse por favor comuniquese con soporte técnico","card":"'.$card.'","hash":"'.$hash.'"}';	
 		}
 	} else {
 		$quer0 = "INSERT INTO cards (card, tipo) VALUES ('".$card."','prepago')";
@@ -163,17 +188,30 @@ if ($result = mysqli_query($link,$query)) {
 			$query = "INSERT INTO prepago (card, nombres, apellidos, telefono, email, saldo, saldoentransito, moneda, fechacompra, fechavencimiento, validez, status, id_socio, id_proveedor, hash, premium) VALUES ('".$card."','".$nombres."','".$apellidos."','".$telefono."','".$email."',".$monto.",0.00,'".$moneda."','".$fecha."','".$fechavencimiento."','".$validez."','".$status."',".$idsocio.",".$idproveedor.",'".$hash."',1)";
 			if ($result = mysqli_query($link,$query)) {
 				// Punto de venta
-				$tipo2 = '51'; 
+				$tipo2 = '53'; 
 				// Insertar transacción para confirmar
-				$quer2  = 'INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, ';
+				$quer2  = 'INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, comision, ';
 				$quer2 .= 'instrumento, id_instrumento, documento, status, origen, token, pin, hashpin) ';
-				$quer2 .= 'VALUES ("'.$fecha.'","0000-00-00",'.$idproveedor.','.$idsocio.',"'.$tipo2.'","'.$moneda.'",';
-				$quer2 .= $monto.',"prepago","'.$card.'","'.$referencia.'","'.$status;
-				$quer2 .= '","","",0,"")';
+				$quer2 .= 'VALUES ("'.$fecha.'",'.$fechaconfirmacion.','.$idproveedor.','.$idsocio.',"'.$tipo2.'","'.$moneda.'",';
+				$quer2 .= $monto.', '.$comis.',"prepago","'.$card.'","'.$referencia.'","'.$status.'","","",0,"")';
 				$resul2 = mysqli_query($link,$quer2);
 
+				// Comision por pagar (del punto de venta a Cash-Flag)
+				$tipo3 = '54'; 
+				// Insertar transacción para confirmar
+				$quer3  = 'INSERT INTO pdv_transacciones (fecha, fechaconfirmacion, id_proveedor, id_socio, tipo, moneda, monto, comision, ';
+				$quer3 .= 'instrumento, id_instrumento, documento, status, origen, token, pin, hashpin) ';
+				$quer3 .= 'VALUES ("'.$fecha.'","'.$fechaconfirmacion.'",'.$idproveedor.','.$idsocio.',"'.$tipo3.'","'.$moneda.'",';
+				$quer3 .= $comis.', 0,"prepago","'.$card.'","'.$referencia.'","Por enterar","","",0,"")';
+				$resul3 = mysqli_query($link,$quer3);
+				// 
+				//       Registro de la comisión
+				// 
+				$query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio) VALUES (".$idsocio.",".$idproveedor.",'".$fecha."','".$tipotrxcomision."','".$moneda."',".$comisbs.",".$comisdolares.",".$comiscripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','Confirmada','".$card."',".$comercio.")";
+				$result = mysqli_query($link,$query);
+
 				$txtcard = substr($card,0,4).'-'.substr($card,4,4).'-'.substr($card,8,4).'-'.substr($card,12,4);
-				if ($tipopago == 'efectivo') {
+				if ($tipopago == 'efectivo' || $tipopago == 'tarjeta') {
 					$mensaje = '["Tarjeta prepagada generada exitosamente:","",';
 					$mensaje .= '"A nombre de: '.trim($nombres).' '.trim($apellidos).'",';
 					$mensaje .= '"Número de tarjeta: '.$txtcard.'",';
