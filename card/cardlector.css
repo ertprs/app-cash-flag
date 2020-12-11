@@ -8,6 +8,9 @@
     position: fixed;
     width: 30%;
     height: 80%;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px black;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .area_modal3 {
@@ -20,6 +23,8 @@
     position: fixed;
     width: 30%;
     height: 14em;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px black;
 }
 
 .framevideo {

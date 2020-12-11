@@ -41,22 +41,61 @@
 				<!-- Monto -->
 				<div id="div7" class="cmps">
 					<span class="etiq">Monto:</span>
-					<input id="monto" class="campo" type="text" size="50" maxlength="12" title="Debe introducir sólo números o el . como separador decimal" style="text-align: right;"/>
+					<input id="monto" class="campo" type="text" size="47" maxlength="12" title="Debe introducir sólo números o el . como separador decimal" style="text-align: right;"/>
 				</div>
 				<div id="datospago" style="display: none;">
-					<div style="width: 90%; text-align: justify;">
-						<u>Instrucciones para pagar:</u><br/>
-						<ul>
-							<li style="margin-top: 0.5em;">Pago movil: <b>Banco Mercantil</b> - RIF: <b>J-40242441-8</b> - Teléfono: <b>04244071820</b> - A nombre de: <b>SGC Consultores C.A.</b>
-							</li>
-							<li style="margin-top: 0.5em;">Transferencia: <b>Banco Mercantil</b> - RIF: <b>J-40242441-8</b> - Cuenta: <b>0105 0755 3217 5502 6986</b> - A nombre de: <b>SGC Consultores C.A.</b>
-							</li>
-						</ul>
+					<div id="parte1" style="width: 90%; text-align: justify;">
+						<div id="instrucciones" style="font-size: 78%;">
+							<div id="bs" style="margin-top: 5px;">
+								<u>Instrucciones para pagar en Bs.:</u><br/>
+								<ul style="margin-left: 17px;">
+									<li style="margin-top: 0.5em;"><b>Pago movil Banco Mercantil</b> - RIF: <b>J-40242441-8</b> - Teléfono: <b>04244071820</b><br/>
+										A nombre de: <b>SGC Consultores C.A.</b>
+									</li>
+									<li style="margin-top: 0.5em;"><b>Transferencia Banco Mercantil</b> - RIF: <b>J-40242441-8</b> - Cuenta: <b>0105 0755 3217 5502 6986</b><br/>
+										A nombre de: <b>SGC Consultores C.A.</b>
+									</li>
+								</ul>
+							</div>
+							<div id="dolar" style="margin: 10px auto 10px;">
+								<u>Instrucciones para pagar en USD:</u><br/>
+								<ul style="margin-left: 17px;">
+									<li style="margin-top: 0.5em;"><b>UPHOLD:</b> Enviar fondos a: <b>sgcvzla@gmail.com</b>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="parte2" style="width: 90%; text-align: justify;">
+						<div id="instrucciones" style="font-size: 78%;">
+							<div id="bs" style="margin-top: 5px;">
+								<u>Instrucciones para pagar en Bs.:</u><br/>
+								<ul style="margin-left: 17px;">
+									<li style="margin-top: 0.5em;"><b>Pago movil Banco Mercantil</b><br/>
+										RIF: <b>J-40242441-8</b><br/>
+										Teléfono: <b>04244071820</b><br/>
+										A nombre de: <b>SGC Consultores C.A.</b>
+									</li>
+									<li style="margin-top: 0.5em;"><b>Transferencia Banco Mercantil</b><br/>
+										RIF: <b>J-40242441-8</b><br/>
+										Cuenta: <b>0105 0755 3217 5502 6986</b><br/>
+										A nombre de: <b>SGC Consultores C.A.</b>
+									</li>
+								</ul>
+							</div>
+							<div id="dolar" style="margin: 10px auto 10px;">
+								<u>Instrucciones para pagar en USD:</u><br/>
+								<ul style="margin-left: 17px;">
+									<li style="margin-top: 0.5em;"><b>UPHOLD:</b> Enviar fondos a: <b>sgcvzla@gmail.com</b>
+									</li>
+								</ul>
+							</div>
+						</div>
 					</div>
 					<!-- Tipo de pago -->
 					<div id="div8" class="cmps">
 						<span class="etiq">Tipo de operación:</span>
-						<div style="display: flex; flex-flow: column; width: 55%;align-items: flex-start">
+						<div style="display: flex; flex-flow: column; width: 55%;align-items: flex-start; margin-left: 15px;">
 							<div id="div-efectivo" style="width: 100%; text-align: left;">
 								<input class="valores" type="radio" name="tipo" value='efectivo' style="width: auto;" onclick="formapago('efectivo')" selected /> Efectivo
 							</div>

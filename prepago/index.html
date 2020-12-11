@@ -17,8 +17,8 @@
       <style>
          .blink_me {
             animation: blinker 1s linear infinite;
-         }
-
+			}
+			
          @keyframes blinker {
             50% {
                opacity: 0;
@@ -42,22 +42,22 @@
 				<!-- Correo electrónico -->
 				<div id="div2" class="cmps">
 					<span class="etiq">Correo electrónico socio:</span>
-					<input id="email" class="campo" type="email" size="50" maxlength="100" title="Debe introducir un formato de email válido (incluir el @ y al menos un . )" />
+					<input id="email" class="campo" type="email" size="47" maxlength="100" title="Debe introducir un formato de email válido (incluir el @ y al menos un . )" />
 				</div>
 				<!-- Nombres -->
 				<div id="div3" class="cmps" style="display: none;">
 					<span class="etiq">Nombres:</span>
-					<input id="nombres" class="campo" type="text" size="50" maxlength="100" />
+					<input id="nombres" class="campo" type="text" size="47" maxlength="100" />
 				</div>
 				<!-- Apellidos -->
 				<div id="div4" class="cmps" style="display: none;">
 					<span class="etiq">Apellidos:</span>
-					<input id="apellidos" class="campo" type="text" size="50" maxlength="100" />
+					<input id="apellidos" class="campo" type="text" size="47" maxlength="100" />
 				</div>
 				<!-- Teléfono -->
 				<div id="div5" class="cmps" style="display: none;">
 					<span class="etiq">Teléfono:</span>
-					<input id="telefono" class="campo" type="text" size="50" maxlength="100" />
+					<input id="telefono" class="campo" type="text" size="47" maxlength="100" />
 				</div>
 				<div id="detalles" style="display: none;">
 					<p style="text-align: left; padding: 0.5em 0 0 0.5em;"><b><u>Datos de la tarjeta</u></b></p>
@@ -73,12 +73,12 @@
 					<!-- Monto -->
 					<div id="div7" class="cmps">
 						<span class="etiq">Monto:</span>
-						<input id="monto" class="campo" type="text" size="50" maxlength="12" title="Debe introducir sólo números o el . como separador decimal" style="text-align: right;"/>
+						<input id="monto" class="campo" type="text" size="47" maxlength="12" title="Debe introducir sólo números o el . como separador decimal" style="text-align: right;"/>
 					</div>
 					<div id="datospago" style="display: none;">
 						<!-- Tipo de pago -->
 						<div id="div8" class="cmps">
-							<span class="etiq">Tipo de operación:</span>
+							<span class="etiq" style="color: black;"><b>Tipo de operación:</b></span>
 							<div style="display: flex; flex-flow: column; width: 55%;align-items: flex-start; padding-left: 1.5em;">
 								<div id="div-efectivo" style="width: 100%; text-align: left;">
 									<input class="valores" type="radio" name="tipo" value='efectivo' style="width: auto;" onclick="formapago('efectivo')" selected /> Efectivo

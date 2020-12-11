@@ -8,10 +8,15 @@
     --linea: 10px;
 }
 
+body {
+    background: #cbe7f1c2
+}
+
 #container {
     padding: 1em;
     margin: auto;
     width: 47.4%;
+    font-family: Arial, Helvetica, sans-serif
 }
 
 .logo {
@@ -29,7 +34,9 @@ img {
 
 #div1 {
     padding: 0.5em 0 0.5em 0;
-    background: lightgray;
+    background: gray;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px black;
 }
 
 .cmps {
@@ -42,16 +49,25 @@ img {
     width: 37.5%;
     padding-left: 0.5em;
     text-align: left;
+    color: white;
 }
 
 .etiq2 {
     width: 100%;
 }
 
+.campo {
+    border-radius: 5px;
+}
+
 .btns {
     padding-top: 0.5em;
     padding-right: 0.5em;
     text-align: right;
+}
+
+button {
+    border-radius: 5px;
 }
 
 .modal2 {
@@ -78,6 +94,14 @@ img {
     width: auto;"
 }
 
+#parte1 {
+    display: block;
+}
+
+#parte2 {
+    display: none;
+}
+
 @media only screen and (max-width: 960px) {
     * {
         width: 100%;
@@ -92,7 +116,7 @@ img {
 		text-align: center;
 	}
 	h3 {
-		color: blue;
+		/* color: blue; */
         padding-bottom: 0.5em;
 	}
     h5 {
@@ -123,6 +147,12 @@ img {
     }
     .pagopaypal {
         margin: 1em 5em 0em;
+    }
+    #parte1 {
+        display: none;
+    }
+    #parte2 {
+        display: block;
     }
 }
 /*

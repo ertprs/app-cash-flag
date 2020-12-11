@@ -12,8 +12,9 @@ curl_setopt($ch2,CURLOPT_RETURNTRANSFER,true);// set optional params
 curl_setopt($ch2,CURLOPT_HEADER, false);
 $result = curl_exec($ch2);
 $inf2 = json_decode($result,true);
+$minimo = (isset($inf2["min"])) ? $inf2["min"] : 0.00 ;
 // echo curl_error($ch);
-$respuesta = '{"exito":"SI","min":'.$inf2["min"].'}';
+$respuesta = '{"exito":"SI","min":'.$minimo.'}';
 curl_close($ch2);
 echo $respuesta;
 ?>

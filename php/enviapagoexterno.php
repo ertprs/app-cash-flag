@@ -16,7 +16,6 @@ $instrumento = ($row = mysqli_fetch_array($result)) ? $row["tipo"] : "" ;
 // } else {
 // 	$instrumento = "";
 // }
-
 if ($instrumento<>"") {
 	// Buscar tipo de instrumento
 	$id_socio = 0;

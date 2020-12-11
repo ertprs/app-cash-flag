@@ -9,7 +9,7 @@
 }
 
 body {
-    background: lightgray;
+    background: #cbe7f1c2
 }
 
 #container {
@@ -17,6 +17,9 @@ body {
     margin: 2em auto;
     width: 60%;
     background: white;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px black;
 }
 
 .logo {
@@ -131,6 +134,10 @@ img {
     text-align: right;
 }
 
+button {
+    border-radius: 5px;
+}
+
 @media only screen and (max-width: 960px) {
     * {
         width: 100%;
@@ -145,7 +152,7 @@ img {
 		text-align: center;
 	}
 	h3 {
-		color: blue;
+		/* color: blue; */
 	}
     h5 {
         text-align: center;

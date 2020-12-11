@@ -172,6 +172,8 @@ class Card {
         card2.appendChild(cuerpo);
         card2.appendChild(debajo);
     card.appendChild(card2);
+    card.style.boxShadow = "2px 2px 5px black";
+
 
     // return this;
 
@@ -408,6 +410,7 @@ class Card_cashflag {
         card2.appendChild(cuerpo);
         card2.appendChild(debajo);
     card.appendChild(card2);
+    card.style.boxShadow = "2px 2px 5px black";
 
     // return this;
 

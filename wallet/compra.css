@@ -8,10 +8,15 @@
     --linea: 10px;
 }
 
+body {
+    background: #cbe7f1c2;
+}
+
 #container {
     padding: 0 1em 1em;
     margin: auto;
     width: 47.4%;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .logo {
@@ -30,11 +35,14 @@ img {
 
 #div1, #div2 {
     padding: 0.5em 0 0.5em 0;
-    background: lightgray;
+    background: gray;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px black;
 }
 
 #address {
-    font-size: 75%;
+    font-size: 60%;
+    color: black;
 }
 
 #codigoqr {
@@ -57,6 +65,7 @@ img {
     width: 37.5%;
     padding-left: 0.5em;
     text-align: left;
+    color: white;
 }
 
 .etiq2 {
@@ -67,6 +76,10 @@ img {
     padding-top: 0.5em;
     padding-right: 0.5em;
     text-align: right;
+}
+
+button {
+    border-radius: 5px;
 }
 
 .modal2 {
@@ -111,7 +124,7 @@ p {
 		text-align: center;
 	}
 	h3 {
-		color: blue;
+		/* color: blue; */
 	}
     h5 {
         text-align: center;

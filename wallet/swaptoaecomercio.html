@@ -26,6 +26,10 @@
                opacity: 0;
             }
          }
+
+         p {
+            color: white;
+         }
       </style>
 	</head>
 	<body onload="inicio()">
@@ -44,10 +48,10 @@
             <select id="selmonedas" class="seleccion" onchange="buscaminimo(this.value)">
                <option id="opciondefault" value="no">Moneda de origen</option>
             </select>
-            <p id="etqminswap" style="width: 100%; margin: auto; text-align: center;"></p>
+            <p id="etqminswap" style="width: 100%; margin: 10px auto 0; text-align: center;"></p>
             <div align="center" style="margin: 1em 0;">
-               <div class="cmps" style="padding: 0; width: 50%;">
-                  <span class="etiq">Monto a recargar:</span>
+               <div class="cmps" style="padding: 0; width: 60%;">
+                  <span class="etiq" style="color: black;">Monto a recargar:</span>
                   <input id="monto" class="campo" type="text" maxlength="15" style="text-align: right;" />
                </div>
             </div>
@@ -219,11 +223,12 @@
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function() {
                if (this.readyState == 4 && this.status == 200) {
+                  console.log(this.responseText);
                   respuesta = JSON.parse(this.responseText);
                   if (respuesta.exito == 'SI') {
                      minswap = respuesta.min;
                      document.getElementById("etqminswap").classList.remove("blink_me");
-                     document.getElementById("etqminswap").innerHTML = 'Monto mínimo '+minswap+'.';
+                     document.getElementById("etqminswap").innerHTML = 'Monto mínimo '+minswap;
                   }
                }
             };

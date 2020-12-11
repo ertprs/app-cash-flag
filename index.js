@@ -93,6 +93,8 @@ function dibujaropcion(registro) {
 	// Llamada del menú
 	lnkprov = document.createElement("a");
 	lnkprov.id = registro.id;
+	lnkprov.style.textDecoration = "none";
+	lnkprov.style.color = "white";
 	xCat = registro.categoria.replace(" ","_");
 	lnkprov.classList.add(xCat);
 	lnkprov.href = 'menu.html?id_proveedor='+registro.id;

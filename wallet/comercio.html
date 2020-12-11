@@ -8,6 +8,29 @@
 		<title>Cash-Flag</title>
 		<link rel="stylesheet" href="./compra.css">
 		<script type="text/javascript" src="../js/funciones.js"></script>
+      <style>
+         .popupmsg {
+            /* width: auto; */
+            position: absolute;
+            background: white;
+            padding: 10px;
+            border: solid black thin;
+         }
+         
+         .blink_me {
+            animation: blinker 1s linear infinite;
+         }
+
+         @keyframes blinker {
+            50% {
+               opacity: 0;
+            }
+         }
+
+         p {
+            color: white;
+			}
+		</style>
 	</head>
 	<body onload="inicio()">
 		<div id="container">
