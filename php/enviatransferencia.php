@@ -50,13 +50,13 @@ if($from<>"" && $to<>"" && $monto<>0) {
    $status = 'Confirmada';
 }
 
-$query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio) VALUES (".$idsociofrom.",".$idproveedorfrom.",'".$fecha."','".$tipofrom."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referenciafrom."','".$origen."','".$status."','".$from."',".$idproveedorfrom.")";
+$query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio, menu, formapago) VALUES (".$idsociofrom.",".$idproveedorfrom.",'".$fecha."','".$tipofrom."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referenciafrom."','".$origen."','".$status."','".$from."',".$idproveedorfrom.", 'socio', 'card2card')";
 if ($result = mysqli_query($link,$query)) {
    $saldo = $saldofrom - $monto;
    $saldofinalfrom = $saldo;
    $query = "UPDATE prepago SET saldo=".$saldo." WHERE card='".trim($from)."'";
 	if ($result = mysqli_query($link,$query)) {
-      $query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio) VALUES (".$idsocioto.",".$idproveedorto.",'".$fecha."','".$tipoto."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referenciato."','".$origen."','".$status."','".$to."',".$idproveedorto.")";
+      $query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio, menu, formapago) VALUES (".$idsocioto.",".$idproveedorto.",'".$fecha."','".$tipoto."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referenciato."','".$origen."','".$status."','".$to."',".$idproveedorto.", 'socio', 'card2card')";
       if ($result = mysqli_query($link,$query)) {
          $saldo = $saldoto + $monto;
          $saldofinalto = $saldo;

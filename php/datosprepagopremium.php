@@ -25,6 +25,7 @@ $tasadolarbs = 1.00;
 $tasadolarcripto = 1.00;
 $idproveedor = (isset($_POST['idproveedor'])) ? $_POST['idproveedor'] : 0 ;
 $tipopago = (isset($_POST['tipopago'])) ? $_POST['tipopago'] : 'efectivo' ;
+$menu = $_POST["menu"];
 $origen = (isset($_POST['origen'])) ? $_POST['origen'] : '' ;
 $referencia = (isset($_POST['referencia'])) ? $_POST['referencia'] : '' ;
 
@@ -102,7 +103,7 @@ $status = ( $tipopago == 'efectivo') ? 'Lista para usar' : 'Por confirmar pago' 
 // Encripta la giftcard
 $hash = hash("sha256",$card.$nombres.$apellidos.$telefono.$email.$monto.$idproveedor.$moneda);
 
-$query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio) VALUES (".$idsocio.",".$idproveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','".$status."','".$card."',".$idproveedor.")";
+$query = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio, menu, formapago) VALUES (".$idsocio.",".$idproveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','".$status."','".$card."',".$idproveedor.", '".$menu."', '".$tipopago."')";
 if ($result = mysqli_query($link,$query)) {
 	if ($tarjetaexiste) {
 		$query = "UPDATE prepago SET saldo=".$saldo." WHERE card='".trim($card)."'";

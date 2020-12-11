@@ -30,6 +30,7 @@ $tasadolarbs = 1.00;
 $tasadolarcripto = 1.00;
 $idproveedor = (isset($_POST['idproveedor'])) ? $_POST['idproveedor'] : 0 ;
 $tipopago = (isset($_POST['tipopago'])) ? $_POST['tipopago'] : 'efectivo' ;
+$menu = $_POST["menu"];
 $origen = (isset($_POST['origen'])) ? $_POST['origen'] : '' ;
 $referencia = (isset($_POST['referencia'])) ? $_POST['referencia'] : '' ;
 if ($tipopago=="cashflag") {
@@ -108,7 +109,7 @@ $hash = hash("sha256",$card.$nombres.$apellidos.$telefono.$email.$monto.$idprove
 $aux  =  rand(10000, 99999);
 $pwd  = hash("sha256",$card.$aux);
 
-$query = "INSERT INTO giftcards_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio) VALUES (".$idsocio.",".$idproveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','".$status."','".$card."',".$idproveedor.")";
+$query = "INSERT INTO giftcards_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio, menu, formapago) VALUES (".$idsocio.",".$idproveedor.",'".$fecha."','".$tipotransaccion."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','".$status."','".$card."',".$idproveedor.", '".$menu."', '".$tipopago."')";
 if ($result = mysqli_query($link,$query)) {
 	if ($tipopago=="cashflag") {
 		$querz = "select * from prepago where card='".$cardx."'";
@@ -118,7 +119,7 @@ if ($result = mysqli_query($link,$query)) {
 			$saldx    = $roz["saldo"]-$monto;
 		}
 		$tipotrx = '51';
-		$querz = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio) VALUES (".$idsocio.",".$provx.",'".$fecha."','".$tipotrx."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','".$status."','".$cardx."',".$provx.")";
+		$querz = "INSERT INTO prepago_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio, menu, formapago) VALUES (".$idsocio.",".$provx.",'".$fecha."','".$tipotrx."','".$moneda."',".$montobs.",".$montodolares.",".$montocripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','".$status."','".$cardx."',".$provx.", '".$menu."', '".$tipopago."')";
 		if ($resulz = mysqli_query($link,$querz)) {
 			$querz = "UPDATE prepago SET saldo=".$saldx." WHERE card='".trim($cardx)."'";
 			$resulz = mysqli_query($link,$querz);

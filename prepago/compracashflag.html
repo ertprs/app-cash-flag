@@ -49,10 +49,10 @@
 							<div id="bs" style="margin-top: 5px;">
 								<u>Instrucciones para pagar en Bs.:</u><br/>
 								<ul style="margin-left: 17px;">
-									<li style="margin-top: 0.5em;"><b>Pago movil Banco Mercantil</b> - RIF: <b>J-40242441-8</b> - Teléfono: <b>04244071820</b><br/>
+									<li style="margin-top: 0.5em;"><b>Transferencia Banco Mercantil</b> - RIF: <b>J-40242441-8</b> - Cuenta: <b>0105 0755 3217 5502 6986</b><br/>
 										A nombre de: <b>SGC Consultores C.A.</b>
 									</li>
-									<li style="margin-top: 0.5em;"><b>Transferencia Banco Mercantil</b> - RIF: <b>J-40242441-8</b> - Cuenta: <b>0105 0755 3217 5502 6986</b><br/>
+									<li style="margin-top: 0.5em;"><b>Pago movil Banco Mercantil</b> - RIF: <b>J-40242441-8</b> - Teléfono: <b>04244071820</b><br/>
 										A nombre de: <b>SGC Consultores C.A.</b>
 									</li>
 								</ul>
@@ -71,14 +71,14 @@
 							<div id="bs" style="margin-top: 5px;">
 								<u>Instrucciones para pagar en Bs.:</u><br/>
 								<ul style="margin-left: 17px;">
-									<li style="margin-top: 0.5em;"><b>Pago movil Banco Mercantil</b><br/>
-										RIF: <b>J-40242441-8</b><br/>
-										Teléfono: <b>04244071820</b><br/>
-										A nombre de: <b>SGC Consultores C.A.</b>
-									</li>
 									<li style="margin-top: 0.5em;"><b>Transferencia Banco Mercantil</b><br/>
 										RIF: <b>J-40242441-8</b><br/>
 										Cuenta: <b>0105 0755 3217 5502 6986</b><br/>
+										A nombre de: <b>SGC Consultores C.A.</b>
+									</li>
+									<li style="margin-top: 0.5em;"><b>Pago movil Banco Mercantil</b><br/>
+										RIF: <b>J-40242441-8</b><br/>
+										Teléfono: <b>04244071820</b><br/>
 										A nombre de: <b>SGC Consultores C.A.</b>
 									</li>
 								</ul>
@@ -96,19 +96,21 @@
 					<div id="div8" class="cmps">
 						<span class="etiq">Tipo de operación:</span>
 						<div style="display: flex; flex-flow: column; width: 55%;align-items: flex-start; margin-left: 15px;">
+							<!--
 							<div id="div-efectivo" style="width: 100%; text-align: left;">
 								<input class="valores" type="radio" name="tipo" value='efectivo' style="width: auto;" onclick="formapago('efectivo')" selected /> Efectivo
 							</div>
+							-->
 							<!--
 							<div id="div-tarjeta" style="width: 100%; text-align: left;">
 								<input class="valores" type="radio" name="tipo" value='tarjeta' style="width: auto;" onclick="formapago('tarjeta')"/> Tarjeta
 							</div>
 							-->
-							<div id="div-pagomovil" style="width: 100%; text-align: left;">
-								<input class="valores" type="radio" name="tipo" value='pagomovil' style="width: auto;" onclick="formapago('pagomovil')"/> Pago movil
-							</div>
 							<div id="div-transferencia" style="width: 100%; text-align: left;">
 								<input class="valores" type="radio" name="tipo" value='transferencia' style="width: auto;" onclick="formapago('transferencia')"/><span id="txttx"> Transferencia</span>
+							</div>
+							<div id="div-pagomovil" style="width: 100%; text-align: left;">
+								<input class="valores" type="radio" name="tipo" value='pagomovil' style="width: auto;" onclick="formapago('pagomovil')"/> Pago movil
 							</div>
 						</div>
 					</div>
@@ -359,6 +361,7 @@
 				// datos.append("idproveedor", document.getElementById("proveedor").value);
 
 				datos.append("tipopago", tipo);
+				datos.append("menu", "socio");
 				datos.append("origen", document.getElementById("origen").value);
 				datos.append("referencia", document.getElementById("referencia").value);
 
@@ -368,7 +371,7 @@
 						respuesta = JSON.parse(this.responseText);
 						if (respuesta.exito == 'SI') {
 							alert(fmensaje(respuesta.mensaje));
-							limpiar()
+							limpiaforma()
 						} else {
 							alert(respuesta.mensaje);
 						}
@@ -476,6 +479,7 @@
 				} else {
 					document.getElementById("div-pagomovil").style.display = 'none';
 					document.getElementById("txttx").innerHTML = 'UPHOLD';
+					document.getElementById("banco-punto").innerHTML = "Cuenta de origen";
 				}
 
 
