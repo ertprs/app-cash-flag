@@ -9,23 +9,35 @@ $apellidos = (isset($_POST['apellidos'])) ? $_POST['apellidos'] : "" ;
 $telefono  = (isset($_POST['telefono'])) ? $_POST['telefono'] : "" ;
 $email     = (isset($_POST['email'])) ? $_POST['email'] : "" ;
 $moneda    = (isset($_POST['moneda'])) ? $_POST['moneda'] : "bs" ;
-$monto     = (isset($_POST['monto'])) ? $_POST['monto'] : 0 ;
+$montobruto = (isset($_POST['monto'])) ? $_POST['monto'] : 0 ;
+$monto = $montobruto - ($montobruto*3/100);
+$comis = $montobruto*3/100;
+
 $cardx     = (isset($_POST['card'])) ? $_POST['card'] : "" ;
 switch ($moneda) {
 	case 'bs':
+		$brutobs = $montobruto; $brutodolares = 0.00; $brutocripto = 0.00; 
 		$montobs = $monto; $montodolares = 0.00; $montocripto = 0.00; $simbolo = 'Bs.'; 
+		$comisbs = $comis; $comisdolares = 0.00; $comiscripto = 0.00; 
 		break;
 	case 'dolar':
+		$brutobs = 0.00; $brutodolares = $montobruto; $brutocripto = 0.00; 
 		$montobs = 0.00; $montodolares = $monto; $montocripto = 0.00; $simbolo = '$'; 
+		$comisbs = 0.00; $comisdolares = $comis; $comiscripto = 0.00; 
 		break;
 	case 'ae':
+		$brutobs = 0.00; $brutodolares = 0.00; $brutocripto = $montobruto; 
 		$montobs = 0.00; $montodolares = 0.00; $montocripto = $monto; $simbolo = 'AE'; 
+		$comisbs = 0.00; $comisdolares = 0.00; $comiscripto = $comis; 
 		break;
 	default:
+		$brutobs = $montobruto; $brutodolares = 0.00; $brutocripto = 0.00; 
 		$montobs = $monto; $montodolares = 0.00; $montocripto = 0.00; $simbolo = 'Bs.'; 
+		$comisbs = $comis; $comisdolares = 0.00; $comiscripto = 0.00; 
 		break;
 }
-$tipotransaccion = '01';
+$tipotransaccion = '03';
+$tipotrxcomision = '53';
 $tasadolarbs = 1.00;
 $tasadolarcripto = 1.00;
 $idproveedor = (isset($_POST['idproveedor'])) ? $_POST['idproveedor'] : 0 ;
@@ -128,6 +140,12 @@ if ($result = mysqli_query($link,$query)) {
 	if ($tarjetaexiste) {
 		$query = "UPDATE giftcards SET saldo=".$saldo." WHERE card='".trim($card)."'";
 		if ($result = mysqli_query($link,$query)) {
+			// 
+			//       Registro de la comisión
+			// 
+			$query = "INSERT INTO giftcards_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio, menu, formapago) VALUES (".$idsocio.",".$idproveedor.",'".$fecha."','".$tipotrxcomision."','".$moneda."',".$comisbs.",".$comisdolares.",".$comiscripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','Confirmada','".$card."',".$idproveedor.", '".$menu."', '".$tipopago."')";
+			$result = mysqli_query($link,$query);
+
 			$txtcard = substr($card,0,4).'-'.substr($card,4,4).'-'.substr($card,8,4).'-'.substr($card,12,4);
 			if ($tipopago == 'efectivo') {
 				$mensaje = '["Tarjeta de regalo generada exitosamente:","",';
@@ -176,6 +194,12 @@ if ($result = mysqli_query($link,$query)) {
 		if ($resul0 = mysqli_query($link,$quer0)) {
 			$query = "INSERT INTO giftcards (card, remitente, nombres, apellidos, telefono, email, saldo, saldoentransito, moneda, fechacompra, fechavencimiento, validez, status, id_socio, id_proveedor, hash, tipopago, origen, referencia, premium, pwd) VALUES ('".$card."','".$remitente."','".$nombres."','".$apellidos."','".$telefono."','".$email."',".$monto.",0,'".$moneda."','".$fecha."','".$fechavencimiento."','".$validez."','".$status."',".$idsocio.",".$idproveedor.",'".$hash."','".$tipopago."','".$origen."','".$referencia."',1, '".$pwd."')";
 			if ($result = mysqli_query($link,$query)) {
+				// 
+				//       Registro de la comisión
+				// 
+				$query = "INSERT INTO giftcards_transacciones (idsocio, idproveedor, fecha, tipotransaccion, tipomoneda, montobs, montodolares, montocripto, tasadolarbs, tasadolarcripto, documento, origen, status, card, comercio, menu, formapago) VALUES (".$idsocio.",".$idproveedor.",'".$fecha."','".$tipotrxcomision."','".$moneda."',".$comisbs.",".$comisdolares.",".$comiscripto.",".$tasadolarbs.",".$tasadolarcripto.",'".$referencia."','".$origen."','Confirmada','".$card."',".$idproveedor.", '".$menu."', '".$tipopago."')";
+				$result = mysqli_query($link,$query);
+
 				$txtcard = substr($card,0,4).'-'.substr($card,4,4).'-'.substr($card,8,4).'-'.substr($card,12,4);
 				if ($tipopago == 'efectivo') {
 					$mensaje = '["Tarjeta de regalo generada exitosamente:","",';

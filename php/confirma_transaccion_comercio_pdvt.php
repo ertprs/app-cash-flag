@@ -60,10 +60,11 @@ switch ($_POST["accion"]) {
    case 'rechazar':
       $query = 'UPDATE '.$tipocard.'_transacciones SET status="Rechazada" where card="'.trim($card).'" and documento="'.$documento.'" and status="Por confirmar pago"';
       $result = mysqli_query($link, $query);
-
+      /*
       $fechaconfirmacion = date("Y-m-d");
       $query = 'UPDATE pdv_transacciones SET status="Rechazada", fechaconfirmacion="'.$fechaconfirmacion.'" where id='.$_POST["transaccion"];
       $result = mysqli_query($link, $query);
+      */
       break;
 }
 
