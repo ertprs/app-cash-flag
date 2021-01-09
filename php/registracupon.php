@@ -101,33 +101,33 @@ if ($row = mysqli_fetch_array($result)) {
 	*/
 	$hash = hash("sha256",$numcupon.$_POST['id_proveedor']. $id.$tipopremio.$montopremio.$descpremio."Generado");
 
-	$query = "INSERT INTO cupones (cupon,cuponlargo,id_proveedor,id_socio,status,factura,monto,id_premio,tipopremio,montopremio,descpremio,socio,email,telefono,nombres,apellidos,fechacupon,fechavencimiento,fechacanje,facturacanje,montocanje,hash) VALUES ('".$numcupon."','".$cuponlargo."'," . $_POST['id_proveedor'] . "," . $id . ",'Generado','" . $_POST["factura"] . "'," . $_POST["monto"] . ",".$id_premio.",'".$tipopremio."',".$montopremio.",'".$descpremio."'," . $socio . ",'" . $_POST["email"] . "','" . $_POST["telefono"] . "','" . $_POST["nombres"] . "','" . $_POST["apellidos"] . "','".$fechacupon."','".$fechavencimiento."','0000-00-00','',0,'".$hash."')";
+	$query = "INSERT INTO cupones (cupon,cuponlargo,id_proveedor,id_comercio,id_socio,status,factura,monto,id_premio,tipopremio,montopremio,descpremio,socio,email,telefono,nombres,apellidos,fechacupon,fechavencimiento,fechacanje,facturacanje,montocanje,hash) VALUES ('".$numcupon."','".$cuponlargo."'," . $_POST['id_proveedor'] . ",".$_POST['id_proveedor']."," . $id . ",'Generado','" . $_POST["factura"] . "'," . $_POST["monto"] . ",".$id_premio.",'".$tipopremio."',".$montopremio.",'".$descpremio."'," . $socio . ",'" . $_POST["email"] . "','" . $_POST["telefono"] . "','" . $_POST["nombres"] . "','" . $_POST["apellidos"] . "','".$fechacupon."','".$fechavencimiento."','0000-00-00','',0,'".$hash."')";
 	if ($result = mysqli_query($link, $query)) {
 
 		$correo = $_POST["email"];
 
-		$mensaje = utf8_decode('Hola '.trim($_POST["nombres"]).',<br/><br/>');
-		$mensaje .= utf8_decode('¡Gracias por preferir a <b>'.trim($nombreproveedor).'</b> para tus compras!<br/><br/>');
-		$mensaje .= utf8_decode('En reconimiento a tu preferencia, queremos darte un obsequio, ');
-		$mensaje .= utf8_decode('la próxima que nos visites podrás reclamar el siguiente premio:'.'<br/><br/>');
+		$mensaje = 'Hola '.trim($_POST["nombres"]).',<br/><br/>';
+		$mensaje .= '¡Gracias por preferir a <b>'.trim($nombreproveedor).'</b> para tus compras!<br/><br/>';
+		$mensaje .= 'En reconimiento a tu preferencia, queremos darte un obsequio, ';
+		$mensaje .= 'la próxima que nos visites podrás reclamar el siguiente premio:'.'<br/><br/>';
 		switch ($tipopremio) {
 			case 'porcentaje':
-				$mensaje .= utf8_decode('<h3 style="text-align:center;"><b>'.number_format($montopremio,2,',','.').'% de descuento sobre el monto total de tu factura.</b></h3>');
+				$mensaje .= '<h3 style="text-align:center;"><b>'.number_format($montopremio,2,',','.').'% de descuento sobre el monto total de tu factura.</b></h3>';
 				break;
 			case 'monto':
-				$mensaje .= utf8_decode('<h3 style="text-align:center;"><b>'.number_format($montopremio,2,',','.').' Bs. de descuento en sobre el monto total de tu factura.</b></h3>');
+				$mensaje .= '<h3 style="text-align:center;"><b>'.number_format($montopremio,2,',','.').' Bs. de descuento en sobre el monto total de tu factura.</b></h3>';
 				break;
 			case 'producto':
-				$mensaje .= utf8_decode('<h3 style="text-align:center;"><b>'.trim($descpremio).'.</b></h3>');
+				$mensaje .= '<h3 style="text-align:center;"><b>'.trim($descpremio).'.</b></h3>';
 				break;
 			default:
-				$mensaje .= utf8_decode('<h3 style="text-align:center;"><b>Premio especial sorpresa.</b></h3>');
+				$mensaje .= '<h3 style="text-align:center;"><b>Premio especial sorpresa.</b></h3>';
 				break;
 		}
 
-		$mensaje .= utf8_decode('Este premio podrás reclamarlo cualquier día, siempre que sea antes del <b>'.$fechavencstr.'</b>.<br/><br/>');
-		$mensaje .= utf8_decode('Sólo debes presentar este correo electrónico o indicar el siguiente código:'.'<br/>');
-		$mensaje .= utf8_decode('<h2 style="text-align:center"><b>'.$cuponlargo.'</b></h2>');
+		$mensaje .= 'Este premio podrás reclamarlo cualquier día, siempre que sea antes del <b>'.$fechavencstr.'</b>.<br/><br/>';
+		$mensaje .= 'Sólo debes presentar este correo electrónico o indicar el siguiente código:'.'<br/>';
+		$mensaje .= '<h2 style="text-align:center"><b>'.$cuponlargo.'</b></h2>';
 
 		// codigo de barras
 		$mensaje .= '<p style="text-align:center;">';
@@ -141,7 +141,7 @@ if ($row = mysqli_fetch_array($result)) {
 		$mensaje .= '</p>';
 
 		// código qr
-		$mensaje .= utf8_decode('<p style="text-align:center;">Para canjear desde el móvil:</p>');
+		$mensaje .= '<p style="text-align:center;">Para canjear desde el móvil:</p>';
 
 //		$dir = 'https://app.cash-flag.com/php/temp/';
 //		if(!file_exists($dir)) mkdir($dir);
@@ -165,23 +165,24 @@ if ($row = mysqli_fetch_array($result)) {
 		// Hasta aqui
 		$mensaje .= '<p style="text-align:center;">'.$hash.'</p>';
 
-		$mensaje .= utf8_decode('¡Te esperamos!'.'<br/><br/>');
+		$mensaje .= '¡Te esperamos!'.'<br/><br/>';
 
-		$mensaje .= utf8_decode('Atentamente'.'<br/><br/>');
-		$mensaje .= utf8_decode('Cash-Flag'.'<br/><br/>');
+		$mensaje .= 'Atentamente'.'<br/><br/>';
+		$mensaje .= 'Cash-Flag'.'<br/><br/>';
 
-		$mensaje .= utf8_decode('<b>Nota:</b> Esta cuenta no es monitoreada, por favor no respondas este email, si deseas comunicarte con tu club escribe a: <b><a href="mailto:info@cash-flag.com">info@cash-flag.com</a></b>'.'<br/><br/>');
+		$mensaje .= '<b>Nota:</b> Esta cuenta no es monitoreada, por favor no respondas este email, si deseas comunicarte con tu club escribe a: <b><a href="mailto:info@cash-flag.com">info@cash-flag.com</a></b>'.'<br/><br/>';
 
 		// $mensaje .= $numcupon;
 
-		$asunto = utf8_decode(trim($_POST["nombres"]).' ganaste un premio en '.($nombreproveedor).' por tu compra.');
+		$asunto = trim($_POST["nombres"]).' ganaste un premio en '.($nombreproveedor).' por tu compra.';
 		// $cabeceras = 'Content-type: text/html;';
 
 		$cabeceras = 'Content-type: text/html'."\r\n";
 		$cabeceras .= 'From: Cash-Flag <info@cash-flag.com>';
 	//   if ($_SERVER["HTTP_HOST"]!='localhost') {
-			mail($correo,$asunto,$mensaje,$cabeceras);
-		// }
+			// mail($correo,$asunto,$mensaje,$cabeceras);
+			cashflagemail($correo, trim($_POST["nombres"]), $asunto, $mensaje);
+			// }
 
 		$a = fopen('log.html','w+');
 		fwrite($a,$asunto);

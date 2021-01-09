@@ -334,7 +334,8 @@ $asunto = utf8_decode(trim($_POST["razonsocial"]).', bienvenido a Cash-Flag, pue
 // $cabeceras = 'Content-type: text/html;';
 
 if ($_SERVER["HTTP_HOST"]!='localhost') {
-	mail($correo,$asunto,$mensaje,$cabeceras);
+	// mail($correo,$asunto,$mensaje,$cabeceras);
+	cashflagemail($correo, trim($_POST["razonsocial"]), $asunto, $mensaje);
 }
 
 // $respuesta = '{"exito":"SI","archivo":"ultimocontrato.contrato","contenido":'.json_encode($file).',';

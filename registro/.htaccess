@@ -1,0 +1,2 @@
+RewriteEngine On
+RewriteRule ^id/(.*) https://pruebas.cash-flag.com/registro/index.html?id=$1

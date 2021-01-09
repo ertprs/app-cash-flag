@@ -2,14 +2,23 @@
 function cargaforma() {
 	buscatitulo();
 	var logo;
-
+	
 	var params = fparamurl(window.location.search.substr(1));
 
 	localStorage.setItem("id_proveedor",params.idp);
 	localStorage.setItem("id_socio",params.ids);
 	var prov = localStorage.getItem("id_proveedor");
 	var socio = localStorage.getItem("id_socio");
+	/*
+	var params = fparamurl(window.location.search.substr(1));
 
+	var paramarr = params.id.split ("-");
+
+	localStorage.setItem("id_proveedor",paramarr[0]);
+	localStorage.setItem("id_socio",paramarr[1]);
+	var prov = localStorage.getItem("id_proveedor");
+	var socio = localStorage.getItem("id_socio");
+   */
 	var titulo = localStorage.getItem("nombresistema");
 	// cargar parámetros de la tabla
 	var xmlhttp = new XMLHttpRequest();
@@ -90,6 +99,7 @@ function enviar() {
 			var xmlhttp = new XMLHttpRequest();
 			xmlhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
+					console.log(this.responseText);
 					respuesta = JSON.parse(this.responseText);
 					console.log(respuesta);
 					if (respuesta.exito == 'SI') {

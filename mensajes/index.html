@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>SGC Consultores C.A.</title>
+		<link rel="stylesheet" href="./mensajes.css">
+		<script type="text/javascript" src="../js/funciones.js"></script>
+		<script type="text/javascript" src="./mensajes.js"></script>
+	</head>
+<body onload='inicio()'>
+	<div align="center">
+		<div class="logo">
+			<img id="logo" src="" alt="">
+		</div>
+	</div>
+	<div id="container">
+		<h3 id="tituloformulario" align="center"></h3>
+      <p align="center">
+         <b>Paso <span id="numpagina">1</span> de 4: <span id="txtpagina">Seleccionar canal</span>
+         </b>
+      </p>
+		<br/>
+
+		<div id="tab1">
+			<!-- Canal -->
+			<div class="cmps">
+				<span class="etiq">¿Qué deseas enviar?</span>
+            <!-- <input id="" class="campo" type="date" style="height:1.2em;width:9em;" /> -->
+            <div style="display: block;">
+               <div style="display: flex;">
+                  <input id="sms" class="campo" type="checkbox" style="width: 20px;" onchange="datossms(this.checked)" />
+                  <span class="etiq" style="margin-left: 5px; width: auto;">Mensaje de texto (SMS)</span>
+               </div>
+               <div style="display: flex;">
+                  <input id="email" class="campo" type="checkbox" style="width: 20px;" onchange="datosemail(this.checked)" />
+                  <span class="etiq" style="margin-left: 5px; width: auto;">Correo electrónico</span>
+               </div>
+            </div>
+			</div>
+			<div class="btns2">
+				<button id="btn11" onclick="atras(0,1)" style="width: 10em; display: none;">Anterior (0 de 3)</button>
+				<button id="btn21" onclick="adelante(1,2)" style="width: 10em;">Siguiente (2 de 4)</button>
+			</div>
+		</div>
+		<div id="tab2" style="display: none;">
+         <!-- mensaje de texto -->
+         <div id="txtsms">
+            <div class="cmps">
+               <span class="etiq">
+                  Texto SMS (160 caracteres)<br/>
+                  <span style="color: blue;">
+                     Caracteres No permitidos: <br/>' ¡ ¿ \ º | { } [ ] ` ^ Ü € ?  $ # á é í ó ú ñ
+                  </span>
+               </span>
+               <!-- <input id="" class="campo" type="text"  size="47" maxlength="160" /> -->
+               <textarea id="contenidosms" class="campo2" cols="40" rows="5" maxlength="160" style="padding: 8PX 5px 0;"></textarea>
+            </div>
+            <!-- <p class="etiq4">
+               Caracteres No permitidos: ' ¡ ¿ \ º | { } [ ] ` ^ Ü € ?  $ # á é í ó ú ñ
+            </p> -->
+         </div>
+
+         <!-- <div class="etiq4">
+            <ul>
+               <li>Caracteres Permitidos:  . , ; : - _ "  @ / %  ( ) =  !</li>
+               <li>Caracteres No permitidos: ' ¡ ¿ \ º | { } [ ] ` ^ Ü € ?  $ # á é í ó ú ñ</li>
+            </ul>
+         </div> -->
+			<!-- Asunto correo electrónico -->
+			<div id="txtasunto" class="cmps">
+				<span class="etiq">Asunto correo electrónico</span>
+            <!-- <input id="" class="campo" type="text"  size="47" maxlength="10" /> -->
+            <input id="asuntoemail" class="campo" type="text" size="47" maxlength="160" />
+			</div>
+			<!-- Cuerpo correo electrónico -->
+			<div id="txtemail" class="cmps">
+				<span class="etiq">Texto correo electrónico</span>
+            <!-- <input id="" class="campo" type="text"  size="47" maxlength="10" /> -->
+            <textarea id="contenidoemail" class="campo2" cols="40" rows="10" style="padding: 8PX 5px 0;"></textarea>
+			</div>
+			<div class="btns2">
+				<button id="btn12" onclick="atras(1,2)" style="width: 10em;">Anterior (1 de 4)</button>
+				<button id="btn22" onclick="adelante(2,3)" style="width: 10em;">Siguiente (3 de 4)</button>
+			</div>
+		</div>
+		<div id="tab3" style="display: none;">
+			<!-- Canal -->
+			<div class="cmps">
+				<span class="etiq">Tipo de destinatario</span>
+            <!-- <input id="" class="campo" type="date" style="height:1.2em;width:9em;" /> -->
+            <div style="display: block;">
+               <div style="display: flex;">
+                  <input id="socios" class="campo" type="checkbox" style="width: 20px;" checked onchange="displaysocios()" />
+                  <span class="etiq" style="margin-left: 5px; width: auto;">Socios registrados en la plataforma</span>
+               </div>
+               <div style="display: flex;">
+                  <input id="prospectos" class="campo" type="checkbox" style="width: 20px;" checked onchange="displayprospectos()" />
+                  <span class="etiq" style="margin-left: 5px; width: auto;">Prospectos (no registrados)</span>
+               </div>
+            </div>
+			</div>
+			<!-- edad -->
+			<!-- <div class="cmps">
+				<span class="etiq">Rangos de edad</span>
+				<select id="" class="campo" style="width:11.5em;">
+               <option value="todos">Todos</option>
+					<option value="00-20">Menores de 20 años</option>
+					<option value="21-30">Entre 21 y 30 años</option>
+					<option value="31-40">Entre 31 y 40 años</option>
+					<option value="41-50">Entre 41 y 50 años</option>
+					<option value="51-60">Entre 51 y 60 años</option>
+					<option value="61-99">Mayores de 60 años</option>
+				</select>
+			</div> -->
+			<div id="seccionsocios">
+				<hr style="margin: 5px 0;" />
+				<div class="cmps">
+					<span class="etiq">Rangos de edad</span>
+					<div style="width: min-content;">
+						<input id="edad-todos" class="campo" type="checkbox" style="width: 15px;" checked onchange="edadtodos()" />
+						<span class="etiq" style="width: 65px;">Todos</span>
+						<br/>
+						<div style="display: inline-flex;">
+							<div style="width: 90px;">
+								<input id="01-20" class="campo" type="checkbox" style="width: 15px;" checked onchange="edadindividual()" />
+								<span class="etiq" style="width: 65px;">De 1 a 20</span>
+							</div>
+							<div style="width: 90px;">
+								<input id="21-30" class="campo" type="checkbox" style="width: 15px;" checked onchange="edadindividual()" />
+								<span class="etiq" style="width: 65px;">De 21 a 30</span>
+							</div>
+							<div style="width: 90px;">
+								<input id="31-40" class="campo" type="checkbox" style="width: 15px;" checked onchange="edadindividual()" />
+								<span class="etiq" style="width: 65px;">De 31 a 40</span>
+							</div>
+						</div>
+						<div style="display: inline-flex;">
+							<div style="width: 90px;">
+								<input id="41-50" class="campo" type="checkbox" style="width: 15px;" checked onchange="edadindividual()" />
+								<span class="etiq" style="width: 65px;">De 41 a 50</span>
+							</div>
+							<div style="width: 90px;">
+								<input id="51-60" class="campo" type="checkbox" style="width: 15px;" checked onchange="edadindividual()" />
+								<span class="etiq" style="width: 65px;">De 51 a 60</span>
+							</div>
+							<div style="width: 90px;">
+								<input id="61-99" class="campo" type="checkbox" style="width: 15px;" checked onchange="edadindividual()" />
+								<span class="etiq" style="width: 65px;">Más de 60</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<hr style="margin: 5px 0;" />
+
+				<!-- sexo -->
+				<!-- <div class="cmps">
+					<span class="etiq">Sexo</span>
+					<select id="" class="campo" style="width:11.5em;">
+						<option value="todos">Indistinto</option>
+						<option value="femenino">Femenino</option>
+						<option value="masculino">Masculino</option>
+					</select>
+				</div> -->
+				<div class="cmps">
+					<span class="etiq">Sexo</span>
+					<div style="width: min-content;">
+						<input id="sexo-todos" class="campo" type="checkbox" style="width: 15px;" checked onchange="sexotodos()" />
+						<span class="etiq" style="width: 65px;">Indistinto</span>
+						<br/>
+						<div style="display: inline-flex;">
+							<div style="width: 85px;">
+								<input id="femenino" class="campo" type="checkbox" style="width: 15px;" checked onchange="sexoindividual()" />
+								<span class="etiq" style="width: 65px;">Femenino</span>
+							</div>
+							<div style="width: 85px;">
+								<input id="masculino" class="campo" type="checkbox" style="width: 15px;" checked onchange="sexoindividual()" />
+								<span class="etiq" style="width: 65px;">Masculino</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<hr style="margin: 5px 0;" />
+				<!-- Pais -->
+				<div class="cmps">
+					<span class="etiq">País</span>
+					<select id="pais" class="campo" style="width:11.5em;">
+						<!-- <option value="nodefinido">Seleccione una opción</option> -->
+						<option value="192-Venezuela">Venezuela</option>
+					</select>
+				</div>
+				<hr style="margin: 5px 0;" />
+				<!-- estado -->
+				<div class="cmps">
+					<span class="etiq">Estado</span>
+					<select id="estado" class="campo" style="width:13em;">
+						<option value="todos">Seleccione una opción</option>
+						<!-- <option value="1">Amazonas</option>
+						<option value="2">Anzoátegui</option>
+						<option value="3">Apure</option>
+						<option value="4">Aragua</option>
+						<option value="5">Barinas</option>
+						<option value="6">Bolívar</option> -->
+						<option value="7-Carabobo" selected>Carabobo</option>
+						<!-- <option value="8">Cojedes</option>
+						<option value="9">Delta Amacuro</option>
+						<option value="10">Distrito Capital</option>
+						<option value="11">Falcón</option>
+						<option value="12">Guárico</option>
+						<option value="13">Lara</option>
+						<option value="14">Mérida</option>
+						<option value="15">Miranda</option>
+						<option value="16">Monagas</option>
+						<option value="17">Nueva Esparta</option>
+						<option value="18">Portuguesa</option>
+						<option value="19">Sucre</option>
+						<option value="20">Táchira</option>
+						<option value="21">Trujillo</option>
+						<option value="22">Vargas</option>
+						<option value="23">Yaracuy</option>
+						<option value="24">Zulia</option> -->
+					</select>
+				</div>
+				<hr style="margin: 5px 0;" />
+				<!-- ciudad -->
+				<div class="cmps">
+					<span class="etiq">Ciudad</span>
+					<select id="ciudad" class="campo" style="width:13em;">
+						<option value="todos">Todas</option>
+						<!-- <option value="1">Acarigua</option>
+						<option value="2">Anaco</option>
+						<option value="3">Araure</option>
+						<option value="4">Barcelona</option>
+						<option value="5">Barinas</option>
+						<option value="6">Barquisimeto</option>
+						<option value="7">Cabimas</option>
+						<option value="8">Cabudare</option>
+						<option value="9">Cagua</option>
+						<option value="10">Caicara del Orinoco</option>
+						<option value="11">Calabozo</option>
+						<option value="12">Caracas</option>
+						<option value="13">Carora</option>
+						<option value="14">Carúpano</option>
+						<option value="15">Charallave</option>
+						<option value="16">Ciudad Bolívar</option>
+						<option value="17">Ciudad Guayana</option>
+						<option value="18">Ciudad Ojeda</option>
+						<option value="19">Coro</option>
+						<option value="20">Cúa</option>
+						<option value="21">Cumaná</option>
+						<option value="22">Ejido</option>
+						<option value="23">El Limón</option>
+						<option value="24">El Tigre</option>
+						<option value="25">El Tocuyo</option>
+						<option value="26">El Vigía</option> -->
+						<option value="27-Guacara">Guacara</option>
+						<!-- <option value="28">Guanare</option>
+						<option value="29">Guarenas</option>
+						<option value="30">Guasdualito</option>
+						<option value="31">Guatire</option> -->
+						<option value="32-Güigüe">Güigüe</option>
+						<!-- <option value="33">La Concepción</option>
+						<option value="34">La Victoria</option> -->
+						<option value="35-Los Guayos">Los Guayos</option>
+						<!-- <option value="36">Los Puertos de Altagracia</option>
+						<option value="37">Los Teques</option>
+						<option value="38">Machiques</option>
+						<option value="39">Maracaibo</option>
+						<option value="40">Maracay</option> -->
+						<option value="41-Mariara">Mariara</option>
+						<!-- <option value="42">Maturín</option>
+						<option value="43">Mérida</option> -->
+						<option value="44-Naguanagua">Naguanagua</option>
+						<!-- <option value="45">Ocumare del Tuy</option>
+						<option value="46">Porlamar</option>
+						<option value="47">Puerto Ayacucho</option> -->
+						<option value="48-Puerto Cabello">Puerto Cabello</option>
+						<!-- <option value="49">Puerto La Cruz</option>
+						<option value="50">Punto Fijo</option>
+						<option value="51">Quíbor</option>
+						<option value="52">San Carlos</option>
+						<option value="53">San Cristóbal</option>
+						<option value="54">San Felipe</option>
+						<option value="55">San Fernando de Apure</option>
+						<option value="56">San Juan de Los Morros</option>
+						<option value="57">Santa Bárbara del Zulia</option>
+						<option value="58">Santa Lucía</option>
+						<option value="59">Santa Rita</option>
+						<option value="60">Santa Teresa del Tuy</option>
+						<option value="61">Táriba</option>
+						<option value="62">Tinaquillo</option> -->
+						<option value="63-Tocuyito">Tocuyito</option>
+						<!-- <option value="64">Tovar</option>
+						<option value="65">Tucupita</option>
+						<option value="66">Turmero</option>
+						<option value="67">Upata</option> -->
+						<option value="68-Valencia">Valencia</option>
+						<!-- <option value="69">Valera</option>
+						<option value="70">Valle de la Pascua</option>
+						<option value="71">Villa de Cura</option>
+						<option value="72">Yaritagua</option>
+						<option value="73">Zaraza</option>
+						<option value="74">Higuerote</option> -->
+						<option value="75-San Joaquin">San Joaquin</option>
+						<option value="76-Canoabo">Canoabo</option>
+						<!-- <option value="77">La Guaira</option>
+						<option value="78">Caja Seca</option> -->
+					</select>
+				</div>
+				<hr style="margin: 5px 0;" />
+				<!-- sector -->
+				<div class="cmps">
+					<span class="etiq">Sector de la ciudad</span>
+					<input id="sector" class="campo" type="text"  size="47" maxlength="100" />
+				</div>
+				<hr style="margin: 5px 0;" />
+				<!-- tiene vehiculo -->
+				<div class="cmps2">
+					<span class="etiq">Poseedor de vehículo</span>
+					<div style="display: flex; width: 75px;">
+						<input id="vehiculotodos" name="vehiculo" value="todos" class="campo" type="radio" style="width: 20px;" checked />
+						<span class="etiq" style="width: 65px;">Indistinto</span>
+					</div>
+					<div style="display: flex; width: 75px;">
+						<input id="vehiculosi" name="vehiculo" value="si" class="campo" type="radio" style="width: 20px;" />
+						<span class="etiq" style="width: 65px;">Si</span>
+					</div>
+					<div style="display: flex; width: 75px;">
+						<input id="vehiculono" name="vehiculo" value="no" class="campo" type="radio" style="width: 20px;" />
+						<span class="etiq" style="width: 65px;">No</span>
+					</div>
+
+				</div>
+				<hr style="margin: 5px 0;" />
+				<!-- profesion -->
+				<div class="cmps">
+					<span class="etiq">Profesión</span>
+					<input id="profesion" class="campo" type="text"  size="47" maxlength="100" />
+				</div>
+				<hr style="margin: 5px 0;" />
+				<!-- ocupacion -->
+				<div class="cmps">
+					<span class="etiq">Ocupación</span>
+					<input id="ocupacion" class="campo" type="text"  size="47" maxlength="100" />
+				</div>
+				<hr style="margin: 5px 0;" />
+				<!-- estado civil -->
+				<div class="cmps">
+					<span class="etiq">Estado civil</span>
+					<div style="width: min-content;">
+						<input id="edocivil-todos" class="campo" type="checkbox" style="width: 15px;" checked onchange="edociviltodos()" />
+						<span class="etiq" style="width: 65px;">Todos</span>
+						<br/>
+						<div style="display: inline-flex;">
+							<div style="width: 90px;">
+								<input id="soltero" class="campo" type="checkbox" style="width: 15px;" checked onchange="edocivilindividual()" />
+								<span class="etiq" style="width: 65px;">Solteros</span>
+							</div>
+							<div style="width: 90px;">
+								<input id="casado" class="campo" type="checkbox" style="width: 15px;" checked onchange="edocivilindividual()" />
+								<span class="etiq" style="width: 65px;">Casados</span>
+							</div>
+							<div style="width: 90px;">
+								<input id="divorciado" class="campo" type="checkbox" style="width: 15px;" checked onchange="edocivilindividual()" />
+								<span class="etiq" style="width: 65px;">Divorciados</span>
+							</div>
+						</div>
+						<div style="display: inline-flex;">
+							<div style="width: 90px;">
+								<input id="viudo" class="campo" type="checkbox" style="width: 15px;" checked onchange="edocivilindividual()" />
+								<span class="etiq" style="width: 65px;">Viudos</span>
+							</div>
+							<div style="width: 90px;">
+								<input id="complicado" class="campo" type="checkbox" style="width: 15px;" checked onchange="edocivilindividual()" />
+								<span class="etiq" style="width: 65px;">Otro</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<hr style="margin: 5px 0;" />
+				<!-- padre vivo -->
+				<div class="cmps2">
+					<span class="etiq">Padre vivo</span>
+					<div style="display: flex; width: 75px;">
+						<input id="padretodos" name="padre" value="todos" class="campo" type="radio" style="width: 20px;" checked />
+						<span class="etiq" style="width: 65px;">Indistinto</span>
+					</div>
+					<div style="display: flex; width: 75px;">
+						<input id="padresi" name="padre" value="si" class="campo" type="radio" style="width: 20px;" />
+						<span class="etiq" style="width: 65px;">Si</span>
+					</div>
+					<div style="display: flex; width: 75px;">
+						<input id="padreno" name="padre" value="no" class="campo" type="radio" style="width: 20px;" />
+						<span class="etiq" style="width: 65px;">No</span>
+					</div>
+					<!-- <input class="campo" type="checkbox" /> -->
+				</div>
+				<hr style="margin: 5px 0;" />
+				<!-- madre viva -->
+				<div class="cmps2">
+					<span class="etiq">Madre viva</span>
+					<div style="display: flex; width: 75px;">
+						<input id="madretodos" name="madre" value="todos" class="campo" type="radio" style="width: 20px;" checked />
+						<span class="etiq" style="width: 65px;">Indistinto</span>
+					</div>
+					<div style="display: flex; width: 75px;">
+						<input id="madresi" name="madre" value="si" class="campo" type="radio" style="width: 20px;" />
+						<span class="etiq" style="width: 65px;">Si</span>
+					</div>
+					<div style="display: flex; width: 75px;">
+						<input id="madreno" name="madre" value="no" class="campo" type="radio" style="width: 20px;" />
+						<span class="etiq" style="width: 65px;">No</span>
+					</div>
+					<!-- <input class="campo" type="checkbox" /> -->
+				</div>
+				<hr style="margin: 5px 0;" />
+				<!-- edades de hijos -->
+				<div class="cmps">
+					<span class="etiq">Edades de los hijos</span>
+					<div style="width: min-content;">
+						<input id="hijos-todos" class="campo" type="checkbox" style="width: 15px;" checked onchange="hijostodos()" />
+						<span class="etiq" style="width: 65px;">Todos</span>
+						<br/>
+						<div style="display: inline-flex;">
+							<div style="width: 90px;">
+								<input id="00-05" class="campo" type="checkbox" style="width: 15px;" checked onchange="hijosindividual()" />
+								<span class="etiq" style="width: 65px;">Menos de 5</span>
+							</div>
+							<div style="width: 90px;">
+								<input id="05-10" class="campo" type="checkbox" style="width: 15px;" checked onchange="hijosindividual()" />
+								<span class="etiq" style="width: 65px;">De 5 a 10</span>
+							</div>
+						</div>
+						<div style="display: inline-flex;">
+							<div style="width: 90px;">
+								<input id="11-20" class="campo" type="checkbox" style="width: 15px;" checked onchange="hijosindividual()" />
+								<span class="etiq" style="width: 65px;">De 11 a 20</span>
+							</div>
+							<div style="width: 90px;">
+								<input id="21-99" class="campo" type="checkbox" style="width: 15px;" checked onchange="hijosindividual()" />
+								<span class="etiq" style="width: 65px;">Más de 20</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="seccionprospectos">
+				<!-- numeros adicionales -->
+				<div id="adicsms">
+					<hr style="margin: 5px 0;" />
+					<div class="cmps">
+						<span class="etiq">
+							Números adicionales para SMS<br/>
+							<span style="color: blue;">
+								formato: 12 dígitos sin espacio, ejm: 584#########<br/>
+								(separados con punto y coma ";")
+							</span>
+						</span>
+						<textarea id="otrossms" class="campo2" cols="40" rows="5" maxlength="160" style="padding: 8PX 5px 0;"></textarea>
+					</div>
+				</div>
+				<!-- email adicionales -->
+				<div id="adicemail">
+					<hr style="margin: 5px 0;" />
+					<div class="cmps">
+						<span class="etiq">
+							emails adicionales<br/>
+							<span style="color: blue;">
+								(separados con punto y coma ";")
+							</span>
+						</span>
+						<textarea id="otrosemails" class="campo2" cols="40" rows="5" maxlength="250" style="padding: 8PX 5px 0;"></textarea>
+					</div>
+				</div>
+			</div>
+         <div class="btns2">
+				<button id="btn13" onclick="atras(2,3)" style="width: 10em;">Anterior (2 de 4)</button>
+				<button id="btn23" onclick="adelante(3,4)" style="width: 10em;">Siguiente (4 de 4)</button>
+			</div>
+		</div>
+		<div id="tab4" style="display: none;">
+			<div>
+				<div>
+					<p id="mensajefinal" style="text-align: center; margin: 0 auto 10px;">
+					</p>
+				</div>
+			</div>
+			<div id="finalsms">
+				<h3 id="confirmasms" style="text-align: center; margin: 0 auto 10px;">
+					<u>Texto del SMS</u>
+				</h3>
+				<div>
+					<p id="parrafosms" style="text-align: justify; margin: 0 auto 10px;">
+					</p>
+				</div>
+			</div>
+
+			<div id="finalemail">
+				<h3 id="confirmaemail" style="text-align: center; margin: 0 auto 10px;">
+					<u>Texto del correo electrónico</u>
+				</h3>
+				<div>
+					<p id="parrafoasunto" style="text-align: justify; margin: 0 auto 10px;">
+					</p>
+					<p id="parrafoemail" style="text-align: justify; margin: 0 auto 10px;">
+					</p>
+				</div>
+			</div>
+
+         <h3 style="text-align: center; margin: 0 auto 10px;">
+            <u>Destinatarios</u>
+         </h3>
+			<div id="filtrossocios">
+            <p id="parrafofiltrossocios" style="text-align: justify; margin: 0 auto 10px;">
+				</p>
+         </div>
+			<div id="filtrosprospectos">
+            <p id="parrafofiltrosprospectos" style="text-align: justify; margin: 0 0 10px; width: 290px; overflow: hidden; text-overflow: ellipsis;">
+				</p>
+         </div>
+
+         <div class="btns2">
+				<button id="btn14" onclick="atras(3,4)" style="width: 10em;">Anterior (3 de 4)</button>
+				<button id="btn24" onclick="adelante(4,0)" style="width: 10em; display: none;">Siguiente (0 de 4)</button>
+			</div>
+		</div>
+		<!-- Variable para controlar el proveedor -->
+		<input id="" class="campo" type="hidden" />
+		<!-- Linea de botones -->
+		<div class="btns" style="margin-top: 10px;">
+			<button id="enviar" onclick="enviar()" style="width: 7em; background: yellow; display: none;">Enviar</button>
+			<button id="limpiar" onclick="limpiar()" style="width: 7em;">Limpiar</button>
+			<button id="volver" style="width: 7em;">Volver</button>
+		</div>
+	</div>
+	<!-- Variable para el query -->
+	<input id="query" class="campo" type="hidden" />
+</body>
+</html>

@@ -324,7 +324,8 @@ function correogiftcard($card, $nombres, $remitente, $correo, $comercio, $monto,
 	fwrite($a,'-');
 	fwrite($a,$mensaje);
 	
-	mail($correo,$asunto,$mensaje,$cabeceras);
+	// mail($correo,$asunto,$mensaje,$cabeceras);
+	cashflagemail($correo, $nombres, $asunto, $mensaje);
 }
 
 

@@ -60,7 +60,8 @@ echo $texto;
 $asunto = "Transacciones del dia: ".substr($fecha,8,2).'/'.substr($fecha,5,2).'/'.substr($fecha,0,4);
 $mensaje = $texto;
 $cabeceras = 'Content-type: text/html;';
-mail("soluciones2000@gmail.com",$asunto,$mensaje,$cabeceras);
+// mail("soluciones2000@gmail.com",$asunto,$mensaje,$cabeceras);
+cashflagemail("soluciones2000@gmail.com", "Luis", $asunto, $mensaje);
 
 
 

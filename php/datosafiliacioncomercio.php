@@ -1,5 +1,6 @@
-<?php 
+<?php
 header('Content-Type: application/json');
+// include_once("./cash-flag-email.php");
 include_once("../_config/conexion.php");
 include_once("./funciones.php");
 
@@ -8,12 +9,19 @@ if($result = mysqli_query($link, $query)) {
     $query = "select * from socios where email='".$_POST['email']."'";
     $result = mysqli_query($link, $query);
     if ($row = mysqli_fetch_array($result)) {
+        $telefono = trim($_POST["telefono"]);
         $id=$row["id"];
         $socio = 1;
+        $archivojson = "../registro/registro.json";
         mensajebienvenida($row);
         generatarjetaAE($_POST, $link);
         generatarjetadolar($_POST, $link);
-	    $respuesta = '{"exito":"SI",';
+        cupondebienvenida($link,1,$_POST["email"],$_POST["telefono"],$_POST["nombres"],$_POST["apellidos"],$archivojson,$_POST["idproveedor"],$id,$_POST["idcomercio"]);
+
+        $mensaje = utf8_decode('Bienvenido a Cash-Flag!!! hemos enviado a tu correo electronico dos emails: Uno de bienvenida con informacion importante y otro con un obsequio especial.');        
+        $respuesta1 = enviasms($telefono,$mensaje);
+        
+        $respuesta = '{"exito":"SI",';
         $respuesta .= '"mensaje":"Registro exitoso"}';
     } else {
         $respuesta = '{"exito":"NO",';

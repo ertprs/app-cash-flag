@@ -22,6 +22,7 @@ $socio = 1;
 $registro="No existe";
 
 $query = 'select * from socios where id='.$_POST['id_socio'].';';
+// echo $query;
 $result = mysqli_query($link, $query);
 if ($row = mysqli_fetch_array($result)) {
 	$registro=$row["registro"];
@@ -62,9 +63,15 @@ if ($registro=="Pendiente") {
 		if ($_POST["id_proveedor"]==3) {
 			recargapremiumdolar($link,$idsocio,$email,$telefono,$nombres,$apellidos);
 			$respuesta = '{"exito":"SI","mensaje":' . mensajes($archivojson,"exitoregistrocf") . '}';
+
+			$mensaje = utf8_decode('Gracias por ayudarnos a conocerte mejor, en agradecimiento hemos incrementado tu saldo prepagado, ingresa en http://bit.ly/3pn1CUq y revisa tu tarjetero.');        
+			$respuesta1 = enviasms($telefono,$mensaje);
 		} else {
-			cupondebienvenida($link,$socio,$email,$telefono,$nombres,$apellidos,$archivojson);
+			cupondebienvenida($link,$socio,$email,$telefono,$nombres,$apellidos,$archivojson,$_POST["id_proveedor"],$idsocio);
 			$respuesta = '{"exito":"SI","mensaje":' . mensajes($archivojson,"exitoregistro") . '}';
+
+			$mensaje = utf8_decode('Gracias por ayudarnos a conocerte mejor, en agradecimiento hemos enviado un regalo especial a tu correo electronico.');        
+			$respuesta1 = enviasms($telefono,$mensaje);
 		}
 	} else {
 		$respuesta = '{"exito":"NO","mensaje":' . mensajes($archivojson,"fallaregistro") . '}';
@@ -85,167 +92,6 @@ if ($registro=="Pendiente") {
 	}
 }
 echo $respuesta;
-
-function cupondebienvenida($link,$socio,$email,$telefono,$nombres,$apellidos,$archivojson) {
-	// Buscar datos de proveedor
-	$query = "select * from proveedores where id=".$_POST['id_proveedor'];
-	// $query = "select * from proveedores where id=1";
-	$result = mysqli_query($link, $query);
-	if ($row = mysqli_fetch_array($result)) {
-		$nombreproveedor=$row["nombre"];
-	}
-
-	// Buscar premio activo
-	$query = "select * from premios where id_proveedor=".$_POST['id_proveedor'] . " and clasepremio='bienvenida' and activo=1";
-	// $query = "select * from premios where id_proveedor=1 and activo=1";
-	$result = mysqli_query($link, $query);
-	if ($row = mysqli_fetch_array($result)) {
-		$id_premio=$row["id"];
-		$tipopremio=$row["tipopremio"];
-		$montopremio=$row["montopremio"];
-		$descpremio=$row["descpremio"];
-		$diasvalidez=$row["diasvalidez"];
-	}
-
-	// Asignar el número de cupón
-	$query = "select max(cupon) as ultcupon from cupones";
-	$result = mysqli_query($link, $query);
-	if ($row = mysqli_fetch_array($result)) {
-		if (strlen($row["ultcupon"])==0) {
-			$numcupon = asignacodigo('0000000000');
-			$cuponlargo = asignacodigolargo2($numcupon,$email,$nombres,$apellidos,$telefono);
-		} else {
-			$numcupon = asignacodigo($row["ultcupon"]);
-			$cuponlargo = asignacodigolargo2($numcupon,$email,$nombres,$apellidos,$telefono);
-		}
-	}
-
-	// Verificar si ya existe el cupón, si existe responder, si no, agregar y responder 
-	$query = "select * from cupones where id_socio=".$_POST['id_socio']." and factura='00000'";
-	// $query = "select * from cupones where id_proveedor=1 and factura='8888888'";
-	$result = mysqli_query($link, $query);
-	if ($row = mysqli_fetch_array($result)) {
-		$respuesta = '{"exito":"NO","mensaje":'. mensajes($archivojson,"cuponyaregistrado") .',"cupon":"0"}';
-	} else {
-		$fechacupon = date ('Y-m-d');
-		$fechavencimiento = strtotime('+'.$diasvalidez.' days', strtotime ($fechacupon));
-		$fechavencimiento = date ('Y-m-d' , $fechavencimiento);
-		$fechavencstr = substr($fechavencimiento,8,2).'/'.substr($fechavencimiento,5,2).'/'.substr($fechavencimiento,0,4);
-
-		/*
-		Hash para insertar en el blockchain
-		-----------------------------------
-		El hash se va a armar con los siguientes datos:
-		- Cupon
-		- Proveedor
-		- Socio
-		- Tipo premio
-		- Monto premio
-		- Descripción premio
-		- Status cupón
-		*/
-		$hash = hash("sha256",$numcupon.$_POST['id_proveedor'].$_POST['id_socio'].$tipopremio.$montopremio.$descpremio."Generado");
-
-		$query = "INSERT INTO cupones (cupon,cuponlargo,id_proveedor,id_socio,status,factura,monto,id_premio,tipopremio,montopremio,descpremio,socio,email,telefono,nombres,apellidos,fechacupon,fechavencimiento,fechacanje,facturacanje,montocanje,hash) VALUES ('".$numcupon."','".$cuponlargo."'," . $_POST['id_proveedor'] . "," . $_POST['id_socio'] . ",'Generado','00000',0,".$id_premio.",'".$tipopremio."',".$montopremio.",'Bienvenida'," . $socio . ",'" . $email . "','" . $telefono . "','" . $nombres . "','" . $apellidos . "','".$fechacupon."','".$fechavencimiento."','0000-00-00','',0,'".$hash."')";
-		// echo $query;
-
-		if ($result = mysqli_query($link, $query)) {
-
-			$correo = $email;
-
-			$mensaje = utf8_decode('Hola '.trim($nombres).',<br/><br/>');
-			$mensaje .= utf8_decode('¡Bienvenido a Cash-Flag, tu comunidad de beneficios!<br/><br/>');
-
-			$mensaje .= utf8_decode('Queremos darte un obsequio de bienvenida, ');
-			$mensaje .= utf8_decode('la próxima que visites <b>'.trim($nombreproveedor).'</b> podrás reclamar el siguiente premio:'.'<br/><br/>');
-			switch ($tipopremio) {
-				case 'porcentaje':
-					$mensaje .= utf8_decode('<h3 style="text-align:center;"><b>'.number_format($montopremio,2,',','.').'% de descuento sobre el monto total de tu factura.</b></h3>');
-					break;
-				case 'monto':
-					$mensaje .= utf8_decode('<h3 style="text-align:center;"><b>'.number_format($montopremio,2,',','.').' Bs. de descuento en sobre el monto total de tu factura.</b></h3>');
-					break;
-				case 'producto':
-					$mensaje .= utf8_decode('<h3 style="text-align:center;"><b>'.trim($descpremio).'.</b></h3>');
-					break;
-				default:
-					$mensaje .= utf8_decode('<h3 style="text-align:center;"><b>Premio especial sorpresa.</b></h3>');
-					break;
-			}
-
-			$mensaje .= utf8_decode('Este premio podrás reclamarlo cualquier día, siempre que sea antes del <b>'.$fechavencstr.'</b>.<br/><br/>');
-			$mensaje .= utf8_decode('Sólo debes presentar este correo electrónico o indicar el siguiente código:'.'<br/>');
-			$mensaje .= utf8_decode('<h2 style="text-align:center"><b>'.$cuponlargo.'</b></h2>');
-
-			// codigo de barras
-			$mensaje .= '<p style="text-align:center;">';
-				$mensaje .= '<img src="https://app.cash-flag.com/php/barcode.php?';
-				$mensaje .= 'text='.$cuponlargo;
-				$mensaje .= '&size=50';
-				$mensaje .= '&orientation=horizontal';
-				$mensaje .= '&codetype=Code39';
-				$mensaje .= '&print=true';
-				$mensaje .= '&sizefactor=1" />';
-			$mensaje .= '</p>';
-
-			// código qr
-			$mensaje .= utf8_decode('<p style="text-align:center;">Para canjear desde el móvil:</p>');
-
-	//		$dir = 'https://app.cash-flag.com/php/temp/';
-	//		if(!file_exists($dir)) mkdir($dir);
-			$ruta = 'https://app.cash-flag.com/php/';
-			$dir = 'qr/';
-			if(!file_exists($dir)) mkdir($dir);
-
-	//		$filename = $dir.'test.png';
-			$tamanio = 5;
-			$level = 'H';
-			$frameSize = 1;
-	//		$contenido = $cuponlargo;
-	//		$contenido = '{"id_proveedor":'.$_POST['id_proveedor'].',"cupon":"'.$cuponlargo.'"}';
-			$contenido = 'https://app.cash-flag.com/canje/canje.html?cJson={"id_proveedor":'.$_POST['id_proveedor'].',"cupon":"'.$cuponlargo.'"}';
-
-	//		QRcode::png($contenido, $filename, $level, $tamanio, $frameSize);
-			QRcode::png($contenido,$dir.$numcupon.'.png', $level, $tamanio, $frameSize);
-			$mensaje .= '<p style="text-align:center;">';
-				$mensaje .= '<img src="'.$ruta.$dir.$numcupon.'.png" height="200" width="200" />';
-			$mensaje .= '</p>';
-			// Hasta aqui
-			$mensaje .= '<p style="text-align:center;">'.$hash.'</p>';
-
-			$mensaje .= utf8_decode('¡Te esperamos!'.'<br/><br/>');
-
-			$mensaje .= utf8_decode('Atentamente'.'<br/><br/>');
-			$mensaje .= utf8_decode('Cash-Flag'.'<br/><br/>');
-
-			$mensaje .= utf8_decode('<b>Nota:</b> Esta cuenta no es monitoreada, por favor no respondas este email, si deseas comunicarte con tu club escribe a: <b><a href="mailto:info@cash-flag.com">info@cash-flag.com</a></b>'.'<br/><br/>');
-
-			// $mensaje .= $numcupon;
-
-			$asunto = utf8_decode('Hola '.trim($nombres).', recibe este obsequio de bienvenida a Cash-Flag, tu comunidad de beneficios.');
-			// $cabeceras = 'Content-type: text/html;';
-
-			$cabeceras = 'Content-type: text/html'."\r\n";
-			$cabeceras .= 'From: Cash-Flag <info@cash-flag.com>';
-		  // if ($_SERVER["HTTP_HOST"]!='localhost') {
-				mail($correo,$asunto,$mensaje,$cabeceras);
-			// }
-
-			$a = fopen('log.html','w+');
-			fwrite($a,$asunto);
-			fwrite($a,'-');
-			fwrite($a,$mensaje);
-
-			// $respuesta = '{"exito":"SI","mensaje":' . mensajes($archivojson,"exitoregistrocupon") . ',"cupon":"'.$numcupon.'"}';
-	//		$respuesta = '{"exito":"SI","mensaje":' . mensajes($archivojson,"exitoregistrocupon") . ',"cupon":"'.$numcupon.'",';
-	//		$respuesta .= '"contenido":'.$contenido.',"filename":"'.$filename.'"}';
-
-		// } else {
-			// $respuesta = '{"exito":"NO","mensaje":' . mensajes($archivojson,"fallaregistrocupon") . ',"cupon":"0"}';
-		}
-	}
-	// echo $respuesta;
-}
 
 function generarprepago($link,$socio,$email,$telefono,$nombres,$apellidos) {
 	$query = 'SELECT proveedores.id as idproveedor, proveedores.nombre, moneda FROM proveedores,_monedas';

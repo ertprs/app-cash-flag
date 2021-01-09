@@ -174,9 +174,12 @@
 					document.getElementById("mensaje").innerHTML = "Buscando status de comisiones...";
 					document.getElementById("norecuerda").style.display = 'none';
 					// se crea la instancia del Sdk necesaria para consultar balance y hacer transacciones 
-					Client = await instanciaSdk( skey,  acct );
+					// Client = await instanciaSdk( skey,  acct );
 
-					var balance = await obtenerBalance( acct, Client );
+					// var balance = await obtenerBalance( acct, Client );
+
+					var balance = 10;
+
 					console.log(balance);
 
 					if (balance<5) {

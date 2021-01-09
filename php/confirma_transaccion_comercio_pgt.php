@@ -46,7 +46,8 @@ switch ($_POST["accion"]) {
     $query = 'SELECT * FROM '.$tipocard.' where card="'.trim($card).'"';
     $result = mysqli_query($link, $query);
     if ($row = mysqli_fetch_array($result)) {
-      $saldo = $monto+$row['saldo'];
+      // $saldo = $monto+$row['saldo'];
+      $saldo = $row['saldo'];
     } else {
       $saldo = $monto;
     }

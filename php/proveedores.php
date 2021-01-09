@@ -35,6 +35,7 @@ if ($row = mysqli_fetch_array($result)) {
 }
 
 $query = "SELECT * from proveedores where id = " . $_GET["prov"];
+// echo $query;
 $result = mysqli_query($link, $query);
 if ($row = mysqli_fetch_array($result)) {
 	$sinclave = ($row["clavecanje"]=="") ? 1 : 0 ;

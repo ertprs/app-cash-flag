@@ -366,7 +366,8 @@ fwrite($a,$asunto);
 fwrite($a,'-');
 fwrite($a,$mensaje);
  
-mail($correo,$asunto,$mensaje,$cabeceras);
+// mail($correo,$asunto,$mensaje,$cabeceras);
+cashflagemail($correo, $nombres, $asunto, $mensaje);
 }
 /*
 <div id="6553415554230016" style="width: 340px; height: 221px; margin: auto; position: relative; top: 10%; border-radius: 6%; display: flex; flex-direction: column; justify-content: space-between; background-image: radial-gradient(white, rgb(192, 158, 112)); color: black; border: 2px solid black;">

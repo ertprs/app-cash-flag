@@ -18,7 +18,8 @@ while ($row = mysqli_fetch_array($result)) {
 	$tamanio = 5;
 	$level = 'H';
 	$frameSize = 1;
-	$contenido = 'https://app.cash-flag.com/cupones/cupon.html?reg={"id_proveedor":'.$id_proveedor.'}';
+	$contenido = 'https://pruebas.cash-flag.com/cupones/cupon.html?reg={"id":'.$id_proveedor.'}';
+	// $contenido = 'https://app.cash-flag.com/cupones/cupon.html?reg={"id_proveedor":'.$id_proveedor.'}';
 
 	QRcode::png($contenido, $filename, $level, $tamanio, $frameSize);
 

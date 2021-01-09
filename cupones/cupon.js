@@ -8,13 +8,19 @@ function cargaforma() {
 	var logo;
 
 	var params = fparamurl(window.location.search.substr(1));
-	var prov;
+	var oParams, prov;
 
 	if (params==undefined) {
 		prov = localStorage.getItem("id_proveedor");
 	} else {
-		prov = params.id;
-		localStorage.setItem("id_proveedor",params.id);
+		if(params.reg==undefined) {
+			prov = params.id;
+		} else {
+			oParams = JSON.parse(params.reg);
+			prov = oParams.id;
+		}
+		console.log(oParams);
+		localStorage.setItem("id_proveedor",prov);
 		if (params.btn!=1) {
 	        document.getElementById("botonvolver").style.display = 'none';
 		}
@@ -38,6 +44,7 @@ function cargaforma() {
 			}
 		}
 	};
+	console.log("../php/proveedores.php?prov=" + prov);
 	xmlhttp.open("GET", "../php/proveedores.php?prov=" + prov, false);
 	xmlhttp.send();
 
