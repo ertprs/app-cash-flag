@@ -39,6 +39,11 @@
 					<span class="etiq">Correo electrónico:</span>
 					<input id="email" class="campo" type="email" size="47" maxlength="100" title="Debe introducir un formato de email válido (incluir el @ y al menos un . )" />
 				</div>
+				<!-- Mensaje -->
+				<div id="div5" class="cmps">
+					<span class="etiq">Mensaje para el beneficiario:</span>
+					<textarea id="txtemail" class="campo" cols="47" rows="4" style="padding: 8PX 5px 0;"></textarea>
+				</div>
 				<p style="text-align: left; padding: 0.5em 0 0.5em 0.5em;"><b><u>Datos de la tarjeta</u></b></p>
 				<!-- Proveedor -->
 				<div id="div8" class="cmps">
@@ -410,6 +415,7 @@
 					datos.append("apellidos", document.getElementById("apellidos").value);
 					datos.append("telefono", document.getElementById("telefono").value);
 					datos.append("email", document.getElementById("email").value);
+					datos.append("txtemail", document.getElementById("txtemail").value);
 					datos.append("moneda", document.getElementById("divisa").value);
 					datos.append("monto", document.getElementById("monto").value);
 					datos.append("idproveedor", document.getElementById("proveedor").value);

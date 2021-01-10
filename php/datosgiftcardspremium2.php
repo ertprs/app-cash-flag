@@ -8,6 +8,7 @@ $nombres   = (isset($_POST['nombres'])) ? $_POST['nombres'] : "" ;
 $apellidos = (isset($_POST['apellidos'])) ? $_POST['apellidos'] : "" ;
 $telefono  = (isset($_POST['telefono'])) ? $_POST['telefono'] : "" ;
 $email     = (isset($_POST['email'])) ? $_POST['email'] : "" ;
+$txtemail = (isset($_POST['txtemail'])) ? $_POST['txtemail'] : "" ;
 $moneda    = (isset($_POST['moneda'])) ? $_POST['moneda'] : "bs" ;
 $montobruto = (isset($_POST['monto'])) ? $_POST['monto'] : 0 ;
 $monto = $montobruto - ($montobruto*3/100);
@@ -266,7 +267,7 @@ if ($result = mysqli_query($link,$query)) {
 				}
 				$querx = 'UPDATE _parametros SET dcg='.$dcg;
 				$resulx = mysqli_query($link,$querx);
-				correogiftcard($card, $nombres, $remitente, $email, $nombreproveedor, $monto, $simbolo, $validez, $aux, $urlapp);
+				correogiftcard($card, $nombres, $remitente, $email, $txtemail, $nombreproveedor, $monto, $simbolo, $validez, $aux, $urlapp);
 			   $respuesta = '{"exito":"SI","mensaje":'.$mensaje.',"card":"'.$card.'","hash":"'.$hash.'"}';	
 			} else {
 			   $respuesta = '{"exito":"NO","mensaje":"La tarjeta no pudo generarse por favor comuniquese con soporte técnico [1]","card":"'.$card.'","hash":"'.$hash.'"}';	
@@ -281,7 +282,7 @@ if ($result = mysqli_query($link,$query)) {
 echo $respuesta;
 
 
-function correogiftcard($card, $nombres, $remitente, $correo, $comercio, $monto, $simbolo, $validez, $pwd, $ruta) {
+function correogiftcard($card, $nombres, $remitente, $correo, $mensaje, $comercio, $monto, $simbolo, $validez, $pwd, $ruta) {
 	$mensaje = 
 	'<!DOCTYPE html>
 	<html>
@@ -333,6 +334,8 @@ function correogiftcard($card, $nombres, $remitente, $correo, $comercio, $monto,
 			 <b>¡Felicidades '.$nombres.', has recibido un regalo de '.$remitente.'!</b>
 		  </span>
 		</p>
+
+		<p style="text-align: justify;"><u>Mensaje:</u><br/><b><i>'.$mensaje.'</i></b></p>
 
 		<div id="tarjetero"></div>			
 		<div id="card_img"></div>			
