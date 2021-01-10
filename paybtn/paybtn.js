@@ -1,7 +1,15 @@
 var ruta = s_paybtn.src.split("?");
 var params = ruta[1].split("&");
 
-var ok = params[0].substr(3,1000), nok = params[1].substr(4,1000);
+var ok = params[0].substr(3,1000), nok = params[1].substr(4,1000), sandbox = "", url = "";
+
+if(params[2].substr(8,1000)=="true") { 
+	sandbox = true;
+	url = "pruebas.cash-flag.com";
+} else {
+	sandbox = false;
+	url = "app.cash-flag.com";
+}
 
 // Función para mostrar los decimales que se quieran
 var formatNumber = {
@@ -67,7 +75,7 @@ function PayButton(event) {
 	dlog.style.textAlign = "center";
 	// Imagen
 	ilog = document.createElement("img");
-	ilog.src = "https://app.cash-flag.com/img/logoclub.png";
+	ilog.src = "https://"+url+"/img/logoclub.png";
 	// ilog.src = "../img/logoclub.png";
 	ilog.style.width = "10em";
 	ilog.style.height = "auto";
@@ -188,6 +196,7 @@ function PayButton(event) {
 	bpag.id           = "bpag";
 	bpag.style.width  = "7em";
 	bpag.style.margin = "0 0.25em";
+	// bpag.addEventListener("click", function(){ alert('enviar') });
 	bpag.addEventListener("click", function(){ enviar() });
 	// Boton cerrar
 	tetc = document.createTextNode("Cerrar");
@@ -364,6 +373,7 @@ function enviar() {
 		datos.append("card",        card);
 		datos.append("vencimiento", venc);
 		datos.append("monto",       mont);
+		datos.append("sandbox",     sandbox);
 
 		xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function() {
@@ -391,8 +401,8 @@ function enviar() {
 				}
 			}
 		};
-		xmlhttp.open("POST", "https://app.cash-flag.com/php/paybtn_token.php", true);
-		// xmlhttp.open("POST", "../php/paybtn_token.php", true);
+		// xmlhttp.open("POST", "https://"+url+"/php/paybtn_token.php", true);
+		xmlhttp.open("POST", "../php/paybtn_token.php", true);
 		xmlhttp.send(datos);
 	} else {
 
@@ -418,7 +428,7 @@ function callback(card, token, monto) {
 			}
 		}
 	};
-	xmlhttp.open("POST", "https://app.cash-flag.com/php/paybtn_verify.php", true);
-	// xmlhttp.open("POST", "../php/paybtn_verify.php", true);
+	// xmlhttp.open("POST", "https://"+url+"/php/paybtn_verify.php", true);
+	xmlhttp.open("POST", "../php/paybtn_verify.php", true);
 	xmlhttp.send(datos);
 }

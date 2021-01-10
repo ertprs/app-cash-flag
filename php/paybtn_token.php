@@ -8,6 +8,7 @@ include_once("../lib/phpqrcode/qrlib.php");
 $card        = $_POST["card"];
 $vencimiento = $_POST["vencimiento"];
 $monto       = $_POST["monto"];
+$sandbox     = ($_POST["sandbox"]=="true") ? true : false ;
 
 $query = 'select * from cards where card="'.$card.'"';
 $result = mysqli_query($link, $query);
@@ -83,7 +84,9 @@ if ($row = mysqli_fetch_array($result)) {
 
 			QRcode::png($contenido, $filename, $level, $tamanio, $frameSize);
 
-			$respuesta = '{"exito":"SI","token":"'.$hash.'","status":'.$valida.',"mensaje":"'.$mensaje.'","qr":"'.'https://app.cash-flag.com/php/'.$filename.'"}';
+			$url = ($sandbox) ? "pruebas.cash-flag.com" : "app.cash-flag.com" ;
+
+			$respuesta = '{"exito":"SI","token":"'.$hash.'","status":'.$valida.',"mensaje":"'.$mensaje.'","qr":"'.'https://'.$url.'/php/'.$filename.'"}';
 			// $respuesta = '{"exito":"SI","token":"'.$hash.'","status":'.$valida.',"mensaje":"'.$mensaje.'","qr":"'.'../php/'.$filename.'"}';
 		} else {
 			$respuesta = '{"exito":"NO","token":"","status":'.$valida.',"mensaje":"'.$mensaje.'","qr":""}';
