@@ -793,6 +793,7 @@ function enviar() {
 	datos.append("otrossms", document.getElementById("otrossms").value);
 	datos.append("otrosemails", document.getElementById("otrosemails").value);
 	datos.append("query", document.getElementById("query").value);
+	datos.append("idproveedor", idproveedor);
 
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() {

@@ -6,7 +6,11 @@ include_once("funciones.php");
 $mensaje = utf8_decode($_POST["contenidosms"]);
 $asunto = utf8_decode($_POST["asuntoemail"]);
 $mensaje2 = utf8_decode($_POST["contenidoemail"]);
+$idproveedor = $_POST["idproveedor"];
+$fecha = date("Y-m-d");
 
+$smss = 0;
+$correos = 0;
 $total = 0;
 // $lote = 3;
 // Buscar en base de datos
@@ -21,6 +25,7 @@ if ($_POST["socios"]=="true") {
    while ($row = mysqli_fetch_array($result)) {
       if ($_POST["sms"]=="true") {
          $respuesta1 = enviasms(trim($row["telefono"]),$mensaje);
+         $smss++;
          $total++;
          /*
          if ($first) {
@@ -45,6 +50,7 @@ if ($_POST["socios"]=="true") {
          $nombres = trim($row["nombres"])." ".trim($row["apellidos"]);
          // $asunto = "Información interesante de Cash-Flag.";
          cashflagemail($email, $nombres, $asunto, $mensaje2);
+         $correos++;
          $total++;
       }
    }
@@ -85,6 +91,7 @@ if ($_POST["prospectos"]=="true") {
                $first = true;
             }
             */
+            $smss++;
             $total++;
          }
          /*
@@ -102,11 +109,28 @@ if ($_POST["prospectos"]=="true") {
             $nombres = "<".trim($aEmails[$i]).">";
             // $asunto = "Información interesante de Cash-Flag.";
             cashflagemail($email, $nombres, $asunto, $mensaje2);
+            $correos++;
             $total++;
          }
       }
    }
 }
+
+$query = "INSERT INTO mensajes_transacciones (id_proveedor, fecha, tipo, textosms, textoemail, cantsms, cantemails) VALUES (".$idproveedor.",'".$fecha."','envio','".$mensaje."','".$mensaje2."',".$smss.",".$correos.")";
+$result = mysqli_query($link, $query);
+
+$query = "SELECT * FROM proveedores WHERE id=".$idproveedor;
+$result = mysqli_query($link, $query);
+if ($row = mysqli_fetch_array($result)) {
+   $msgproveedor = $row["mensajes"];
+} else {
+   $msgproveedor = 0;
+}
+$totmsg = $msgproveedor - $total;
+
+$query = "UPDATE proveedores SET mensajes=".$totmsg." WHERE id=".$idproveedor;
+$result = mysqli_query($link, $query);
+
 $respuesta = '{"exito":"SI","mensaje":"'.$total.' Mensaje(s) enviado(s)."}';
 
 echo $respuesta;
