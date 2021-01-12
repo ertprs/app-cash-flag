@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, scalable=yes"> -->
+		<title>SGC Consultores C.A.</title>
+	</head>
+<body>
+<!-- DESDE AQUI -->
+<div id="container-payment-button" style="width: 177px;"></div>
+<script src="https://24-7net.net/SDK/OnlinePayment"></script>
+<script>
+    var monto = "10.00";
+    console.log(monto);
+    net247.button.create({
+    style:{
+        color:'dark',
+        label:'Pagar con',
+        border: 'normal'
+    },
+    createOrder: function (actions) {
+        console.log(monto);
+        return actions.order.create({
+            // amount: "1.00",
+            amount: monto,
+            id: "eyJpZCI6Ik5XWm1PR1prTkRjd1ptRXhZalF3WVdNNU1EQTNOV0l3IiwidXJsIjoicHJ1ZWJhcy5jYXNoLWZsYWcuY29tIn0=",
+            tender: "null",
+            language: "es",
+            interface:{
+                primary: '#4f4f4f',
+                secondary: '#b5b5b5',
+                text: '#1e00ff',
+                hasName: true,
+                background: {
+                    type: "linear",
+                    value: "#4f4f4f"
+                },
+                logo:{
+                    enabled: true,
+                    value:'5ffc65b0f6d903bc1ae374b2',
+                    size:'big',
+                    position:'left'
+                },
+                buttons:{
+                    border:'normal'
+                }
+            }
+        });
+    },
+    onApprove: function () {
+        alert(
+            "¡Transacción aprobada!"
+        );
+    },
+    onDecline: function () {
+        alert(
+            "¡Transacción rechazada!"
+        );
+    }
+    });
+    document.getElementById("payment-button-247").style.marginTop = "0";
+</script>
+<!-- HASTA AQUI -->
+</body>
+</html>

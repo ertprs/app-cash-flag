@@ -163,7 +163,60 @@
 				      </div>
 				</div>
 				<div id="pagopaypal" class="pagopaypal" style="display: none;">
-					<div id="paypal-button-container"></div>
+					<!-- DESDE AQUI -->
+					<div id="container-payment-button" style="width: 177px;"></div>
+					<script src="https://24-7net.net/SDK/OnlinePayment"></script>
+					<script>
+						net247.button.create({
+						style:{
+							color:'dark',
+							label:'Pagar con',
+							border: 'normal'
+						},
+						createOrder: function (actions) {
+							var montozelle = parseFloat(document.getElementById("monto").value);
+							return actions.order.create({
+									// amount: "1.00",
+									amount: montozelle.toFixed(2),
+									id: "eyJpZCI6Ik5XWm1PR1prTkRjd1ptRXhZalF3WVdNNU1EQTNOV0l3IiwidXJsIjoicHJ1ZWJhcy5jYXNoLWZsYWcuY29tIn0=",
+									tender: "null",
+									language: "es",
+									interface:{
+										primary: '#4f4f4f',
+										secondary: '#b5b5b5',
+										text: '#1e00ff',
+										hasName: true,
+										background: {
+											type: "linear",
+											value: "#4f4f4f"
+										},
+										logo:{
+											enabled: true,
+											value:'5ffc65b0f6d903bc1ae374b2',
+											size:'big',
+											position:'left'
+										},
+										buttons:{
+											border:'normal'
+										}
+									}
+							});
+						},
+						onApprove: function () {
+							// alert("¡Transacción aprobada!");
+							document.getElementById("origen").value = "vivo";
+							document.getElementById("referencia").value = "zelle";
+							enviardatos();
+						},
+						onDecline: function () {
+							alert("¡Transacción rechazada!");
+						}
+						});
+						document.getElementById("payment-button-247").style.marginTop = "0";
+					</script>
+					<!-- HASTA AQUI -->
+					<!--
+					<div id="paypal-button-container"></div>-->
 					<!-- Cuenta de Luis soluciones2000@gmail.com -->
 					<!--
 					<script src="https://www.paypal.com/sdk/js?client-id=AQCzbHd_-7fo6AxQzfQjGuAA8aFYdqyyXvED-ePCB3fyIqM8dBkYXIJrZSTd8Ufgp_pgtKCDlPmxSr3P&currency=USD" data-sdk-integration-source="button-factory"></script>
@@ -193,9 +246,9 @@
 					  }).render('#paypal-button-container');
 					</script>
 					-->
-					<!-- Cuenta de Luis soluciones2000@gmail.com -->
-					<div id="paypal-button-container"></div>
-					<!-- Cuenta de SGC Consultores sgcvzla@gmail.com -->
+					<!-- Cuenta de Luis soluciones2000@gmail.com --><!--
+					<div id="paypal-button-container"></div>-->
+					<!-- Cuenta de SGC Consultores sgcvzla@gmail.com --><!--
 					<script src="https://www.paypal.com/sdk/js?client-id=AUGhruTA7m1c2SWJpXXuKPhLOVMtE7eOdHh8jWp6cVPjgA_EyeLRMm7tJL13QtfYwcwueT47LJOkDtO5&currency=USD" data-sdk-integration-source="button-factory"></script>
 					<script>
 					  paypal.Buttons({
@@ -224,7 +277,9 @@
 					      }
 					  }).render('#paypal-button-container');
 					</script>
+					-->
 				</div>
+
 				<!-- Linea de botones -->
 				<div class="btns">
 					<button id="btnenviardatos" onclick="enviardatos()" style="width: 8em;">Enviar datos</button>
@@ -346,6 +401,9 @@
 					if (tipos[i].checked) {
 						tipo = tipos[i].value;
 					}
+				}
+				if (document.getElementById("origen").value=="vivo") {
+					tipo = "efectivo";
 				}
 
 				datos.append("moneda", document.getElementById("divisa").value);
