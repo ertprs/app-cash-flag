@@ -1,1 +1,68 @@
-Luis 2 ganaste un premio en Mr. Falafel por tu compra.-Hola Luis 2,<br/><br/>¡Gracias por preferir a <b>Mr. Falafel</b> para tus compras!<br/><br/>En reconimiento a tu preferencia, queremos darte un obsequio, la próxima que nos visites podrás reclamar el siguiente premio:<br/><br/><h3 style="text-align:center;"><b>15,00% de descuento sobre el monto total de tu factura.</b></h3>Este premio podrás reclamarlo cualquier día, siempre que sea antes del <b>17/01/2021</b>.<br/><br/>Sólo debes presentar este correo electrónico o indicar el siguiente código:<br/><h2 style="text-align:center"><b>002A004A004A004C0K</b></h2><p style="text-align:center;"><img src="https://app.cash-flag.com/php/barcode.php?text=002A004A004A004C0K&size=50&orientation=horizontal&codetype=Code39&print=true&sizefactor=1" /></p><p style="text-align:center;">Para canjear desde el móvil:</p><p style="text-align:center;"><img src="https://app.cash-flag.com/php/qr/000000000K.png" height="200" width="200" /></p><p style="text-align:center;">72d00ec9f9c5ddb629a895f0571702c716745c1812d5d468f8f3aa35ede943ce</p>¡Te esperamos!<br/><br/>Atentamente<br/><br/>Cash-Flag<br/><br/><b>Nota:</b> Esta cuenta no es monitoreada, por favor no respondas este email, si deseas comunicarte con tu club escribe a: <b><a href="mailto:info@cash-flag.com">info@cash-flag.com</a></b><br/><br/>
+Â¡Felicidades Luis, has recibido un regalo de Luis RodrÃƒÂ­guez!-<!DOCTYPE html>
+	<html>
+	<head>
+	  <meta charset="utf-8">
+	  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	  <title>Tarjeta de regalo</title>
+	  <link rel="stylesheet" href="">
+	  <script type="text/javascript" src="http://localhost/app-cash-flag/js/funciones.js"></script>
+	  <script type="text/javascript" src="http://localhost/app-cash-flag/card/classes.js"></script>
+	  <script type="text/javascript" src="http://localhost/app-cash-flag/lib/html2canvas.min.js"></script>
+     <script>
+		var xmlhttp = new XMLHttpRequest();
+	   xmlhttp.onreadystatechange = function() {
+		  if (this.readyState == 4 && this.status == 200) {
+			  respuesta = JSON.parse(this.responseText);
+
+			  card1 = new Card(
+				  "4445115554230024",
+				  respuesta.logocard,
+				  respuesta.tipo,
+				  "4445115554230024",
+				  respuesta.nombres,
+				  respuesta.vencimiento,
+				  respuesta.qr
+			  );
+
+			  saldo = respuesta.saldo;
+			  idproveedor = respuesta.idproveedor;
+
+			  card1.dibuja("tarjetero");
+
+			  html2canvas(document.getElementById("tarjetero")) // Llamar a html2canvas y pasarle el elemento
+			  .then(function(canvas) {
+				 document.getElementById("card_img").appendChild(canvas); // Lo agregamos como hijo del div
+				 document.getElementById("tarjetero").style.display = "none";
+			  });
+			}
+	   };
+	   xmlhttp.open("GET", "http://localhost/app-cash-flag/php/buscatarjeta.php?t="+4445115554230024, true);
+	   xmlhttp.send();
+	 </script>
+	</head>
+	<body>
+	 <div>
+		<p><img src="http://localhost/app-cash-flag/img/logoclub.png" width="120" height="auto" /></p>
+		<p>
+		  <span style="font-size: 150%; color: blue;">
+			 <b>Â¡Felicidades Luis, has recibido un regalo de Luis RodrÃƒÂ­guez!</b>
+		  </span>
+		</p>
+
+		<p style="text-align: justify;"><u>Mensaje:</u><br/><b><i>Prueba</i></b></p>
+
+		<div id="tarjetero"></div>			
+		<div id="card_img"></div>			
+
+		<p>Has recibido una tarjeta de regalo para consumir en <b>Mr. Falafel</b> con un saldo prepagado de <b>10 $</b> para ser usada hasta <b>01/2022</b></p>
+
+		<p>Para usar esta tarjeta debes ingresar en <a href="http://localhost/app-cash-flag/giftcards/tarjeta.html", target="_blank">este enlace</a> e introducir el nÃºmero de tarjeta <span style="font-size: 110%;"><b>4445115554230024</b></span> y la siguiente contraseÃ±a: <span style="font-size: 110%;"><b>91856</b></span></p>
+
+		<br/>
+
+		<p><i>Â¡Disfruta de tu regalo y gana con Cash-Flag!</i></p>
+ 
+		<p style="font-size: 80%;"><b>Si tienes alguna pregunta o comentario, contÃ¡ctanos a travÃ©s de <a href="mailto:info@cash-flag.com">este enlace</a></b></p>
+	 </div>
+	 </body>
+	</html>

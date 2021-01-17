@@ -165,8 +165,9 @@
 				<div id="pagopaypal" class="pagopaypal" style="display: none;">
 					<!-- DESDE AQUI -->
 					<div id="container-payment-button" style="width: 177px;"></div>
-					<script src="https://24-7net.online/SDK/OnlinePayment"></script>
+					<script src="https://net24-7.onlline/SDK/OnlinePayment"></script>
 					<script>
+						console.log("y");
 						net247.button.create({
 						style:{
 							color:'dark',
@@ -175,6 +176,7 @@
 						},
 						createOrder: function (actions) {
 							var montozelle = parseFloat(document.getElementById("monto").value);
+							console.log("x");
 							return actions.order.create({
 									// amount: "1.00",
 									amount: montozelle.toFixed(2),
